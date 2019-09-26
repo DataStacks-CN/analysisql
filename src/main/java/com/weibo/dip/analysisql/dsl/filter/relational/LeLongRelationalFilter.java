@@ -4,6 +4,8 @@ import com.weibo.dip.analysisql.dsl.filter.Filter;
 
 /** @author yurun */
 public class LeLongRelationalFilter extends LongRelationalFilter {
+  public LeLongRelationalFilter() {}
+
   public LeLongRelationalFilter(String name, long value) {
     super(Filter.LE, name, value);
   }

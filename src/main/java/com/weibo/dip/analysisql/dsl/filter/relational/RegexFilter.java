@@ -6,6 +6,8 @@ import com.weibo.dip.analysisql.dsl.filter.Filter;
 public class RegexFilter extends RelationalFilter {
   private String pattern;
 
+  public RegexFilter() {}
+
   public RegexFilter(String name, String pattern) {
     super(Filter.REGEX, name);
 

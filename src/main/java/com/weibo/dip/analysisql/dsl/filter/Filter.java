@@ -1,7 +1,9 @@
 package com.weibo.dip.analysisql.dsl.filter;
 
+import java.io.Serializable;
+
 /** @author yurun */
-public abstract class Filter {
+public abstract class Filter implements Serializable {
   // logical
   public static final String AND = "and";
   public static final String OR = "or";
