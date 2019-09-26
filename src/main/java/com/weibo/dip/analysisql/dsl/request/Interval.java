@@ -1,32 +1,33 @@
 package com.weibo.dip.analysisql.dsl.request;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /** @author yurun */
 public class Interval implements Serializable {
-  private String start;
-  private String end;
+  private Date start;
+  private Date end;
 
   public Interval() {}
 
-  public Interval(String start, String end) {
+  public Interval(Date start, Date end) {
     this.start = start;
     this.end = end;
   }
 
-  public String getStart() {
+  public Date getStart() {
     return start;
   }
 
-  public void setStart(String start) {
+  public void setStart(Date start) {
     this.start = start;
   }
 
-  public String getEnd() {
+  public Date getEnd() {
     return end;
   }
 
-  public void setEnd(String end) {
+  public void setEnd(Date end) {
     this.end = end;
   }
 }
