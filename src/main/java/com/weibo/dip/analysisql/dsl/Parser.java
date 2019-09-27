@@ -5,12 +5,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.weibo.dip.analysisql.dsl.filter.Filter;
 import com.weibo.dip.analysisql.dsl.request.GetDimentionValuesRequest;
 import com.weibo.dip.analysisql.dsl.request.GetDimentionsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetMetricsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.Granularity;
 import com.weibo.dip.analysisql.dsl.request.Interval;
+import com.weibo.dip.analysisql.dsl.request.Order;
+import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.dsl.request.Request;
 import com.weibo.dip.analysisql.exception.SyntaxException;
 import java.text.ParseException;
@@ -193,6 +196,44 @@ public class Parser {
     Granularity granularity = new Granularity(data, unit);
 
     JsonArray metricsArray = json.getAsJsonArray(METRICS);
+
+    String[] metrics = new String[metricsArray.size()];
+
+    for (int index = 0; index < metricsArray.size(); index++) {
+      JsonElement item = metricsArray.get(index);
+      if (!item.isJsonPrimitive() || !item.getAsJsonPrimitive().isString()) {
+        throw new SyntaxException("Type query, property 'metrics' must be a string array");
+      }
+
+      metrics[index] = item.getAsJsonPrimitive().getAsString();
+    }
+
+    Filter where = null;
+    if (json.has(WHERE)) {}
+
+    String[] groups = null;
+    if (json.has(GROUPS)) {}
+
+    Filter having = null;
+    if (json.has(HAVING)) {}
+
+    Order[] orders = null;
+    if (json.has(ORDERS)) {}
+
+    int limit = 0;
+    if (json.has(LIMIT)) {}
+
+    QueryRequest queryRequest = new QueryRequest();
+
+    queryRequest.setTopic(topic);
+    queryRequest.setInterval(interval);
+    queryRequest.setGranularity(granularity);
+    queryRequest.setMetrics(metrics);
+    queryRequest.setWhere(where);
+    queryRequest.setGroups(groups);
+    queryRequest.setHaving(having);
+    queryRequest.setOrders(orders);
+    queryRequest.setLimit(limit);
 
     return null;
   }
