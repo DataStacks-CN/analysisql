@@ -20,6 +20,8 @@ import com.weibo.dip.analysisql.dsl.request.Request;
 import com.weibo.dip.analysisql.exception.SyntaxException;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 /** @author yurun */
@@ -51,6 +53,9 @@ public class Parser {
   public static final String VALUE = "value";
   public static final String VALUES = "values";
   public static final String PATTERN = "pattern";
+
+  public static final String ASC = "asc";
+  public static final String DESC = "desc";
 
   private Connector connector;
 
@@ -160,11 +165,13 @@ public class Parser {
         || !json.get(TYPE).getAsJsonPrimitive().isString()
         || !json.has(INTERVAL)
         || !json.get(INTERVAL).isJsonObject()
+        || !(json.getAsJsonObject(INTERVAL).entrySet().size() > 0)
         || !json.has(GRANULARITY)
         || !json.get(GRANULARITY).isJsonPrimitive()
         || !json.getAsJsonPrimitive(GRANULARITY).isString()
         || !json.has(METRICS)
-        || !json.get(METRICS).isJsonArray()) {
+        || !json.get(METRICS).isJsonArray()
+        || !(json.getAsJsonArray(METRICS).size() > 0)) {
       throw new SyntaxException(
           "Type query, property 'topic'(string), 'interval'(json), 'granularity'(string), 'metrics'(array) must be set");
     }
@@ -257,7 +264,30 @@ public class Parser {
     }
 
     Order[] orders = null;
-    if (json.has(ORDERS)) {}
+    if (json.has(ORDERS)) {
+      if (!json.get(ORDERS).isJsonObject()
+          || !(json.getAsJsonObject(ORDERS).entrySet().size() > 0)) {
+        throw new SyntaxException("Type query, property 'orders'(object) must be set");
+      }
+
+      Set<Map.Entry<String, JsonElement>> entries = json.getAsJsonObject(ORDERS).entrySet();
+
+      orders = new Order[entries.size()];
+
+      int index = 0;
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        String name = entry.getKey();
+        JsonElement sort = entry.getValue();
+        if (!sort.isJsonPrimitive()
+            || !sort.getAsJsonPrimitive().isString()
+            || !(sort.getAsString().equals(ASC) || sort.getAsString().equals(DESC))) {
+          throw new SyntaxException(
+              "Type query, property 'orders'(object)'s value must be 'asc'/'desc'");
+        }
+
+        orders[index] = new Order(name, Order.Sort.valueOf(sort.getAsString()));
+      }
+    }
 
     int limit = 0;
     if (json.has(LIMIT)) {
@@ -265,7 +295,7 @@ public class Parser {
           || !json.getAsJsonPrimitive(LIMIT).isNumber()
           || ((json.getAsJsonPrimitive(LIMIT).getAsNumber() instanceof Float)
               || (json.getAsJsonPrimitive(LIMIT).getAsNumber() instanceof Double))) {
-        throw new SyntaxException("Type query, property 'limit'(long) must be set");
+        throw new SyntaxException("Type query, property 'limit'(int) must be set");
       }
 
       limit = json.get(LIMIT).getAsInt();

@@ -49,7 +49,7 @@ public class FilterParser {
   private Filter parseAndOrOr(String operator, JsonObject json) {
     if (!json.has(Parser.FILTERS)
         || !json.get(Parser.FILTERS).isJsonArray()
-        || !(json.get(Parser.FILTERS).getAsJsonArray().size() == 0)) {
+        || !(json.get(Parser.FILTERS).getAsJsonArray().size() > 0)) {
       throw new SyntaxException(
           "Type query/" + context + "/" + operator + ", property 'filters'(array) must be set");
     }
@@ -239,7 +239,7 @@ public class FilterParser {
         || !json.getAsJsonPrimitive(Parser.NAME).isString()
         || !json.has(Parser.VALUES)
         || !json.get(Parser.VALUES).isJsonArray()
-        || !(json.get(Parser.VALUES).getAsJsonArray().size() == 0)) {
+        || !(json.get(Parser.VALUES).getAsJsonArray().size() > 0)) {
       throw new SyntaxException(
           "Type query/" + context + "/in, property 'name'(string), 'values'(array) must be set");
     }
