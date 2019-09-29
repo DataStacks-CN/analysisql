@@ -17,7 +17,7 @@ public class AnalysisQl {
   }
 
   public Response request(String dsl) {
-    Parser parser = new Parser();
+    Parser parser = new Parser(connector);
     Request request = parser.parse(dsl);
 
     Response response = null;

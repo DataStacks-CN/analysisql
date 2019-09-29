@@ -5,7 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.weibo.dip.analysisql.Connector;
 import com.weibo.dip.analysisql.dsl.filter.Filter;
+import com.weibo.dip.analysisql.dsl.filter.FilterParser;
 import com.weibo.dip.analysisql.dsl.request.GetDimentionValuesRequest;
 import com.weibo.dip.analysisql.dsl.request.GetDimentionsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetMetricsRequest;
@@ -22,23 +24,39 @@ import org.apache.commons.lang3.time.FastDateFormat;
 
 /** @author yurun */
 public class Parser {
-  private static final String TYPE = "type";
-  private static final String TOPIC = "topic";
-  private static final String DIMENTION = "dimention";
+  public static final String TYPE = "type";
+  public static final String TOPIC = "topic";
+  public static final String DIMENTION = "dimention";
 
-  private static final String INTERVAL = "interval";
-  private static final String START = "start";
-  private static final String END = "end";
-  private static final FastDateFormat DATE_FORMAT =
+  public static final String INTERVAL = "interval";
+  public static final String START = "start";
+  public static final String END = "end";
+  public static final FastDateFormat DATE_FORMAT =
       FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 
-  private static final String GRANULARITY = "granularity";
-  private static final String METRICS = "metrics";
-  private static final String WHERE = "where";
-  private static final String GROUPS = "groups";
-  private static final String HAVING = "having";
-  private static final String ORDERS = "orders";
-  private static final String LIMIT = "limit";
+  public static final String GRANULARITY = "granularity";
+  public static final String METRICS = "metrics";
+  public static final String WHERE = "where";
+  public static final String GROUPS = "groups";
+  public static final String HAVING = "having";
+  public static final String ORDERS = "orders";
+  public static final String LIMIT = "limit";
+
+  public static final String OPERATOR = "operator";
+
+  public static final String FILTERS = "filters";
+  public static final String FILTER = "filter";
+
+  public static final String NAME = "name";
+  public static final String VALUE = "value";
+  public static final String VALUES = "values";
+  public static final String PATTERN = "pattern";
+
+  private Connector connector;
+
+  public Parser(Connector connector) {
+    this.connector = connector;
+  }
 
   public Request parse(String dsl) throws SyntaxException {
     JsonParser parser = new JsonParser();
@@ -85,7 +103,7 @@ public class Parser {
         request = parseQuery(json);
         break;
       default:
-        throw new SyntaxException("Unsupported type");
+        throw new SyntaxException("Unsupported type '" + type + "'");
     }
 
     return request;
@@ -209,13 +227,25 @@ public class Parser {
     }
 
     Filter where = null;
-    if (json.has(WHERE)) {}
+    if (json.has(WHERE)) {
+      try {
+        where = new FilterParser(WHERE, connector).parse(json.get(WHERE));
+      } catch (SyntaxException e) {
+        throw e;
+      }
+    }
 
     String[] groups = null;
     if (json.has(GROUPS)) {}
 
     Filter having = null;
-    if (json.has(HAVING)) {}
+    if (json.has(HAVING)) {
+      try {
+        having = new FilterParser(HAVING, connector).parse(json.get(HAVING));
+      } catch (Exception e) {
+        throw e;
+      }
+    }
 
     Order[] orders = null;
     if (json.has(ORDERS)) {}
