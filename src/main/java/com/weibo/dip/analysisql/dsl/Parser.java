@@ -213,12 +213,12 @@ public class Parser {
 
     Granularity granularity = new Granularity(data, unit);
 
-    JsonArray metricsArray = json.getAsJsonArray(METRICS);
+    JsonArray metricArray = json.getAsJsonArray(METRICS);
 
-    String[] metrics = new String[metricsArray.size()];
+    String[] metrics = new String[metricArray.size()];
 
-    for (int index = 0; index < metricsArray.size(); index++) {
-      JsonElement item = metricsArray.get(index);
+    for (int index = 0; index < metricArray.size(); index++) {
+      JsonElement item = metricArray.get(index);
       if (!item.isJsonPrimitive() || !item.getAsJsonPrimitive().isString()) {
         throw new SyntaxException("Type query, property 'metrics' must be a string array");
       }
@@ -228,23 +228,32 @@ public class Parser {
 
     Filter where = null;
     if (json.has(WHERE)) {
-      try {
-        where = new FilterParser(WHERE, connector).parse(json.get(WHERE));
-      } catch (SyntaxException e) {
-        throw e;
-      }
+      where = new FilterParser(WHERE, connector).parse(json.get(WHERE));
     }
 
     String[] groups = null;
-    if (json.has(GROUPS)) {}
+    if (json.has(GROUPS)) {
+      if (!json.get(GROUPS).isJsonArray()) {
+        throw new SyntaxException("Type query, property 'groups'(array) must be set");
+      }
+
+      JsonArray groupArray = json.getAsJsonArray(GROUPS);
+
+      groups = new String[groupArray.size()];
+
+      for (int index = 0; index < groupArray.size(); index++) {
+        JsonElement item = groupArray.get(index);
+        if (!item.isJsonPrimitive() || !item.getAsJsonPrimitive().isString()) {
+          throw new SyntaxException("Type query, property 'groups' must be a string array");
+        }
+
+        groups[index] = item.getAsJsonPrimitive().getAsString();
+      }
+    }
 
     Filter having = null;
     if (json.has(HAVING)) {
-      try {
-        having = new FilterParser(HAVING, connector).parse(json.get(HAVING));
-      } catch (Exception e) {
-        throw e;
-      }
+      having = new FilterParser(HAVING, connector).parse(json.get(HAVING));
     }
 
     Order[] orders = null;
@@ -265,6 +274,6 @@ public class Parser {
     queryRequest.setOrders(orders);
     queryRequest.setLimit(limit);
 
-    return null;
+    return queryRequest;
   }
 }
