@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.time.FastDateFormat;
 
-/** @author yurun */
+/** Parser. */
 public class Parser {
   public static final String TYPE = "type";
   public static final String TOPIC = "topic";
@@ -63,6 +63,13 @@ public class Parser {
     this.connector = connector;
   }
 
+  /**
+   * Parse dsl to Request.
+   *
+   * @param dsl json
+   * @return request
+   * @throws SyntaxException if syntax error
+   */
   public Request parse(String dsl) throws SyntaxException {
     JsonParser parser = new JsonParser();
 
@@ -173,11 +180,22 @@ public class Parser {
         || !json.get(METRICS).isJsonArray()
         || !(json.getAsJsonArray(METRICS).size() > 0)) {
       throw new SyntaxException(
-          "Type query, property 'topic'(string), 'interval'(json), 'granularity'(string), 'metrics'(array) must be set");
+          "Type query, property "
+              + "'topic'(string), 'interval'(json), "
+              + "'granularity'(string), 'metrics'(array) must be set");
     }
 
-    String topic = json.getAsJsonPrimitive(TOPIC).getAsString();
+    QueryRequest queryRequest = new QueryRequest();
 
+    /*
+     topic
+    */
+    String topic = json.getAsJsonPrimitive(TOPIC).getAsString();
+    queryRequest.setTopic(topic);
+
+    /*
+     interval
+    */
     JsonObject intervalOjb = json.getAsJsonObject(INTERVAL);
     if (!intervalOjb.has(START)
         || !intervalOjb.get(START).isJsonPrimitive()
@@ -197,11 +215,16 @@ public class Parser {
       end = DATE_FORMAT.parse(intervalOjb.getAsJsonPrimitive(END).getAsString());
     } catch (ParseException e) {
       throw new SyntaxException(
-          "Type query/interval, property 'start'(string), 'end'(string) must be in 'yyyy-MM-dd HH:mm:ss' format");
+          "Type query/interval, property "
+              + "'start'(string), 'end'(string) must be in 'yyyy-MM-dd HH:mm:ss' format");
     }
 
     Interval interval = new Interval(start, end);
+    queryRequest.setInterval(interval);
 
+    /*
+     granularity
+    */
     String granularityStr = json.getAsJsonPrimitive(GRANULARITY).getAsString();
 
     String dataStr = granularityStr.substring(0, granularityStr.length() - 1);
@@ -219,7 +242,11 @@ public class Parser {
     }
 
     Granularity granularity = new Granularity(data, unit);
+    queryRequest.setGranularity(granularity);
 
+    /*
+     metrics
+    */
     JsonArray metricArray = json.getAsJsonArray(METRICS);
 
     String[] metrics = new String[metricArray.size()];
@@ -233,11 +260,21 @@ public class Parser {
       metrics[index] = item.getAsJsonPrimitive().getAsString();
     }
 
+    queryRequest.setMetrics(metrics);
+
+    /*
+     where
+    */
     Filter where = null;
     if (json.has(WHERE)) {
       where = new FilterParser(WHERE, connector).parse(json.get(WHERE));
     }
 
+    queryRequest.setWhere(where);
+
+    /*
+     groups
+    */
     String[] groups = null;
     if (json.has(GROUPS)) {
       if (!json.get(GROUPS).isJsonArray()) {
@@ -258,11 +295,21 @@ public class Parser {
       }
     }
 
+    queryRequest.setGroups(groups);
+
+    /*
+     having
+    */
     Filter having = null;
     if (json.has(HAVING)) {
       having = new FilterParser(HAVING, connector).parse(json.get(HAVING));
     }
 
+    queryRequest.setHaving(having);
+
+    /*
+     order
+    */
     Order[] orders = null;
     if (json.has(ORDERS)) {
       if (!json.get(ORDERS).isJsonObject()
@@ -289,6 +336,11 @@ public class Parser {
       }
     }
 
+    queryRequest.setOrders(orders);
+
+    /*
+     limit
+    */
     int limit = 0;
     if (json.has(LIMIT)) {
       if (!json.get(LIMIT).isJsonPrimitive()
@@ -301,16 +353,6 @@ public class Parser {
       limit = json.get(LIMIT).getAsInt();
     }
 
-    QueryRequest queryRequest = new QueryRequest();
-
-    queryRequest.setTopic(topic);
-    queryRequest.setInterval(interval);
-    queryRequest.setGranularity(granularity);
-    queryRequest.setMetrics(metrics);
-    queryRequest.setWhere(where);
-    queryRequest.setGroups(groups);
-    queryRequest.setHaving(having);
-    queryRequest.setOrders(orders);
     queryRequest.setLimit(limit);
 
     return queryRequest;

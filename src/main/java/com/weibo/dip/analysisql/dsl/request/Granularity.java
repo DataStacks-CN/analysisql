@@ -2,7 +2,7 @@ package com.weibo.dip.analysisql.dsl.request;
 
 import java.io.Serializable;
 
-/** @author yurun */
+/** Granularity. */
 public class Granularity implements Serializable {
   private int data;
   private Unit unit;

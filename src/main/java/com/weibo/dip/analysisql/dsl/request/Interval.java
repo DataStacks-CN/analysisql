@@ -3,7 +3,7 @@ package com.weibo.dip.analysisql.dsl.request;
 import java.io.Serializable;
 import java.util.Date;
 
-/** @author yurun */
+/** Interval. */
 public class Interval implements Serializable {
   private Date start;
   private Date end;

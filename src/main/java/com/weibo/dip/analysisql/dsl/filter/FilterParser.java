@@ -35,12 +35,18 @@ import com.weibo.dip.analysisql.exception.SyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @author yurun */
+/** FilterParser. */
 public class FilterParser {
   private String context;
 
   private Connector connector;
 
+  /**
+   * Initializes a instance with context and connector.
+   *
+   * @param context 'where' or 'having'
+   * @param connector Connector instance
+   */
   public FilterParser(String context, Connector connector) {
     this.context = context;
     this.connector = connector;
@@ -280,6 +286,13 @@ public class FilterParser {
     return new RegexFilter(name, pattern);
   }
 
+  /**
+   * Parse 'where' or 'having' filter json.
+   *
+   * @param element json
+   * @return filter
+   * @throws SyntaxException if syntax error
+   */
   public Filter parse(JsonElement element) throws SyntaxException {
     if (!element.isJsonObject()) {
       throw new SyntaxException("Type query, property " + context + " must be in json object");

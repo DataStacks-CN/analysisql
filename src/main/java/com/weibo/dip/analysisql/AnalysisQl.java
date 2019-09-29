@@ -8,7 +8,7 @@ import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.dsl.request.Request;
 
-/** @author yurun */
+/** AnalysisQl. */
 public class AnalysisQl {
   private Connector connector;
 
@@ -16,11 +16,17 @@ public class AnalysisQl {
     this.connector = connector;
   }
 
+  /**
+   * Request with a dsl.
+   *
+   * @param dsl json
+   * @return response
+   */
   public Response request(String dsl) {
     Parser parser = new Parser(connector);
     Request request = parser.parse(dsl);
 
-    Response response = null;
+    Response response;
 
     switch (request.getType()) {
       case Request.GET_TOPICS:
@@ -42,6 +48,8 @@ public class AnalysisQl {
       case Request.QUERY:
         response = connector.query((QueryRequest) request);
         break;
+      default:
+        response = null;
     }
 
     return response;

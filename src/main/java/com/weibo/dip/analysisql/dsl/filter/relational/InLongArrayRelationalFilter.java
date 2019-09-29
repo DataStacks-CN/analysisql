@@ -2,12 +2,18 @@ package com.weibo.dip.analysisql.dsl.filter.relational;
 
 import com.weibo.dip.analysisql.dsl.filter.Filter;
 
-/** @author yurun */
+/** InLongArrayRelationalFilter. */
 public class InLongArrayRelationalFilter extends RelationalFilter {
   private long[] values;
 
   public InLongArrayRelationalFilter() {}
 
+  /**
+   * Initializes a instance with name and long array.
+   *
+   * @param name name
+   * @param values long array
+   */
   public InLongArrayRelationalFilter(String name, long[] values) {
     super(Filter.IN, name);
 

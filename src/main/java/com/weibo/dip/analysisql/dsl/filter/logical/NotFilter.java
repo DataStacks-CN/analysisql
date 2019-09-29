@@ -2,7 +2,7 @@ package com.weibo.dip.analysisql.dsl.filter.logical;
 
 import com.weibo.dip.analysisql.dsl.filter.Filter;
 
-/** @author yurun */
+/** NotFilter. */
 public class NotFilter extends Filter {
   private Filter filter;
 
@@ -10,6 +10,11 @@ public class NotFilter extends Filter {
     super(Filter.NOT);
   }
 
+  /**
+   * Initializes a instance with filter.
+   *
+   * @param filter filter
+   */
   public NotFilter(Filter filter) {
     this();
 

@@ -3,7 +3,7 @@ package com.weibo.dip.analysisql.dsl.filter.logical;
 import com.weibo.dip.analysisql.dsl.filter.Filter;
 import java.util.List;
 
-/** @author yurun */
+/** OrFilter. */
 public class OrFilter extends Filter {
   private List<Filter> filters;
 
@@ -11,6 +11,11 @@ public class OrFilter extends Filter {
     super(Filter.OR);
   }
 
+  /**
+   * Initializes a instance with filter list.
+   *
+   * @param filters filters
+   */
   public OrFilter(List<Filter> filters) {
     this();
 

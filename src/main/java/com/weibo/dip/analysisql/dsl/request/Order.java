@@ -2,7 +2,7 @@ package com.weibo.dip.analysisql.dsl.request;
 
 import java.io.Serializable;
 
-/** @author yurun */
+/** Order. */
 public class Order implements Serializable {
   private String name;
   private Sort sort;

@@ -2,7 +2,7 @@ package com.weibo.dip.analysisql.dsl.request;
 
 import com.weibo.dip.analysisql.dsl.filter.Filter;
 
-/** @author yurun */
+/** QueryRequest. */
 public class QueryRequest extends Request {
   private String topic;
   private Interval interval;
@@ -18,6 +18,20 @@ public class QueryRequest extends Request {
     super(Request.QUERY);
   }
 
+  /**
+   * Initializes a instance with topic, interval, granularity, metrics, where, groups, having,
+   * orders and limit.
+   *
+   * @param topic topic
+   * @param interval interval
+   * @param granularity granularity
+   * @param metrics metrics
+   * @param where where
+   * @param groups groups
+   * @param having having
+   * @param orders orders
+   * @param limit limit
+   */
   public QueryRequest(
       String topic,
       Interval interval,

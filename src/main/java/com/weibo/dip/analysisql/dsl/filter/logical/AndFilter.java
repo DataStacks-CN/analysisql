@@ -3,7 +3,7 @@ package com.weibo.dip.analysisql.dsl.filter.logical;
 import com.weibo.dip.analysisql.dsl.filter.Filter;
 import java.util.List;
 
-/** @author yurun */
+/** AndFilter. */
 public class AndFilter extends Filter {
   private List<Filter> filters;
 
@@ -11,6 +11,11 @@ public class AndFilter extends Filter {
     super(Filter.AND);
   }
 
+  /**
+   * Initializes a instance with filter list.
+   *
+   * @param filters filters
+   */
   public AndFilter(List<Filter> filters) {
     this();
 

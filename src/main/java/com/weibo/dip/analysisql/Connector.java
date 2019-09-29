@@ -6,7 +6,7 @@ import com.weibo.dip.analysisql.dsl.request.GetMetricsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 
-/** @author yurun */
+/** Connector. */
 public interface Connector {
   Response getTopics(GetTopicsRequest request);
 

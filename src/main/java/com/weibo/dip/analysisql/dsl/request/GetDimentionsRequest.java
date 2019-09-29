@@ -1,6 +1,6 @@
 package com.weibo.dip.analysisql.dsl.request;
 
-/** @author yurun */
+/** GetDimentionsRequest. */
 public class GetDimentionsRequest extends Request {
   private String topic;
 
@@ -8,6 +8,11 @@ public class GetDimentionsRequest extends Request {
     super(Request.GET_DIMENTIONS);
   }
 
+  /**
+   * Initializes a instance with topic.
+   *
+   * @param topic topic
+   */
   public GetDimentionsRequest(String topic) {
     this();
 

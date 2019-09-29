@@ -1,6 +1,6 @@
 package com.weibo.dip.analysisql.exception;
 
-/** @author yurun */
+/** SyntaxException. */
 public class SyntaxException extends RuntimeException {
   public SyntaxException() {
     super();

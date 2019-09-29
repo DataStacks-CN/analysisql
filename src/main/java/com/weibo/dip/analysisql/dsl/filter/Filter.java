@@ -2,7 +2,7 @@ package com.weibo.dip.analysisql.dsl.filter;
 
 import java.io.Serializable;
 
-/** @author yurun */
+/** Filter. */
 public abstract class Filter implements Serializable {
   // logical
   public static final String AND = "and";

@@ -2,7 +2,7 @@ package com.weibo.dip.analysisql.dsl.request;
 
 import java.io.Serializable;
 
-/** @author yurun */
+/** Request. */
 public abstract class Request implements Serializable {
   public static final String GET_TOPICS = "getTopics";
   public static final String GET_DIMENTIONS = "getDimentions";
