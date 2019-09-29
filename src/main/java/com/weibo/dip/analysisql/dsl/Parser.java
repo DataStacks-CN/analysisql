@@ -260,7 +260,16 @@ public class Parser {
     if (json.has(ORDERS)) {}
 
     int limit = 0;
-    if (json.has(LIMIT)) {}
+    if (json.has(LIMIT)) {
+      if (!json.get(LIMIT).isJsonPrimitive()
+          || !json.getAsJsonPrimitive(LIMIT).isNumber()
+          || ((json.getAsJsonPrimitive(LIMIT).getAsNumber() instanceof Float)
+              || (json.getAsJsonPrimitive(LIMIT).getAsNumber() instanceof Double))) {
+        throw new SyntaxException("Type query, property 'limit'(long) must be set");
+      }
+
+      limit = json.get(LIMIT).getAsInt();
+    }
 
     QueryRequest queryRequest = new QueryRequest();
 
