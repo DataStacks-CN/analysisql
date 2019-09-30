@@ -5,6 +5,7 @@ import com.weibo.dip.analysisql.dsl.request.GetDimentionsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetMetricsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
+import com.weibo.dip.analysisql.response.Response;
 
 /** Connector. */
 public interface Connector {

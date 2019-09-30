@@ -7,6 +7,7 @@ import com.weibo.dip.analysisql.dsl.request.GetMetricsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.dsl.request.Request;
+import com.weibo.dip.analysisql.response.Response;
 
 /** AnalysisQl. */
 public class AnalysisQl {
@@ -24,6 +25,7 @@ public class AnalysisQl {
    */
   public Response request(String dsl) {
     Parser parser = new Parser(connector);
+
     Request request = parser.parse(dsl);
 
     Response response;
