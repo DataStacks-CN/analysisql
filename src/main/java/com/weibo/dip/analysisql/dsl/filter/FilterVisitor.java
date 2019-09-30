@@ -49,6 +49,12 @@ public abstract class FilterVisitor<T> {
 
   abstract T visitDoubleEq(DoubleEqFilter filter);
 
+  /**
+   * Visit eq filter.
+   *
+   * @param filter eq filter
+   * @return return
+   */
   public T visitEq(EqFilter filter) {
     String type = filter.getType();
 
@@ -70,6 +76,12 @@ public abstract class FilterVisitor<T> {
 
   abstract T visitDoubleNe(DoubleNeFilter filter);
 
+  /**
+   * Visit ne filter.
+   *
+   * @param filter ne filter
+   * @return result
+   */
   public T visitNe(NeFilter filter) {
     String type = filter.getType();
 
@@ -91,6 +103,12 @@ public abstract class FilterVisitor<T> {
 
   abstract T visitDoubleGt(DoubleGtFilter filter);
 
+  /**
+   * Visit gt filter.
+   *
+   * @param filter gt filter
+   * @return result
+   */
   public T visitGt(GtFilter filter) {
     String type = filter.getType();
 
@@ -112,6 +130,12 @@ public abstract class FilterVisitor<T> {
 
   abstract T visitDoubleLt(DoubleLtFilter filter);
 
+  /**
+   * Visit lt filter.
+   *
+   * @param filter lt filter
+   * @return result
+   */
   public T visitLt(LtFilter filter) {
     String type = filter.getType();
 
@@ -133,6 +157,12 @@ public abstract class FilterVisitor<T> {
 
   abstract T visitDoubleGe(DoubleGeFilter filter);
 
+  /**
+   * Visit ge filter.
+   *
+   * @param filter ge filter
+   * @return result
+   */
   public T visitGe(GeFilter filter) {
     String type = filter.getType();
 
@@ -154,6 +184,12 @@ public abstract class FilterVisitor<T> {
 
   abstract T visitDoubleLe(DoubleLeFilter filter);
 
+  /**
+   * Visit le filter.
+   *
+   * @param filter le filter
+   * @return result
+   */
   public T visitLe(LeFilter filter) {
     String type = filter.getType();
 
@@ -175,6 +211,12 @@ public abstract class FilterVisitor<T> {
 
   abstract T visitDoubleIn(DoubleInFilter filter);
 
+  /**
+   * Visit in filter.
+   *
+   * @param filter in filter
+   * @return result
+   */
   public T visitIn(InFilter filter) {
     String type = filter.getType();
 

@@ -15,7 +15,7 @@ public class RegexFilter extends RelationalFilter {
    * @param pattern pattern
    */
   public RegexFilter(String name, String pattern) {
-    super(Filter.REGEX, name);
+    super(Filter.REGEX, name, RelationalFilter.STRING);
 
     this.pattern = pattern;
   }
