@@ -11,6 +11,13 @@ public class Response implements Serializable {
 
   public Response() {}
 
+  /**
+   * Initializes a instance with code, msg and rows.
+   *
+   * @param code code
+   * @param msg msg
+   * @param rows rows
+   */
   public Response(int code, String msg, List<Row> rows) {
     this.code = code;
     this.msg = msg;

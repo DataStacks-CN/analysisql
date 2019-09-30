@@ -15,6 +15,13 @@ public abstract class Column<T> implements Serializable {
 
   public Column() {}
 
+  /**
+   * Initializes a instance with name, type, value.
+   *
+   * @param name name
+   * @param type type
+   * @param value value
+   */
   public Column(String name, String type, T value) {
     this.name = name;
     this.type = type;

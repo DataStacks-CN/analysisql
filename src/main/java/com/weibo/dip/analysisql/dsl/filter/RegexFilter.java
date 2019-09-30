@@ -1,9 +1,8 @@
-package com.weibo.dip.analysisql.dsl.filter.relational;
-
-import com.weibo.dip.analysisql.dsl.filter.Filter;
+package com.weibo.dip.analysisql.dsl.filter;
 
 /** RegexFilter. */
-public class RegexFilter extends RelationalFilter {
+public class RegexFilter extends Filter {
+  private String name;
   private String pattern;
 
   public RegexFilter() {}
@@ -15,9 +14,18 @@ public class RegexFilter extends RelationalFilter {
    * @param pattern pattern
    */
   public RegexFilter(String name, String pattern) {
-    super(Filter.REGEX, name, RelationalFilter.STRING);
+    super(Filter.REGEX);
 
+    this.name = name;
     this.pattern = pattern;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getPattern() {

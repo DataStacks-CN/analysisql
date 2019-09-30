@@ -6,10 +6,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.weibo.dip.analysisql.Connector;
 import com.weibo.dip.analysisql.dsl.Parser;
+import com.weibo.dip.analysisql.dsl.filter.in.DoubleInFilter;
+import com.weibo.dip.analysisql.dsl.filter.in.LongInFilter;
+import com.weibo.dip.analysisql.dsl.filter.in.StringInFilter;
 import com.weibo.dip.analysisql.dsl.filter.logical.AndFilter;
 import com.weibo.dip.analysisql.dsl.filter.logical.NotFilter;
 import com.weibo.dip.analysisql.dsl.filter.logical.OrFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.RegexFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.RelationalFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.eq.DoubleEqFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.eq.LongEqFilter;
@@ -20,9 +22,6 @@ import com.weibo.dip.analysisql.dsl.filter.relational.ge.StringGeFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.gt.DoubleGtFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.gt.LongGtFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.gt.StringGtFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.in.DoubleInFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.in.LongInFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.in.StringInFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.le.DoubleLeFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.le.LongLeFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.le.StringLeFilter;
@@ -216,7 +215,7 @@ public class FilterParser {
   }
 
   private Filter parseLongIn(String name, JsonArray array) {
-    long[] values = new long[array.size()];
+    Long[] values = new Long[array.size()];
 
     for (int index = 0; index < array.size(); index++) {
       Number value = array.get(index).getAsNumber();
@@ -237,7 +236,7 @@ public class FilterParser {
   }
 
   private Filter parseDoubleIn(String name, JsonArray array) {
-    double[] values = new double[array.size()];
+    Double[] values = new Double[array.size()];
 
     for (int index = 0; index < array.size(); index++) {
       Number value = array.get(index).getAsNumber();

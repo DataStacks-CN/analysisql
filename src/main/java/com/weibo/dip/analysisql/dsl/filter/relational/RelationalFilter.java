@@ -3,13 +3,14 @@ package com.weibo.dip.analysisql.dsl.filter.relational;
 import com.weibo.dip.analysisql.dsl.filter.Filter;
 
 /** RelationalFilter. */
-public abstract class RelationalFilter extends Filter {
+public abstract class RelationalFilter<T> extends Filter {
   public static final String STRING = "string";
   public static final String LONG = "long";
   public static final String DOUBLE = "double";
 
   protected String name;
   protected String type;
+  protected T value;
 
   public RelationalFilter() {}
 
@@ -20,11 +21,12 @@ public abstract class RelationalFilter extends Filter {
    * @param name name
    * @param type type
    */
-  public RelationalFilter(String operator, String name, String type) {
+  public RelationalFilter(String operator, String name, String type, T value) {
     super(operator);
 
     this.name = name;
     this.type = type;
+    this.value = value;
   }
 
   public String getName() {
@@ -41,5 +43,13 @@ public abstract class RelationalFilter extends Filter {
 
   public void setType(String type) {
     this.type = type;
+  }
+
+  public T getValue() {
+    return value;
+  }
+
+  public void setValue(T value) {
+    this.value = value;
   }
 }

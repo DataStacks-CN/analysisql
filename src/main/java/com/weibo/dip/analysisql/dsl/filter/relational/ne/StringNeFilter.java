@@ -3,9 +3,7 @@ package com.weibo.dip.analysisql.dsl.filter.relational.ne;
 import com.weibo.dip.analysisql.dsl.filter.relational.RelationalFilter;
 
 /** StringNeRelationalFilter. */
-public class StringNeFilter extends NeFilter {
-  private String value;
-
+public class StringNeFilter extends NeFilter<String> {
   public StringNeFilter() {}
 
   /**
@@ -15,16 +13,6 @@ public class StringNeFilter extends NeFilter {
    * @param value string value
    */
   public StringNeFilter(String name, String value) {
-    super(name, RelationalFilter.STRING);
-
-    this.value = value;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
+    super(name, RelationalFilter.STRING, value);
   }
 }

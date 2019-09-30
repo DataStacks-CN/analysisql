@@ -4,16 +4,17 @@ import com.weibo.dip.analysisql.dsl.filter.Filter;
 import com.weibo.dip.analysisql.dsl.filter.relational.RelationalFilter;
 
 /** EqFilter. */
-public abstract class EqFilter extends RelationalFilter {
+public abstract class EqFilter<T> extends RelationalFilter<T> {
   public EqFilter() {}
 
   /**
-   * Initializes a instance with name.
+   * Initializes a instance with name, type and value.
    *
    * @param name name
    * @param type type
+   * @param value value
    */
-  public EqFilter(String name, String type) {
-    super(Filter.EQ, name, type);
+  public EqFilter(String name, String type, T value) {
+    super(Filter.EQ, name, type, value);
   }
 }

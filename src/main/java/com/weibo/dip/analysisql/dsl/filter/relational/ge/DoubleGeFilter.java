@@ -3,9 +3,7 @@ package com.weibo.dip.analysisql.dsl.filter.relational.ge;
 import com.weibo.dip.analysisql.dsl.filter.relational.RelationalFilter;
 
 /** DoubleGeFilter. */
-public class DoubleGeFilter extends GeFilter {
-  private double value;
-
+public class DoubleGeFilter extends GeFilter<Double> {
   public DoubleGeFilter() {}
 
   /**
@@ -15,16 +13,6 @@ public class DoubleGeFilter extends GeFilter {
    * @param value double value
    */
   public DoubleGeFilter(String name, double value) {
-    super(name, RelationalFilter.DOUBLE);
-
-    this.value = value;
-  }
-
-  public double getValue() {
-    return value;
-  }
-
-  public void setValue(double value) {
-    this.value = value;
+    super(name, RelationalFilter.DOUBLE, value);
   }
 }

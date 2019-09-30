@@ -4,16 +4,17 @@ import com.weibo.dip.analysisql.dsl.filter.Filter;
 import com.weibo.dip.analysisql.dsl.filter.relational.RelationalFilter;
 
 /** LeFilter. */
-public abstract class LeFilter extends RelationalFilter {
+public abstract class LeFilter<T> extends RelationalFilter<T> {
   public LeFilter() {}
 
   /**
-   * Initializes a instance with name.
+   * Initializes a instance with name, type and value.
    *
    * @param name name
    * @param type type
+   * @param value value
    */
-  public LeFilter(String name, String type) {
-    super(Filter.LE, name, type);
+  public LeFilter(String name, String type, T value) {
+    super(Filter.LE, name, type, value);
   }
 }

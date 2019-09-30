@@ -3,9 +3,7 @@ package com.weibo.dip.analysisql.dsl.filter.relational.lt;
 import com.weibo.dip.analysisql.dsl.filter.relational.RelationalFilter;
 
 /** LongLtFilter. */
-public class LongLtFilter extends LtFilter {
-  private long value;
-
+public class LongLtFilter extends LtFilter<Long> {
   public LongLtFilter() {}
 
   /**
@@ -15,16 +13,6 @@ public class LongLtFilter extends LtFilter {
    * @param value long value
    */
   public LongLtFilter(String name, long value) {
-    super(name, RelationalFilter.LONG);
-
-    this.value = value;
-  }
-
-  public long getValue() {
-    return value;
-  }
-
-  public void setValue(long value) {
-    this.value = value;
+    super(name, RelationalFilter.LONG, value);
   }
 }

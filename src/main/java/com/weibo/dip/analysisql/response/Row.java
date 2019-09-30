@@ -8,6 +8,17 @@ import java.util.List;
 public class Row implements Serializable {
   private List<Column<?>> columns;
 
+  public Row() {}
+
+  /**
+   * Initializes a instance with columns.
+   *
+   * @param columns columns
+   */
+  public Row(List<Column<?>> columns) {
+    this.columns = columns;
+  }
+
   public List<Column<?>> getColumns() {
     return columns;
   }

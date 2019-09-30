@@ -1,9 +1,12 @@
 package com.weibo.dip.analysisql.dsl.filter;
 
+import com.weibo.dip.analysisql.dsl.filter.in.DoubleInFilter;
+import com.weibo.dip.analysisql.dsl.filter.in.InFilter;
+import com.weibo.dip.analysisql.dsl.filter.in.LongInFilter;
+import com.weibo.dip.analysisql.dsl.filter.in.StringInFilter;
 import com.weibo.dip.analysisql.dsl.filter.logical.AndFilter;
 import com.weibo.dip.analysisql.dsl.filter.logical.NotFilter;
 import com.weibo.dip.analysisql.dsl.filter.logical.OrFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.RegexFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.RelationalFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.eq.DoubleEqFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.eq.EqFilter;
@@ -17,10 +20,6 @@ import com.weibo.dip.analysisql.dsl.filter.relational.gt.DoubleGtFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.gt.GtFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.gt.LongGtFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.gt.StringGtFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.in.DoubleInFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.in.InFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.in.LongInFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.in.StringInFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.le.DoubleLeFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.le.LeFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.le.LongLeFilter;
