@@ -9,31 +9,33 @@ import com.weibo.dip.analysisql.dsl.Parser;
 import com.weibo.dip.analysisql.dsl.filter.logical.AndFilter;
 import com.weibo.dip.analysisql.dsl.filter.logical.NotFilter;
 import com.weibo.dip.analysisql.dsl.filter.logical.OrFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.EqDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.EqLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.EqStringRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GeDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GeLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GeStringRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GtDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GtLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GtStringRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.InDoubleArrayRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.InLongArrayRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.InStringArrayRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LeDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LeLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LeStringRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LtDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LtLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LtStringRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.NeDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.NeLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.NeStringRelationalFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.RegexFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.RelationalFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.eq.DoubleEqFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.eq.LongEqFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.eq.StringEqFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ge.DoubleGeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ge.LongGeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ge.StringGeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.gt.DoubleGtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.gt.LongGtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.gt.StringGtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.in.DoubleInFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.in.LongInFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.in.StringInFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.le.DoubleLeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.le.LongLeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.le.StringLeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.lt.DoubleLtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.lt.LongLtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.lt.StringLtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ne.DoubleNeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ne.LongNeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ne.StringNeFilter;
 import com.weibo.dip.analysisql.exception.SyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /** FilterParser. */
 public class FilterParser {
@@ -50,6 +52,14 @@ public class FilterParser {
   public FilterParser(String context, Connector connector) {
     this.context = context;
     this.connector = connector;
+  }
+
+  private Filter parseAnd(JsonObject json) {
+    return parseAndOrOr(Filter.AND, json);
+  }
+
+  private Filter parseOr(JsonObject json) {
+    return parseAndOrOr(Filter.OR, json);
   }
 
   private Filter parseAndOrOr(String operator, JsonObject json) {
@@ -87,66 +97,43 @@ public class FilterParser {
     return new NotFilter(parse(json.getAsJsonObject(Parser.FILTER)));
   }
 
-  private Filter parseStringEqOrNeOrGtOrLtOrGeOrLe(
-      String operator, String name, JsonPrimitive primitive) {
-    String value = primitive.getAsString();
-
-    switch (operator) {
-      case Filter.EQ:
-        return new EqStringRelationalFilter(name, value);
-      case Filter.NE:
-        return new NeStringRelationalFilter(name, value);
-      case Filter.GT:
-        return new GtStringRelationalFilter(name, value);
-      case Filter.LT:
-        return new LtStringRelationalFilter(name, value);
-      case Filter.GE:
-        return new GeStringRelationalFilter(name, value);
-      case Filter.LE:
-        return new LeStringRelationalFilter(name, value);
-      default:
-        return null;
-    }
+  private Filter parseEq(JsonObject json) {
+    return parseEqOrNeOrGtOrLtOrGeOrLe(Filter.EQ, json);
   }
 
-  private Filter parseNumberEqOrNeOrGtOrLtOrGeOrLe(
-      String operator, String name, JsonPrimitive primitive) {
+  private Filter parseNe(JsonObject json) {
+    return parseEqOrNeOrGtOrLtOrGeOrLe(Filter.NE, json);
+  }
+
+  private Filter parseGt(JsonObject json) {
+    return parseEqOrNeOrGtOrLtOrGeOrLe(Filter.GT, json);
+  }
+
+  private Filter parseLt(JsonObject json) {
+    return parseEqOrNeOrGtOrLtOrGeOrLe(Filter.LT, json);
+  }
+
+  private Filter parseGe(JsonObject json) {
+    return parseEqOrNeOrGtOrLtOrGeOrLe(Filter.GE, json);
+  }
+
+  private Filter parseLe(JsonObject json) {
+    return parseEqOrNeOrGtOrLtOrGeOrLe(Filter.LE, json);
+  }
+
+  private String getType(JsonPrimitive primitive) {
+    if (primitive.isString()) {
+      return RelationalFilter.STRING;
+    }
+
     Number value = primitive.getAsNumber();
 
-    boolean isLong =
-        (value instanceof Byte)
+    return ((value instanceof Byte)
             || (value instanceof Short)
             || (value instanceof Integer)
-            || (value instanceof Long);
-
-    switch (operator) {
-      case Filter.EQ:
-        return isLong
-            ? new EqLongRelationalFilter(name, value.longValue())
-            : new EqDoubleRelationalFilter(name, value.doubleValue());
-      case Filter.NE:
-        return isLong
-            ? new NeLongRelationalFilter(name, value.longValue())
-            : new NeDoubleRelationalFilter(name, value.doubleValue());
-      case Filter.GT:
-        return isLong
-            ? new GtLongRelationalFilter(name, value.longValue())
-            : new GtDoubleRelationalFilter(name, value.doubleValue());
-      case Filter.LT:
-        return isLong
-            ? new LtLongRelationalFilter(name, value.longValue())
-            : new LtDoubleRelationalFilter(name, value.doubleValue());
-      case Filter.GE:
-        return isLong
-            ? new GeLongRelationalFilter(name, value.longValue())
-            : new GeDoubleRelationalFilter(name, value.doubleValue());
-      case Filter.LE:
-        return isLong
-            ? new LeLongRelationalFilter(name, value.longValue())
-            : new LeDoubleRelationalFilter(name, value.doubleValue());
-      default:
-        return null;
-    }
+            || (value instanceof Long))
+        ? RelationalFilter.LONG
+        : RelationalFilter.DOUBLE;
   }
 
   private Filter parseEqOrNeOrGtOrLtOrGeOrLe(String operator, JsonObject json) {
@@ -168,9 +155,48 @@ public class FilterParser {
     String name = json.getAsJsonPrimitive(Parser.NAME).getAsString();
     JsonPrimitive value = json.getAsJsonPrimitive(Parser.VALUE);
 
-    return value.isString()
-        ? parseStringEqOrNeOrGtOrLtOrGeOrLe(operator, name, value)
-        : parseNumberEqOrNeOrGtOrLtOrGeOrLe(operator, name, value);
+    String type = getType(value);
+
+    switch (operator) {
+      case Filter.EQ:
+        return StringUtils.equals(type, RelationalFilter.STRING)
+            ? new StringEqFilter(name, value.getAsString())
+            : (StringUtils.equals(type, RelationalFilter.LONG)
+                ? new LongEqFilter(name, value.getAsLong())
+                : new DoubleEqFilter(name, value.getAsDouble()));
+      case Filter.NE:
+        return StringUtils.equals(type, RelationalFilter.STRING)
+            ? new StringNeFilter(name, value.getAsString())
+            : (StringUtils.equals(type, RelationalFilter.LONG)
+                ? new LongNeFilter(name, value.getAsLong())
+                : new DoubleNeFilter(name, value.getAsDouble()));
+      case Filter.GT:
+        return StringUtils.equals(type, RelationalFilter.STRING)
+            ? new StringGtFilter(name, value.getAsString())
+            : (StringUtils.equals(type, RelationalFilter.LONG)
+                ? new LongGtFilter(name, value.getAsLong())
+                : new DoubleGtFilter(name, value.getAsDouble()));
+      case Filter.LT:
+        return StringUtils.equals(type, RelationalFilter.STRING)
+            ? new StringLtFilter(name, value.getAsString())
+            : (StringUtils.equals(type, RelationalFilter.LONG)
+                ? new LongLtFilter(name, value.getAsLong())
+                : new DoubleLtFilter(name, value.getAsDouble()));
+      case Filter.GE:
+        return StringUtils.equals(type, RelationalFilter.STRING)
+            ? new StringGeFilter(name, value.getAsString())
+            : (StringUtils.equals(type, RelationalFilter.LONG)
+                ? new LongGeFilter(name, value.getAsLong())
+                : new DoubleGeFilter(name, value.getAsDouble()));
+      case Filter.LE:
+        return StringUtils.equals(type, RelationalFilter.STRING)
+            ? new StringLeFilter(name, value.getAsString())
+            : (StringUtils.equals(type, RelationalFilter.LONG)
+                ? new LongLeFilter(name, value.getAsLong())
+                : new DoubleLeFilter(name, value.getAsDouble()));
+      default:
+        return null;
+    }
   }
 
   private Filter parseStringIn(String name, JsonArray array) {
@@ -186,7 +212,7 @@ public class FilterParser {
       values[index] = value.getAsJsonPrimitive().getAsString();
     }
 
-    return new InStringArrayRelationalFilter(name, values);
+    return new StringInFilter(name, values);
   }
 
   private Filter parseLongIn(String name, JsonArray array) {
@@ -207,7 +233,7 @@ public class FilterParser {
       values[index] = value.longValue();
     }
 
-    return new InLongArrayRelationalFilter(name, values);
+    return new LongInFilter(name, values);
   }
 
   private Filter parseDoubleIn(String name, JsonArray array) {
@@ -224,19 +250,7 @@ public class FilterParser {
       values[index] = value.doubleValue();
     }
 
-    return new InDoubleArrayRelationalFilter(name, values);
-  }
-
-  private Filter parseNumberIn(String name, JsonArray array) {
-    Number value = array.get(0).getAsNumber();
-
-    boolean isLong =
-        (value instanceof Byte)
-            || (value instanceof Short)
-            || (value instanceof Integer)
-            || (value instanceof Long);
-
-    return isLong ? parseLongIn(name, array) : parseDoubleIn(name, array);
+    return new DoubleInFilter(name, values);
   }
 
   private Filter parseIn(JsonObject json) {
@@ -262,9 +276,18 @@ public class FilterParser {
       }
     }
 
-    boolean isString = valueArray.get(0).getAsJsonPrimitive().isString();
+    String type = getType(valueArray.get(0).getAsJsonPrimitive());
 
-    return isString ? parseStringIn(name, valueArray) : parseNumberIn(name, valueArray);
+    switch (type) {
+      case RelationalFilter.STRING:
+        return parseStringIn(name, valueArray);
+      case RelationalFilter.LONG:
+        return parseLongIn(name, valueArray);
+      case RelationalFilter.DOUBLE:
+        return parseDoubleIn(name, valueArray);
+      default:
+        return null;
+    }
   }
 
   private Filter parseRegex(JsonObject json) {
@@ -310,17 +333,23 @@ public class FilterParser {
 
     switch (operator) {
       case Filter.AND:
+        return parseAnd(json);
       case Filter.OR:
-        return parseAndOrOr(operator, json);
+        return parseOr(json);
       case Filter.NOT:
         return parseNot(json);
       case Filter.EQ:
+        return parseEq(json);
       case Filter.NE:
+        return parseNe(json);
       case Filter.GT:
+        return parseGt(json);
       case Filter.LT:
+        return parseLt(json);
       case Filter.GE:
+        return parseGe(json);
       case Filter.LE:
-        return parseEqOrNeOrGtOrLtOrGeOrLe(operator, json);
+        return parseLe(json);
       case Filter.IN:
         return parseIn(json);
       case Filter.REGEX:

@@ -3,155 +3,194 @@ package com.weibo.dip.analysisql.dsl.filter;
 import com.weibo.dip.analysisql.dsl.filter.logical.AndFilter;
 import com.weibo.dip.analysisql.dsl.filter.logical.NotFilter;
 import com.weibo.dip.analysisql.dsl.filter.logical.OrFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.DoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.EqDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.EqLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.EqStringRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GeDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GeLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GeStringRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GtDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GtLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.GtStringRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.InDoubleArrayRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.InLongArrayRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.InStringArrayRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LeDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LeLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LeStringRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LtDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LtLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.LtStringRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.NeDoubleRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.NeLongRelationalFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.NeStringRelationalFilter;
 import com.weibo.dip.analysisql.dsl.filter.relational.RegexFilter;
-import com.weibo.dip.analysisql.dsl.filter.relational.StringRelationalFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.RelationalFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.eq.DoubleEqFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.eq.EqFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.eq.LongEqFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.eq.StringEqFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ge.DoubleGeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ge.GeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ge.LongGeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ge.StringGeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.gt.DoubleGtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.gt.GtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.gt.LongGtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.gt.StringGtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.in.DoubleInFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.in.InFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.in.LongInFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.in.StringInFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.le.DoubleLeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.le.LeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.le.LongLeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.le.StringLeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.lt.DoubleLtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.lt.LongLtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.lt.LtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.lt.StringLtFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ne.DoubleNeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ne.LongNeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ne.NeFilter;
+import com.weibo.dip.analysisql.dsl.filter.relational.ne.StringNeFilter;
+import java.util.Objects;
 
 /** FilterVisitor. */
 public abstract class FilterVisitor<T> {
-  abstract T visitAndFilter(AndFilter filter);
+  abstract T visitAnd(AndFilter filter);
 
-  abstract T visitOrFilter(OrFilter filter);
+  abstract T visitOr(OrFilter filter);
 
-  abstract T visitNotFilter(NotFilter filter);
+  abstract T visitNot(NotFilter filter);
 
-  abstract T visitEqDoubleRelationalFilter(EqDoubleRelationalFilter filter);
+  abstract T visitStringEq(StringEqFilter filter);
 
-  abstract T visitEqLongRelationalFilter(EqLongRelationalFilter filter);
+  abstract T visitLongEq(LongEqFilter filter);
 
-  abstract T visitEqStringRelationalFilter(EqStringRelationalFilter filter);
+  abstract T visitDoubleEq(DoubleEqFilter filter);
 
-  abstract T visitNeDoubleRelationalFilter(NeDoubleRelationalFilter filter);
+  public T visitEq(EqFilter filter) {
+    String type = filter.getType();
 
-  abstract T visitNeLongRelationalFilter(NeLongRelationalFilter filter);
-
-  abstract T visitNeStringRelationalFilter(NeStringRelationalFilter filter);
-
-  abstract T visitGtDoubleRelationalFilter(GtDoubleRelationalFilter filter);
-
-  abstract T visitGtLongRelationalFilter(GtLongRelationalFilter filter);
-
-  abstract T visitGtStringRelationalFilter(GtStringRelationalFilter filter);
-
-  abstract T visitLtDoubleRelationalFilter(LtDoubleRelationalFilter filter);
-
-  abstract T visitLtLongRelationalFilter(LtLongRelationalFilter filter);
-
-  abstract T visitLtStringRelationalFilter(LtStringRelationalFilter filter);
-
-  abstract T visitGeDoubleRelationalFilter(GeDoubleRelationalFilter filter);
-
-  abstract T visitGeLongRelationalFilter(GeLongRelationalFilter filter);
-
-  abstract T visitGeStringRelationalFilter(GeStringRelationalFilter filter);
-
-  abstract T visitLeDoubleRelationalFilter(LeDoubleRelationalFilter filter);
-
-  abstract T visitLeLongRelationalFilter(LeLongRelationalFilter filter);
-
-  abstract T visitLeStringRelationalFilter(LeStringRelationalFilter filter);
-
-  abstract T visitInDoubleArrayRelationalFilter(InDoubleArrayRelationalFilter filter);
-
-  abstract T visitInLongArrayRelationalFilter(InLongArrayRelationalFilter filter);
-
-  abstract T visitInStringArrayRelationalFilter(InStringArrayRelationalFilter filter);
-
-  abstract T visitRegexFilter(RegexFilter filter);
-
-  /**
-   * Visit double relational filter.
-   *
-   * @param filter filter
-   * @return result
-   */
-  public T visitDoubleRelationalFilter(DoubleRelationalFilter filter) {
-    if (filter instanceof EqDoubleRelationalFilter) {
-      return visitEqDoubleRelationalFilter((EqDoubleRelationalFilter) filter);
-    } else if (filter instanceof NeDoubleRelationalFilter) {
-      return visitNeDoubleRelationalFilter((NeDoubleRelationalFilter) filter);
-    } else if (filter instanceof GtDoubleRelationalFilter) {
-      return visitGtDoubleRelationalFilter((GtDoubleRelationalFilter) filter);
-    } else if (filter instanceof LtDoubleRelationalFilter) {
-      return visitLtDoubleRelationalFilter((LtDoubleRelationalFilter) filter);
-    } else if (filter instanceof GeDoubleRelationalFilter) {
-      return visitGeDoubleRelationalFilter((GeDoubleRelationalFilter) filter);
-    } else if (filter instanceof LeDoubleRelationalFilter) {
-      return visitLeDoubleRelationalFilter((LeDoubleRelationalFilter) filter);
-    } else {
-      return null;
+    switch (type) {
+      case RelationalFilter.STRING:
+        return visitStringEq((StringEqFilter) filter);
+      case RelationalFilter.LONG:
+        return visitLongEq((LongEqFilter) filter);
+      case RelationalFilter.DOUBLE:
+        return visitDoubleEq((DoubleEqFilter) filter);
+      default:
+        return null;
     }
   }
 
-  /**
-   * Visit long relational filter.
-   *
-   * @param filter filter
-   * @return result
-   */
-  public T visitLongRelationalFilter(LongRelationalFilter filter) {
-    if (filter instanceof EqLongRelationalFilter) {
-      return visitEqLongRelationalFilter((EqLongRelationalFilter) filter);
-    } else if (filter instanceof NeLongRelationalFilter) {
-      return visitNeLongRelationalFilter((NeLongRelationalFilter) filter);
-    } else if (filter instanceof GtLongRelationalFilter) {
-      return visitGtLongRelationalFilter((GtLongRelationalFilter) filter);
-    } else if (filter instanceof LtLongRelationalFilter) {
-      return visitLtLongRelationalFilter((LtLongRelationalFilter) filter);
-    } else if (filter instanceof GeLongRelationalFilter) {
-      return visitGeLongRelationalFilter((GeLongRelationalFilter) filter);
-    } else if (filter instanceof LeLongRelationalFilter) {
-      return visitLeLongRelationalFilter((LeLongRelationalFilter) filter);
-    } else {
-      return null;
+  abstract T visitStringNe(StringNeFilter filter);
+
+  abstract T visitLongNe(LongNeFilter filter);
+
+  abstract T visitDoubleNe(DoubleNeFilter filter);
+
+  public T visitNe(NeFilter filter) {
+    String type = filter.getType();
+
+    switch (type) {
+      case RelationalFilter.STRING:
+        return visitStringNe((StringNeFilter) filter);
+      case RelationalFilter.LONG:
+        return visitLongNe((LongNeFilter) filter);
+      case RelationalFilter.DOUBLE:
+        return visitDoubleNe((DoubleNeFilter) filter);
+      default:
+        return null;
     }
   }
 
-  /**
-   * Visit string relational filter.
-   *
-   * @param filter filter
-   * @return result
-   */
-  public T visitStringRelationalFilter(StringRelationalFilter filter) {
-    if (filter instanceof EqStringRelationalFilter) {
-      return visitEqStringRelationalFilter((EqStringRelationalFilter) filter);
-    } else if (filter instanceof NeStringRelationalFilter) {
-      return visitNeStringRelationalFilter((NeStringRelationalFilter) filter);
-    } else if (filter instanceof GtStringRelationalFilter) {
-      return visitGtStringRelationalFilter((GtStringRelationalFilter) filter);
-    } else if (filter instanceof LtStringRelationalFilter) {
-      return visitLtStringRelationalFilter((LtStringRelationalFilter) filter);
-    } else if (filter instanceof GeStringRelationalFilter) {
-      return visitGeStringRelationalFilter((GeStringRelationalFilter) filter);
-    } else if (filter instanceof LeStringRelationalFilter) {
-      return visitLeStringRelationalFilter((LeStringRelationalFilter) filter);
-    } else {
-      return null;
+  abstract T visitStringGt(StringGtFilter filter);
+
+  abstract T visitLongGt(LongGtFilter filter);
+
+  abstract T visitDoubleGt(DoubleGtFilter filter);
+
+  public T visitGt(GtFilter filter) {
+    String type = filter.getType();
+
+    switch (type) {
+      case RelationalFilter.STRING:
+        return visitStringGt((StringGtFilter) filter);
+      case RelationalFilter.LONG:
+        return visitLongGt((LongGtFilter) filter);
+      case RelationalFilter.DOUBLE:
+        return visitDoubleGt((DoubleGtFilter) filter);
+      default:
+        return null;
     }
   }
+
+  abstract T visitStringLt(StringLtFilter filter);
+
+  abstract T visitLongLt(LongLtFilter filter);
+
+  abstract T visitDoubleLt(DoubleLtFilter filter);
+
+  public T visitLt(LtFilter filter) {
+    String type = filter.getType();
+
+    switch (type) {
+      case RelationalFilter.STRING:
+        return visitStringLt((StringLtFilter) filter);
+      case RelationalFilter.LONG:
+        return visitLongLt((LongLtFilter) filter);
+      case RelationalFilter.DOUBLE:
+        return visitDoubleLt((DoubleLtFilter) filter);
+      default:
+        return null;
+    }
+  }
+
+  abstract T visitStringGe(StringGeFilter filter);
+
+  abstract T visitLongGe(LongGeFilter filter);
+
+  abstract T visitDoubleGe(DoubleGeFilter filter);
+
+  public T visitGe(GeFilter filter) {
+    String type = filter.getType();
+
+    switch (type) {
+      case RelationalFilter.STRING:
+        return visitStringGe((StringGeFilter) filter);
+      case RelationalFilter.LONG:
+        return visitLongGe((LongGeFilter) filter);
+      case RelationalFilter.DOUBLE:
+        return visitDoubleGe((DoubleGeFilter) filter);
+      default:
+        return null;
+    }
+  }
+
+  abstract T visitStringLe(StringLeFilter filter);
+
+  abstract T visitLongLe(LongLeFilter filter);
+
+  abstract T visitDoubleLe(DoubleLeFilter filter);
+
+  public T visitLe(LeFilter filter) {
+    String type = filter.getType();
+
+    switch (type) {
+      case RelationalFilter.STRING:
+        return visitStringLe((StringLeFilter) filter);
+      case RelationalFilter.LONG:
+        return visitLongLe((LongLeFilter) filter);
+      case RelationalFilter.DOUBLE:
+        return visitDoubleLe((DoubleLeFilter) filter);
+      default:
+        return null;
+    }
+  }
+
+  abstract T visitStringIn(StringInFilter filter);
+
+  abstract T visitLongIn(LongInFilter filter);
+
+  abstract T visitDoubleIn(DoubleInFilter filter);
+
+  public T visitIn(InFilter filter) {
+    String type = filter.getType();
+
+    switch (type) {
+      case RelationalFilter.STRING:
+        return visitStringIn((StringInFilter) filter);
+      case RelationalFilter.LONG:
+        return visitLongIn((LongInFilter) filter);
+      case RelationalFilter.DOUBLE:
+        return visitDoubleIn((DoubleInFilter) filter);
+      default:
+        return null;
+    }
+  }
+
+  public abstract T visitRegex(RegexFilter filter);
 
   /**
    * Visit filter.
@@ -160,28 +199,37 @@ public abstract class FilterVisitor<T> {
    * @return result
    */
   public T visit(Filter filter) {
-    if (filter instanceof AndFilter) {
-      return visitAndFilter((AndFilter) filter);
-    } else if (filter instanceof OrFilter) {
-      return visitOrFilter((OrFilter) filter);
-    } else if (filter instanceof NotFilter) {
-      return visitNotFilter((NotFilter) filter);
-    } else if (filter instanceof StringRelationalFilter) {
-      return visitStringRelationalFilter((StringRelationalFilter) filter);
-    } else if (filter instanceof DoubleRelationalFilter) {
-      return visitDoubleRelationalFilter((DoubleRelationalFilter) filter);
-    } else if (filter instanceof LongRelationalFilter) {
-      return visitLongRelationalFilter((LongRelationalFilter) filter);
-    } else if (filter instanceof InStringArrayRelationalFilter) {
-      return visitInStringArrayRelationalFilter((InStringArrayRelationalFilter) filter);
-    } else if (filter instanceof InDoubleArrayRelationalFilter) {
-      return visitInDoubleArrayRelationalFilter((InDoubleArrayRelationalFilter) filter);
-    } else if (filter instanceof InLongArrayRelationalFilter) {
-      return visitInLongArrayRelationalFilter((InLongArrayRelationalFilter) filter);
-    } else if (filter instanceof RegexFilter) {
-      return visitRegexFilter((RegexFilter) filter);
-    } else {
+    if (Objects.isNull(filter)) {
       return null;
+    }
+
+    String operator = filter.getOperator();
+
+    switch (operator) {
+      case Filter.AND:
+        return visitAnd((AndFilter) filter);
+      case Filter.OR:
+        return visitOr((OrFilter) filter);
+      case Filter.NOT:
+        return visitNot((NotFilter) filter);
+      case Filter.EQ:
+        return visitEq((EqFilter) filter);
+      case Filter.NE:
+        return visitNe((NeFilter) filter);
+      case Filter.GT:
+        return visitGt((GtFilter) filter);
+      case Filter.LT:
+        return visitLt((LtFilter) filter);
+      case Filter.GE:
+        return visitGe((GeFilter) filter);
+      case Filter.LE:
+        return visitLe((LeFilter) filter);
+      case Filter.IN:
+        return visitIn((InFilter) filter);
+      case Filter.REGEX:
+        return visitRegex((RegexFilter) filter);
+      default:
+        return null;
     }
   }
 }
