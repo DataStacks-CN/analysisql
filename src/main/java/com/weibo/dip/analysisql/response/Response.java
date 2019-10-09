@@ -1,7 +1,10 @@
 package com.weibo.dip.analysisql.response;
 
+import com.google.gson.GsonBuilder;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /** Response. */
 public class Response implements Serializable {
@@ -46,5 +49,23 @@ public class Response implements Serializable {
 
   public void setRows(List<Row> rows) {
     this.rows = rows;
+  }
+
+  /**
+   * Add a row.
+   *
+   * @param row row
+   */
+  public void add(Row row) {
+    if (Objects.isNull(rows)) {
+      rows = new ArrayList<>();
+    }
+
+    rows.add(row);
+  }
+
+  @Override
+  public String toString() {
+    return new GsonBuilder().setPrettyPrinting().create().toJson(this);
   }
 }

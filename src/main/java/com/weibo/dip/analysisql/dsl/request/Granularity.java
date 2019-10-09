@@ -1,5 +1,6 @@
 package com.weibo.dip.analysisql.dsl.request;
 
+import com.google.gson.GsonBuilder;
 import java.io.Serializable;
 
 /** Granularity. */
@@ -39,5 +40,10 @@ public class Granularity implements Serializable {
     M,
     q,
     y
+  }
+
+  @Override
+  public String toString() {
+    return new GsonBuilder().setPrettyPrinting().create().toJson(this);
   }
 }

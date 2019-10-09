@@ -12,7 +12,7 @@ public class QueryRequest extends Request {
   private String[] groups;
   private Filter having;
   private Order[] orders;
-  private int limit;
+  private int limit = -1;
 
   public QueryRequest() {
     super(Request.QUERY);

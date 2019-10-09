@@ -5,7 +5,7 @@ public class GetMetricsRequest extends Request {
   private String topic;
 
   public GetMetricsRequest() {
-    super(Request.GET_DIMENTIONS);
+    super(Request.GET_METRICS);
   }
 
   /**

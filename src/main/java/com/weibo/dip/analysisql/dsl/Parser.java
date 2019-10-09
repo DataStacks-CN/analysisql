@@ -37,6 +37,9 @@ public class Parser {
       FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 
   public static final String GRANULARITY = "granularity";
+  public static final String DATA = "data";
+  public static final String UNIT = "unit";
+
   public static final String METRICS = "metrics";
   public static final String WHERE = "where";
   public static final String GROUPS = "groups";
@@ -127,8 +130,8 @@ public class Parser {
 
   private Request parseGetDimentions(JsonObject json) {
     if (!json.has(TOPIC)
-        || !json.get(TYPE).isJsonPrimitive()
-        || !json.getAsJsonPrimitive(TYPE).isString()) {
+        || !json.get(TOPIC).isJsonPrimitive()
+        || !json.getAsJsonPrimitive(TOPIC).isString()) {
       throw new SyntaxException("Type getDimentions, property 'topic'(string) must be set");
     }
 
@@ -139,8 +142,8 @@ public class Parser {
 
   private Request parseGetDimentionValues(JsonObject json) {
     if (!json.has(TOPIC)
-        || !json.get(TYPE).isJsonPrimitive()
-        || !json.getAsJsonPrimitive(TYPE).isString()
+        || !json.get(TOPIC).isJsonPrimitive()
+        || !json.getAsJsonPrimitive(TOPIC).isString()
         || !json.has(DIMENTION)
         || !json.get(DIMENTION).isJsonPrimitive()
         || !json.getAsJsonPrimitive(DIMENTION).isString()) {
@@ -156,8 +159,8 @@ public class Parser {
 
   private Request parseGetMetrics(JsonObject json) {
     if (!json.has(TOPIC)
-        || !json.get(TYPE).isJsonPrimitive()
-        || !json.getAsJsonPrimitive(TYPE).isString()) {
+        || !json.get(TOPIC).isJsonPrimitive()
+        || !json.getAsJsonPrimitive(TOPIC).isString()) {
       throw new SyntaxException("Type getMetrics, property 'topic'(string) must be set");
     }
 
@@ -168,21 +171,21 @@ public class Parser {
 
   private Request parseQuery(JsonObject json) {
     if (!json.has(TOPIC)
-        || !json.get(TYPE).isJsonPrimitive()
-        || !json.get(TYPE).getAsJsonPrimitive().isString()
+        || !json.get(TOPIC).isJsonPrimitive()
+        || !json.get(TOPIC).getAsJsonPrimitive().isString()
         || !json.has(INTERVAL)
         || !json.get(INTERVAL).isJsonObject()
         || !(json.getAsJsonObject(INTERVAL).entrySet().size() > 0)
         || !json.has(GRANULARITY)
-        || !json.get(GRANULARITY).isJsonPrimitive()
-        || !json.getAsJsonPrimitive(GRANULARITY).isString()
+        || !json.get(GRANULARITY).isJsonObject()
+        || !(json.getAsJsonObject(GRANULARITY).entrySet().size() > 0)
         || !json.has(METRICS)
         || !json.get(METRICS).isJsonArray()
         || !(json.getAsJsonArray(METRICS).size() > 0)) {
       throw new SyntaxException(
           "Type query, property "
               + "'topic'(string), 'interval'(json), "
-              + "'granularity'(string), 'metrics'(array) must be set");
+              + "'granularity'(object), 'metrics'(array) must be set");
     }
 
     QueryRequest queryRequest = new QueryRequest();
@@ -225,17 +228,22 @@ public class Parser {
     /*
      granularity
     */
-    String granularityStr = json.getAsJsonPrimitive(GRANULARITY).getAsString();
+    JsonObject granularityObj = json.getAsJsonObject(GRANULARITY);
+    if (!granularityObj.has(DATA)
+        || !granularityObj.get(DATA).isJsonPrimitive()
+        || !granularityObj.getAsJsonPrimitive(DATA).isNumber()
+        || !granularityObj.has(UNIT)
+        || !granularityObj.get(UNIT).isJsonPrimitive()
+        || !granularityObj.getAsJsonPrimitive(UNIT).isString()) {
+      throw new SyntaxException(
+          "Type query/granularity, property " + "'data'(int), 'unit'(string) must be set");
+    }
 
-    String dataStr = granularityStr.substring(0, granularityStr.length() - 1);
-    String unitStr = granularityStr.substring(granularityStr.length() - 1);
-
-    int data;
+    int data = granularityObj.getAsJsonPrimitive(DATA).getAsInt();
     Granularity.Unit unit;
 
     try {
-      data = Integer.valueOf(dataStr);
-      unit = Granularity.Unit.valueOf(unitStr);
+      unit = Granularity.Unit.valueOf(granularityObj.getAsJsonPrimitive(UNIT).getAsString());
     } catch (IllegalArgumentException e) {
       throw new SyntaxException(
           "Type query, property 'granularity' must be in '1s/2m/3h/4d/5w/6M/1q/1y' format");

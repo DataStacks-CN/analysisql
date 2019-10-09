@@ -1,5 +1,6 @@
 package com.weibo.dip.analysisql.dsl.request;
 
+import com.google.gson.GsonBuilder;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,5 +30,10 @@ public class Interval implements Serializable {
 
   public void setEnd(Date end) {
     this.end = end;
+  }
+
+  @Override
+  public String toString() {
+    return new GsonBuilder().setPrettyPrinting().create().toJson(this);
   }
 }
