@@ -8,6 +8,8 @@ import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.dsl.request.Request;
 import com.weibo.dip.analysisql.response.Response;
+import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 
 /** AnalysisQl. */
 public class AnalysisQl {
@@ -24,36 +26,45 @@ public class AnalysisQl {
    * @return response
    */
   public Response request(String dsl) {
+    if (StringUtils.isEmpty(dsl)) {
+      return null;
+    }
+
     Parser parser = new Parser(connector);
 
     Request request = parser.parse(dsl);
 
-    Response response;
+    return request(request);
+  }
+
+  /**
+   * Request with a instance.
+   *
+   * @param request request
+   * @return response
+   */
+  public Response request(Request request) {
+    if (Objects.isNull(request)) {
+      return null;
+    }
 
     switch (request.getType()) {
       case Request.GET_TOPICS:
-        response = connector.getTopics((GetTopicsRequest) request);
-        break;
+        return connector.getTopics((GetTopicsRequest) request);
 
       case Request.GET_DIMENTIONS:
-        response = connector.getDimentions((GetDimentionsRequest) request);
-        break;
+        return connector.getDimentions((GetDimentionsRequest) request);
 
       case Request.GET_DIMENTION_VALUES:
-        response = connector.getDimentionValues((GetDimentionValuesRequest) request);
-        break;
+        return connector.getDimentionValues((GetDimentionValuesRequest) request);
 
       case Request.GET_METRICS:
-        response = connector.getMetrics((GetMetricsRequest) request);
-        break;
+        return connector.getMetrics((GetMetricsRequest) request);
 
       case Request.QUERY:
-        response = connector.query((QueryRequest) request);
-        break;
+        return connector.query((QueryRequest) request);
       default:
-        response = null;
+        throw new UnsupportedOperationException();
     }
-
-    return response;
   }
 }
