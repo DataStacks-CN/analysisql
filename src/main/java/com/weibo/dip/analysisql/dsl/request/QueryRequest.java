@@ -7,7 +7,7 @@ public class QueryRequest extends Request {
   private String topic;
   private Interval interval;
   private Granularity granularity;
-  private String[] metrics;
+  private String metric;
   private Filter where;
   private String[] groups;
   private Filter having;
@@ -25,7 +25,7 @@ public class QueryRequest extends Request {
    * @param topic topic
    * @param interval interval
    * @param granularity granularity
-   * @param metrics metrics
+   * @param metric metric
    * @param where where
    * @param groups groups
    * @param having having
@@ -36,7 +36,7 @@ public class QueryRequest extends Request {
       String topic,
       Interval interval,
       Granularity granularity,
-      String[] metrics,
+      String metric,
       Filter where,
       String[] groups,
       Filter having,
@@ -45,7 +45,7 @@ public class QueryRequest extends Request {
     this.topic = topic;
     this.interval = interval;
     this.granularity = granularity;
-    this.metrics = metrics;
+    this.metric = metric;
     this.where = where;
     this.groups = groups;
     this.having = having;
@@ -77,12 +77,12 @@ public class QueryRequest extends Request {
     this.granularity = granularity;
   }
 
-  public String[] getMetrics() {
-    return metrics;
+  public String getMetric() {
+    return metric;
   }
 
-  public void setMetrics(String[] metrics) {
-    this.metrics = metrics;
+  public void setMetric(String metric) {
+    this.metric = metric;
   }
 
   public Filter getWhere() {

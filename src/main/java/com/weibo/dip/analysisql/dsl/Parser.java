@@ -38,7 +38,7 @@ public class Parser {
   public static final String DATA = "data";
   public static final String UNIT = "unit";
 
-  public static final String METRICS = "metrics";
+  public static final String METRIC = "metric";
   public static final String WHERE = "where";
   public static final String GROUPS = "groups";
   public static final String HAVING = "having";
@@ -178,13 +178,13 @@ public class Parser {
         || !json.has(GRANULARITY)
         || !json.get(GRANULARITY).isJsonObject()
         || !(json.getAsJsonObject(GRANULARITY).entrySet().size() > 0)
-        || !json.has(METRICS)
-        || !json.get(METRICS).isJsonArray()
-        || !(json.getAsJsonArray(METRICS).size() > 0)) {
+        || !json.has(METRIC)
+        || !json.get(METRIC).isJsonPrimitive()
+        || !json.getAsJsonPrimitive(METRIC).isString()) {
       throw new SyntaxException(
           "Type query, property "
               + "'topic'(string), 'interval'(json), "
-              + "'granularity'(object), 'metrics'(array) must be set");
+              + "'granularity'(object), 'metric'(string) must be set");
     }
 
     QueryRequest queryRequest = new QueryRequest();
@@ -252,22 +252,9 @@ public class Parser {
     queryRequest.setGranularity(granularity);
 
     /*
-     metrics
+     metric
     */
-    JsonArray metricArray = json.getAsJsonArray(METRICS);
-
-    String[] metrics = new String[metricArray.size()];
-
-    for (int index = 0; index < metricArray.size(); index++) {
-      JsonElement item = metricArray.get(index);
-      if (!item.isJsonPrimitive() || !item.getAsJsonPrimitive().isString()) {
-        throw new SyntaxException("Type query, property 'metrics' must be a string array");
-      }
-
-      metrics[index] = item.getAsJsonPrimitive().getAsString();
-    }
-
-    queryRequest.setMetrics(metrics);
+    queryRequest.setMetric(json.get(METRIC).getAsString());
 
     /*
      where
