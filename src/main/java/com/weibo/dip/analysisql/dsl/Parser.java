@@ -20,8 +20,6 @@ import com.weibo.dip.analysisql.dsl.request.Request;
 import com.weibo.dip.analysisql.exception.SyntaxException;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Map;
-import java.util.Set;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 /** Parser. */
@@ -57,6 +55,7 @@ public class Parser {
   public static final String VALUES = "values";
   public static final String PATTERN = "pattern";
 
+  public static final String SORT = "sort";
   public static final String ASC = "asc";
   public static final String DESC = "desc";
 
@@ -320,27 +319,38 @@ public class Parser {
     */
     Order[] orders = null;
     if (json.has(ORDERS) && !json.get(ORDERS).isJsonNull()) {
-      if (!json.get(ORDERS).isJsonObject()
-          || !(json.getAsJsonObject(ORDERS).entrySet().size() > 0)) {
-        throw new SyntaxException("Type query, property 'orders'(object) must be set");
+      if (!json.get(ORDERS).isJsonArray()) {
+        throw new SyntaxException("Type query, property 'orders'(array) must be set");
       }
 
-      Set<Map.Entry<String, JsonElement>> entries = json.getAsJsonObject(ORDERS).entrySet();
+      JsonArray orderArray = json.getAsJsonArray(ORDERS);
 
-      orders = new Order[entries.size()];
+      orders = new Order[orderArray.size()];
 
-      int index = 0;
-      for (Map.Entry<String, JsonElement> entry : entries) {
-        String name = entry.getKey();
-        JsonElement sort = entry.getValue();
-        if (!sort.isJsonPrimitive()
-            || !sort.getAsJsonPrimitive().isString()
-            || !(sort.getAsString().equals(ASC) || sort.getAsString().equals(DESC))) {
+      for (int index = 0; index < orderArray.size(); index++) {
+        JsonElement item = orderArray.get(index);
+        if (!item.isJsonObject()
+            || !item.getAsJsonObject().has(NAME)
+            || !item.getAsJsonObject().get(NAME).isJsonPrimitive()
+            || !item.getAsJsonObject().getAsJsonPrimitive(NAME).isString()
+            || !item.getAsJsonObject().has(SORT)
+            || !item.getAsJsonObject().get(SORT).isJsonPrimitive()
+            || !item.getAsJsonObject().getAsJsonPrimitive(SORT).isString()) {
           throw new SyntaxException(
-              "Type query, property 'orders'(object)'s value must be 'asc'/'desc'");
+              "Type query, property 'orders'(object)'s order "
+                  + "must has property(string) 'name' and 'sort'");
         }
 
-        orders[index] = new Order(name, Order.Sort.valueOf(sort.getAsString()));
+        JsonObject order = item.getAsJsonObject();
+
+        String name = order.getAsJsonPrimitive(NAME).getAsString();
+        String sort = order.getAsJsonPrimitive(SORT).getAsString();
+        if (!(sort.equals(ASC) || sort.equals(DESC))) {
+          throw new SyntaxException(
+              "Type query, property 'orders'(object)'s order" + " 'sort' must be 'asc/desc'");
+        }
+
+        orders[index] = new Order(name, Order.Sort.valueOf(sort));
       }
     }
 
