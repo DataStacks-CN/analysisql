@@ -36,17 +36,17 @@ import java.util.Objects;
 
 /** FilterVisitor. */
 public abstract class FilterVisitor<T> {
-  abstract T visitAnd(AndFilter filter);
+  protected abstract T visitAnd(AndFilter filter);
 
-  abstract T visitOr(OrFilter filter);
+  protected abstract T visitOr(OrFilter filter);
 
-  abstract T visitNot(NotFilter filter);
+  protected abstract T visitNot(NotFilter filter);
 
-  abstract T visitStringEq(StringEqFilter filter);
+  protected abstract T visitStringEq(StringEqFilter filter);
 
-  abstract T visitLongEq(LongEqFilter filter);
+  protected abstract T visitLongEq(LongEqFilter filter);
 
-  abstract T visitDoubleEq(DoubleEqFilter filter);
+  protected abstract T visitDoubleEq(DoubleEqFilter filter);
 
   /**
    * Visit eq filter.
@@ -69,11 +69,11 @@ public abstract class FilterVisitor<T> {
     }
   }
 
-  abstract T visitStringNe(StringNeFilter filter);
+  protected abstract T visitStringNe(StringNeFilter filter);
 
-  abstract T visitLongNe(LongNeFilter filter);
+  protected abstract T visitLongNe(LongNeFilter filter);
 
-  abstract T visitDoubleNe(DoubleNeFilter filter);
+  protected abstract T visitDoubleNe(DoubleNeFilter filter);
 
   /**
    * Visit ne filter.
@@ -96,11 +96,11 @@ public abstract class FilterVisitor<T> {
     }
   }
 
-  abstract T visitStringGt(StringGtFilter filter);
+  protected abstract T visitStringGt(StringGtFilter filter);
 
-  abstract T visitLongGt(LongGtFilter filter);
+  protected abstract T visitLongGt(LongGtFilter filter);
 
-  abstract T visitDoubleGt(DoubleGtFilter filter);
+  protected abstract T visitDoubleGt(DoubleGtFilter filter);
 
   /**
    * Visit gt filter.
@@ -123,11 +123,11 @@ public abstract class FilterVisitor<T> {
     }
   }
 
-  abstract T visitStringLt(StringLtFilter filter);
+  protected abstract T visitStringLt(StringLtFilter filter);
 
-  abstract T visitLongLt(LongLtFilter filter);
+  protected abstract T visitLongLt(LongLtFilter filter);
 
-  abstract T visitDoubleLt(DoubleLtFilter filter);
+  protected abstract T visitDoubleLt(DoubleLtFilter filter);
 
   /**
    * Visit lt filter.
@@ -150,11 +150,11 @@ public abstract class FilterVisitor<T> {
     }
   }
 
-  abstract T visitStringGe(StringGeFilter filter);
+  protected abstract T visitStringGe(StringGeFilter filter);
 
-  abstract T visitLongGe(LongGeFilter filter);
+  protected abstract T visitLongGe(LongGeFilter filter);
 
-  abstract T visitDoubleGe(DoubleGeFilter filter);
+  protected abstract T visitDoubleGe(DoubleGeFilter filter);
 
   /**
    * Visit ge filter.
@@ -177,11 +177,11 @@ public abstract class FilterVisitor<T> {
     }
   }
 
-  abstract T visitStringLe(StringLeFilter filter);
+  protected abstract T visitStringLe(StringLeFilter filter);
 
-  abstract T visitLongLe(LongLeFilter filter);
+  protected abstract T visitLongLe(LongLeFilter filter);
 
-  abstract T visitDoubleLe(DoubleLeFilter filter);
+  protected abstract T visitDoubleLe(DoubleLeFilter filter);
 
   /**
    * Visit le filter.
@@ -204,11 +204,11 @@ public abstract class FilterVisitor<T> {
     }
   }
 
-  abstract T visitStringIn(StringInFilter filter);
+  protected abstract T visitStringIn(StringInFilter filter);
 
-  abstract T visitLongIn(LongInFilter filter);
+  protected abstract T visitLongIn(LongInFilter filter);
 
-  abstract T visitDoubleIn(DoubleInFilter filter);
+  protected abstract T visitDoubleIn(DoubleInFilter filter);
 
   /**
    * Visit in filter.

@@ -1,5 +1,6 @@
 package com.weibo.dip.analysisql.dsl.request;
 
+import com.weibo.dip.analysisql.GsonCreator;
 import java.io.Serializable;
 
 /** Order. */
@@ -33,5 +34,10 @@ public class Order implements Serializable {
   public enum Sort {
     asc,
     desc
+  }
+
+  @Override
+  public String toString() {
+    return GsonCreator.create().toJson(this);
   }
 }

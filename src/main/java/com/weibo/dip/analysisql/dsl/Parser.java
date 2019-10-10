@@ -274,7 +274,7 @@ public class Parser {
      where
     */
     Filter where = null;
-    if (json.has(WHERE)) {
+    if (json.has(WHERE) && !json.get(WHERE).isJsonNull()) {
       where = new FilterParser(WHERE, connector).parse(json.get(WHERE));
     }
 
@@ -284,7 +284,7 @@ public class Parser {
      groups
     */
     String[] groups = null;
-    if (json.has(GROUPS)) {
+    if (json.has(GROUPS) && !json.get(GROUPS).isJsonNull()) {
       if (!json.get(GROUPS).isJsonArray()) {
         throw new SyntaxException("Type query, property 'groups'(array) must be set");
       }
@@ -309,7 +309,7 @@ public class Parser {
      having
     */
     Filter having = null;
-    if (json.has(HAVING)) {
+    if (json.has(HAVING) && !json.get(HAVING).isJsonNull()) {
       having = new FilterParser(HAVING, connector).parse(json.get(HAVING));
     }
 
@@ -319,7 +319,7 @@ public class Parser {
      order
     */
     Order[] orders = null;
-    if (json.has(ORDERS)) {
+    if (json.has(ORDERS) && !json.get(ORDERS).isJsonNull()) {
       if (!json.get(ORDERS).isJsonObject()
           || !(json.getAsJsonObject(ORDERS).entrySet().size() > 0)) {
         throw new SyntaxException("Type query, property 'orders'(object) must be set");
@@ -350,7 +350,7 @@ public class Parser {
      limit
     */
     int limit = 0;
-    if (json.has(LIMIT)) {
+    if (json.has(LIMIT) && !json.get(LIMIT).isJsonNull()) {
       if (!json.get(LIMIT).isJsonPrimitive()
           || !json.getAsJsonPrimitive(LIMIT).isNumber()
           || ((json.getAsJsonPrimitive(LIMIT).getAsNumber() instanceof Float)

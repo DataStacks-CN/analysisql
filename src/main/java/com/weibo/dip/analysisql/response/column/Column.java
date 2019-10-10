@@ -1,6 +1,6 @@
 package com.weibo.dip.analysisql.response.column;
 
-import com.google.gson.GsonBuilder;
+import com.weibo.dip.analysisql.GsonCreator;
 import com.weibo.dip.analysisql.dsl.filter.relational.RelationalFilter;
 import java.io.Serializable;
 
@@ -55,6 +55,6 @@ public abstract class Column<T> implements Serializable {
 
   @Override
   public String toString() {
-    return new GsonBuilder().setPrettyPrinting().create().toJson(this);
+    return GsonCreator.create().toJson(this);
   }
 }

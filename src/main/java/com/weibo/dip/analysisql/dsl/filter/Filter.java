@@ -1,5 +1,6 @@
 package com.weibo.dip.analysisql.dsl.filter;
 
+import com.weibo.dip.analysisql.GsonCreator;
 import java.io.Serializable;
 
 /** Filter. */
@@ -35,5 +36,10 @@ public abstract class Filter implements Serializable {
 
   public void setOperator(String operator) {
     this.operator = operator;
+  }
+
+  @Override
+  public String toString() {
+    return GsonCreator.create().toJson(this);
   }
 }

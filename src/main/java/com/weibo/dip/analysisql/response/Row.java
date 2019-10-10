@@ -1,6 +1,6 @@
 package com.weibo.dip.analysisql.response;
 
-import com.google.gson.GsonBuilder;
+import com.weibo.dip.analysisql.GsonCreator;
 import com.weibo.dip.analysisql.response.column.Column;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -45,6 +45,6 @@ public class Row implements Serializable {
 
   @Override
   public String toString() {
-    return new GsonBuilder().setPrettyPrinting().create().toJson(this);
+    return GsonCreator.create().toJson(this);
   }
 }
