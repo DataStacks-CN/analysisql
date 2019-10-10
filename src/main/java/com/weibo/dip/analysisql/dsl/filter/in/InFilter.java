@@ -9,6 +9,7 @@ public abstract class InFilter<T> extends Filter {
   public static final String LONG = RelationalFilter.LONG;
   public static final String DOUBLE = RelationalFilter.DOUBLE;
 
+  protected String name;
   protected String type;
   protected T[] values;
 
@@ -23,8 +24,17 @@ public abstract class InFilter<T> extends Filter {
   public InFilter(String name, String type, T[] values) {
     super(Filter.IN);
 
+    this.name = name;
     this.type = type;
     this.values = values;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getType() {
