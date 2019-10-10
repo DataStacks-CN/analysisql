@@ -77,7 +77,7 @@ public class FilterParser {
       filters.add(parse(filterArray.get(index)));
     }
 
-    switch (context) {
+    switch (operator) {
       case Filter.AND:
         return new AndFilter(filters);
       case Filter.OR:

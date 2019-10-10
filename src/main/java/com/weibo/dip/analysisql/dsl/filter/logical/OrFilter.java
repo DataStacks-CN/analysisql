@@ -32,6 +32,11 @@ public class OrFilter extends Filter {
     this.filters = filters;
   }
 
+  /**
+   * Add a filter.
+   *
+   * @param filter filter
+   */
   public void add(Filter filter) {
     if (Objects.isNull(filters)) {
       filters = new ArrayList<>();
