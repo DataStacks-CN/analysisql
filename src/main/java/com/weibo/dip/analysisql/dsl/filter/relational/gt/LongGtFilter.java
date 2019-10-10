@@ -13,6 +13,6 @@ public class LongGtFilter extends GtFilter<Long> {
    * @param value long value
    */
   public LongGtFilter(String name, long value) {
-    super(name, RelationalFilter.STRING, value);
+    super(name, RelationalFilter.LONG, value);
   }
 }

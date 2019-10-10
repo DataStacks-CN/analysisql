@@ -13,6 +13,6 @@ public class DoubleGtFilter extends GtFilter<Double> {
    * @param value double value
    */
   public DoubleGtFilter(String name, double value) {
-    super(name, RelationalFilter.STRING, value);
+    super(name, RelationalFilter.DOUBLE, value);
   }
 }
