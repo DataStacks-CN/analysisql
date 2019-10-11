@@ -8,6 +8,16 @@
   <artifactId>analysisql</artifactId>
   <version>1.0</version>
 
+  <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <name>releases</name>
+      <url>
+        http://maven.dip.weibo.com:8888/nexus/content/repositories/releases/
+      </url>
+    </repository>
+  </distributionManagement>
+
   <properties>
     <gson.version>2.6.2</gson.version>
     <commons-lang3.version>3.7</commons-lang3.version>
