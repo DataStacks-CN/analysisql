@@ -1,6 +1,6 @@
 package com.weibo.dip.analysisql.response;
 
-import com.weibo.dip.analysisql.GsonCreator;
+import com.weibo.dip.analysisql.util.GsonCreator;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

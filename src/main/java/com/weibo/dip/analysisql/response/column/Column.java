@@ -1,7 +1,7 @@
 package com.weibo.dip.analysisql.response.column;
 
-import com.weibo.dip.analysisql.GsonCreator;
 import com.weibo.dip.analysisql.dsl.filter.relational.RelationalFilter;
+import com.weibo.dip.analysisql.util.GsonCreator;
 import java.io.Serializable;
 
 /** Column. */
