@@ -346,7 +346,7 @@ public class Parser {
     /*
      limit
     */
-    int limit = 0;
+    int limit = -1;
     if (json.has(LIMIT) && !json.get(LIMIT).isJsonNull()) {
       if (!json.get(LIMIT).isJsonPrimitive()
           || !json.getAsJsonPrimitive(LIMIT).isNumber()
