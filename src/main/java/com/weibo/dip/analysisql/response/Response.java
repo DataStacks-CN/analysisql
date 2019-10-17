@@ -8,6 +8,7 @@ import java.util.Objects;
 
 /** Response. */
 public class Response implements Serializable {
+  private String sessionId;
   private int code;
   private String msg;
   private List<Row> rows;
@@ -25,6 +26,14 @@ public class Response implements Serializable {
     this.code = code;
     this.msg = msg;
     this.rows = rows;
+  }
+
+  public String getSessionId() {
+    return sessionId;
+  }
+
+  public void setSessionId(String sessionId) {
+    this.sessionId = sessionId;
   }
 
   public int getCode() {
