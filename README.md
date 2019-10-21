@@ -87,3 +87,71 @@
   "rows": [{"value": "metric1"}, {"value": "metric2"}, ...]
 }
 ```
+
+## query（查询）
+
+**request**
+
+```json
+{
+	"type": "query",
+	"topic": "topic1",
+	"interval": {"start": "$START_TIME", "end": "$END_TIME"},
+	"granularity": {"data": n, "unit": "s/m/h/d/w/M/q/y"},
+	"metric": "metric1",
+	"where": $DIMENTION_FILTER,
+	"groups": ["dimention1", "dimention2", "..."],
+	"having": $METRIC_FILTER,
+	"orders": [{"name": "dimention1", "sort": "asc"}, {"name": "metric1", "sort": "desc"}, ...],
+	"limit": 1000
+}
+```
+
+### $START_TIME/$END_TIME
+
+```text
+  yyyy-MM-dd HH:mm:ss
+```text
+
+**response**
+
+```json
+{
+  "sessionId": "...",
+  "code": ...,
+  "msg": "...",
+  "rows": [{"value": "metric1"}, {"value": "metric2"}, ...]
+}
+```
+
+### $DIMENTION_FILTER/$METRIC_FILTER
+
+```json
+{
+	"operator": "and/or",
+	"filters": [$FILTER1, $FILTER2, ...]
+}
+
+{
+	"operator": "not",
+	"filter": $FILTER
+}
+
+{
+	"operator": "eq/ne/gt/lt/ge/le",
+	"name": "dimention/metric",
+	"value": $STRING/$NUMBER
+}
+
+{
+	"operator": "in",
+	"name": "dimention/metric",
+	"values": [$STRING/$NUMBER, ...]
+}
+
+{
+	"operator": "regex",
+	"name": "dimention",
+	"pattern": "$JAVA_REGULAR_EXPRESSION"
+}
+```
