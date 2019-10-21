@@ -107,12 +107,6 @@
 }
 ```
 
-### $START_TIME/$END_TIME
-
-```text
-  yyyy-MM-dd HH:mm:ss
-```text
-
 **response**
 
 ```json
@@ -120,8 +114,14 @@
   "sessionId": "...",
   "code": ...,
   "msg": "...",
-  "rows": [{"value": "metric1"}, {"value": "metric2"}, ...]
+  "rows": [{"dimention1": $STRING, "metric1": $NUMBER, "...": ...}, ...]
 }
+```
+
+### $START_TIME/$END_TIME
+
+```text
+  yyyy-MM-dd HH:mm:ss
 ```
 
 ### $DIMENTION_FILTER/$METRIC_FILTER
