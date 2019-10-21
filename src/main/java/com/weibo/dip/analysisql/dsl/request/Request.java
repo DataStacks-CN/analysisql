@@ -11,12 +11,21 @@ public abstract class Request implements Serializable {
   public static final String GET_METRICS = "getMetrics";
   public static final String QUERY = "query";
 
+  protected String sessionId;
   protected String type;
 
   public Request() {}
 
   public Request(String type) {
     this.type = type;
+  }
+
+  public String getSessionId() {
+    return sessionId;
+  }
+
+  public void setSessionId(String sessionId) {
+    this.sessionId = sessionId;
   }
 
   public String getType() {

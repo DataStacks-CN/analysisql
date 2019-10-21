@@ -24,6 +24,7 @@ import org.apache.commons.lang3.time.FastDateFormat;
 
 /** Parser. */
 public class Parser {
+  public static final String SESSION_ID = "sessionId";
   public static final String TYPE = "type";
   public static final String TOPIC = "topic";
   public static final String DIMENTION = "dimention";
@@ -118,6 +119,12 @@ public class Parser {
         break;
       default:
         throw new SyntaxException("Unsupported type '" + type + "'");
+    }
+
+    if (json.has(SESSION_ID)
+        && json.get(SESSION_ID).isJsonPrimitive()
+        && json.getAsJsonPrimitive(SESSION_ID).isString()) {
+      request.setSessionId(json.getAsJsonPrimitive(SESSION_ID).getAsString());
     }
 
     return request;
@@ -346,7 +353,7 @@ public class Parser {
     /*
      limit
     */
-    int limit = 0;
+    int limit = -1;
     if (json.has(LIMIT) && !json.get(LIMIT).isJsonNull()) {
       if (!json.get(LIMIT).isJsonPrimitive()
           || !json.getAsJsonPrimitive(LIMIT).isNumber()
