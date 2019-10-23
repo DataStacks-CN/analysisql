@@ -60,6 +60,8 @@ public class Parser {
   public static final String ASC = "asc";
   public static final String DESC = "desc";
 
+  public static final String ALIAS = "alias";
+
   private Connector connector;
 
   public Parser(Connector connector) {
