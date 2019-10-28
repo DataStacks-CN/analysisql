@@ -162,7 +162,12 @@ public class Parser {
     String topic = json.getAsJsonPrimitive(TOPIC).getAsString();
     String dimention = json.getAsJsonPrimitive(DIMENTION).getAsString();
 
-    return new GetDimentionValuesRequest(topic, dimention);
+    Filter where = null;
+    if (json.has(WHERE) && !json.get(WHERE).isJsonNull()) {
+      where = new FilterParser(WHERE, connector).parse(json.get(WHERE));
+    }
+
+    return new GetDimentionValuesRequest(topic, dimention, where);
   }
 
   private Request parseGetMetrics(JsonObject json) {
