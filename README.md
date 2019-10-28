@@ -51,7 +51,8 @@
 {
   "type": "getDimentionValues",
   "topic": "topic1",
-  "dimention": "dimention1"
+  "dimention": "dimention1",
+  "where": $DIMENTION_FILTER
 }
 ```
 
