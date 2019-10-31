@@ -189,16 +189,13 @@ public class Parser {
         || !json.has(INTERVAL)
         || !json.get(INTERVAL).isJsonObject()
         || !(json.getAsJsonObject(INTERVAL).entrySet().size() > 0)
-        || !json.has(GRANULARITY)
-        || !json.get(GRANULARITY).isJsonObject()
-        || !(json.getAsJsonObject(GRANULARITY).entrySet().size() > 0)
         || !json.has(METRIC)
         || !json.get(METRIC).isJsonPrimitive()
         || !json.getAsJsonPrimitive(METRIC).isString()) {
       throw new SyntaxException(
           "Type query, property "
               + "'topic'(string), 'interval'(json), "
-              + "'granularity'(object), 'metric'(string) must be set");
+              + "'metric'(string) must be set");
     }
 
     QueryRequest queryRequest = new QueryRequest();
@@ -241,25 +238,33 @@ public class Parser {
     /*
      granularity
     */
-    JsonObject granularityObj = json.getAsJsonObject(GRANULARITY);
-    if (!granularityObj.has(DATA)
-        || !granularityObj.get(DATA).isJsonPrimitive()
-        || !granularityObj.getAsJsonPrimitive(DATA).isNumber()
-        || !granularityObj.has(UNIT)
-        || !granularityObj.get(UNIT).isJsonPrimitive()
-        || !granularityObj.getAsJsonPrimitive(UNIT).isString()) {
-      throw new SyntaxException(
-          "Type query/granularity, property " + "'data'(int), 'unit'(string) must be set");
-    }
+    int data = Integer.MAX_VALUE;
+    Granularity.Unit unit = Granularity.Unit.d;
 
-    int data = granularityObj.getAsJsonPrimitive(DATA).getAsInt();
-    Granularity.Unit unit;
+    if (json.has(GRANULARITY) && !json.get(GRANULARITY).isJsonNull()) {
+      if (!json.get(GRANULARITY).isJsonObject()) {
+        throw new SyntaxException("Type query/granularity must be a object");
+      }
 
-    try {
-      unit = Granularity.Unit.valueOf(granularityObj.getAsJsonPrimitive(UNIT).getAsString());
-    } catch (IllegalArgumentException e) {
-      throw new SyntaxException(
-          "Type query, property 'granularity' must be in '1s/2m/3h/4d/5w/6M/1q/1y' format");
+      JsonObject granularityObj = json.getAsJsonObject(GRANULARITY);
+      if (!granularityObj.has(DATA)
+          || !granularityObj.get(DATA).isJsonPrimitive()
+          || !granularityObj.getAsJsonPrimitive(DATA).isNumber()
+          || !granularityObj.has(UNIT)
+          || !granularityObj.get(UNIT).isJsonPrimitive()
+          || !granularityObj.getAsJsonPrimitive(UNIT).isString()) {
+        throw new SyntaxException(
+            "Type query/granularity, property " + "'data'(int), 'unit'(string) must be set");
+      }
+
+      data = granularityObj.getAsJsonPrimitive(DATA).getAsInt();
+
+      try {
+        unit = Granularity.Unit.valueOf(granularityObj.getAsJsonPrimitive(UNIT).getAsString());
+      } catch (IllegalArgumentException e) {
+        throw new SyntaxException(
+            "Type query, property 'granularity' must be in '1s/2m/3h/4d/5w/6M/1q/1y' format");
+      }
     }
 
     Granularity granularity = new Granularity(data, unit);
