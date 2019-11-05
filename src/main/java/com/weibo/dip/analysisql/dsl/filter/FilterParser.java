@@ -303,7 +303,7 @@ public class FilterParser {
     }
 
     String name = json.getAsJsonPrimitive(Parser.NAME).getAsString();
-    String pattern = json.getAsJsonPrimitive(Parser.VALUE).getAsString();
+    String pattern = json.getAsJsonPrimitive(Parser.PATTERN).getAsString();
 
     return new RegexFilter(name, pattern);
   }
