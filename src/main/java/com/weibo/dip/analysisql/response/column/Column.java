@@ -10,6 +10,10 @@ public abstract class Column<T> implements Serializable {
   public static final String LONG = RelationalFilter.LONG;
   public static final String DOUBLE = RelationalFilter.DOUBLE;
 
+  public static final String ARRAY_STRING = "array(string)";
+  public static final String ARRAY_LONG = "array(long)";
+  public static final String ARRAY_DOUBLE = "array(double)";
+
   protected String name;
   protected String type;
   protected T value;
