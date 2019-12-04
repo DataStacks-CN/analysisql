@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.weibo.dip.analysisql.Connector;
+import com.weibo.dip.analysisql.connector.Connector;
 import com.weibo.dip.analysisql.dsl.Parser;
 import com.weibo.dip.analysisql.dsl.filter.in.DoubleInFilter;
 import com.weibo.dip.analysisql.dsl.filter.in.LongInFilter;

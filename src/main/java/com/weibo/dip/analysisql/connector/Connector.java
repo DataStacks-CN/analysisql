@@ -1,4 +1,4 @@
-package com.weibo.dip.analysisql;
+package com.weibo.dip.analysisql.connector;
 
 import com.weibo.dip.analysisql.dsl.request.GetDimentionValuesRequest;
 import com.weibo.dip.analysisql.dsl.request.GetDimentionsRequest;

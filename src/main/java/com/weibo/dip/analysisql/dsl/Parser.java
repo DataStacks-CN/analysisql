@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.weibo.dip.analysisql.Connector;
+import com.weibo.dip.analysisql.connector.Connector;
 import com.weibo.dip.analysisql.dsl.filter.Filter;
 import com.weibo.dip.analysisql.dsl.filter.FilterParser;
 import com.weibo.dip.analysisql.dsl.request.GetDimentionValuesRequest;
