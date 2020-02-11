@@ -140,19 +140,19 @@
 
 {
 	"operator": "eq/ne/gt/lt/ge/le",
-	"name": "dimention/metric",
+	"name": "$DIMENTION/$METRIC",
 	"value": $STRING/$NUMBER
 }
 
 {
 	"operator": "in",
-	"name": "dimention/metric",
+	"name": "$DIMENTION/$METRIC",
 	"values": [$STRING/$NUMBER, ...]
 }
 
 {
 	"operator": "regex",
-	"name": "dimention",
+	"name": "$DIMENTION",
 	"pattern": "$JAVA_REGULAR_EXPRESSION"
 }
 ```
