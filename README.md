@@ -152,7 +152,7 @@
 
 {
 	"operator": "regex",
-	"name": "$DIMENTION",
+	"name": "$DIMENTION/$METRIC",
 	"pattern": "$JAVA_REGULAR_EXPRESSION"
 }
 ```
