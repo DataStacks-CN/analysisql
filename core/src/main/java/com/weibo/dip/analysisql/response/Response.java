@@ -16,7 +16,7 @@ public class Response implements Serializable {
   public Response() {}
 
   /**
-   * Initializes a instance with code, msg and rows.
+   * Initialize a instance with code, msg and rows.
    *
    * @param code code
    * @param msg msg

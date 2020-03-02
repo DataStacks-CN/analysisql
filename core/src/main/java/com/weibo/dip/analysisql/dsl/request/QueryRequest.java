@@ -19,7 +19,7 @@ public class QueryRequest extends Request {
   }
 
   /**
-   * Initializes a instance with topic, interval, granularity, metrics, where, groups, having,
+   * Initialize a instance with topic, interval, granularity, metrics, where, groups, having,
    * orders and limit.
    *
    * @param topic topic

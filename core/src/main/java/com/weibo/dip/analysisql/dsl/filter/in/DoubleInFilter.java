@@ -5,7 +5,7 @@ public class DoubleInFilter extends InFilter<Double> {
   public DoubleInFilter() {}
 
   /**
-   * Initializes a instance with name and double array.
+   * Initialize a instance with name and double array.
    *
    * @param name name
    * @param values double array

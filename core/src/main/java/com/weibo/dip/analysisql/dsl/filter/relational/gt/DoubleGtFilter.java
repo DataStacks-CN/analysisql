@@ -7,7 +7,7 @@ public class DoubleGtFilter extends GtFilter<Double> {
   public DoubleGtFilter() {}
 
   /**
-   * Initializes a instance with name and double value.
+   * Initialize a instance with name and double value.
    *
    * @param name name
    * @param value double value

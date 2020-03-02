@@ -8,7 +8,7 @@ public abstract class GtFilter<T> extends RelationalFilter<T> {
   public GtFilter() {}
 
   /**
-   * Initializes a instance with name, type and value.
+   * Initialize a instance with name, type and value.
    *
    * @param name name
    * @param type type

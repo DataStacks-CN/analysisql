@@ -8,8 +8,8 @@ import com.google.gson.JsonSyntaxException;
 import com.weibo.dip.analysisql.connector.Connector;
 import com.weibo.dip.analysisql.dsl.filter.Filter;
 import com.weibo.dip.analysisql.dsl.filter.FilterParser;
-import com.weibo.dip.analysisql.dsl.request.GetDimentionValuesRequest;
-import com.weibo.dip.analysisql.dsl.request.GetDimentionsRequest;
+import com.weibo.dip.analysisql.dsl.request.GetDimensionValuesRequest;
+import com.weibo.dip.analysisql.dsl.request.GetDimensionsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetMetricsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.Granularity;
@@ -27,7 +27,7 @@ public class Parser {
   public static final String SESSION_ID = "sessionId";
   public static final String TYPE = "type";
   public static final String TOPIC = "topic";
-  public static final String DIMENTION = "dimention";
+  public static final String DIMENSION = "dimension";
 
   public static final String INTERVAL = "interval";
   public static final String START = "start";
@@ -107,11 +107,11 @@ public class Parser {
       case Request.GET_TOPICS:
         request = parseGetTopics(json);
         break;
-      case Request.GET_DIMENTIONS:
-        request = parseGetDimentions(json);
+      case Request.GET_DIMENSIONS:
+        request = parseGetDimensions(json);
         break;
-      case Request.GET_DIMENTION_VALUES:
-        request = parseGetDimentionValues(json);
+      case Request.GET_DIMENSION_VALUES:
+        request = parseGetDimensionValues(json);
         break;
       case Request.GET_METRICS:
         request = parseGetMetrics(json);
@@ -136,38 +136,38 @@ public class Parser {
     return new GetTopicsRequest();
   }
 
-  private Request parseGetDimentions(JsonObject json) {
+  private Request parseGetDimensions(JsonObject json) {
     if (!json.has(TOPIC)
         || !json.get(TOPIC).isJsonPrimitive()
         || !json.getAsJsonPrimitive(TOPIC).isString()) {
-      throw new SyntaxException("Type getDimentions, property 'topic'(string) must be set");
+      throw new SyntaxException("Type getDimensions, property 'topic'(string) must be set");
     }
 
     String topic = json.getAsJsonPrimitive(TOPIC).getAsString();
 
-    return new GetDimentionsRequest(topic);
+    return new GetDimensionsRequest(topic);
   }
 
-  private Request parseGetDimentionValues(JsonObject json) {
+  private Request parseGetDimensionValues(JsonObject json) {
     if (!json.has(TOPIC)
         || !json.get(TOPIC).isJsonPrimitive()
         || !json.getAsJsonPrimitive(TOPIC).isString()
-        || !json.has(DIMENTION)
-        || !json.get(DIMENTION).isJsonPrimitive()
-        || !json.getAsJsonPrimitive(DIMENTION).isString()) {
+        || !json.has(DIMENSION)
+        || !json.get(DIMENSION).isJsonPrimitive()
+        || !json.getAsJsonPrimitive(DIMENSION).isString()) {
       throw new SyntaxException(
-          "Type getDimentionValues, property 'topic'(string), 'dimention'(string) must be set");
+          "Type getDimensionValues, property 'topic'(string), 'dimension'(string) must be set");
     }
 
     String topic = json.getAsJsonPrimitive(TOPIC).getAsString();
-    String dimention = json.getAsJsonPrimitive(DIMENTION).getAsString();
+    String dimension = json.getAsJsonPrimitive(DIMENSION).getAsString();
 
     Filter where = null;
     if (json.has(WHERE) && !json.get(WHERE).isJsonNull()) {
       where = new FilterParser(WHERE, connector).parse(json.get(WHERE));
     }
 
-    return new GetDimentionValuesRequest(topic, dimention, where);
+    return new GetDimensionValuesRequest(topic, dimension, where);
   }
 
   private Request parseGetMetrics(JsonObject json) {

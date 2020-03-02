@@ -14,7 +14,7 @@ public class Row implements Serializable {
   public Row() {}
 
   /**
-   * Initializes a instance with columns.
+   * Initialize a instance with columns.
    *
    * @param columns columns
    */

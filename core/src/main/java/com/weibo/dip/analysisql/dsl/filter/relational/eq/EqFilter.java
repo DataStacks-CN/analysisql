@@ -8,7 +8,7 @@ public abstract class EqFilter<T> extends RelationalFilter<T> {
   public EqFilter() {}
 
   /**
-   * Initializes a instance with name, type and value.
+   * Initialize a instance with name, type and value.
    *
    * @param name name
    * @param type type

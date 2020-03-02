@@ -5,7 +5,7 @@ public class StringInFilter extends InFilter<String> {
   public StringInFilter() {}
 
   /**
-   * Initializes a instance with name and string array.
+   * Initialize a instance with name and string array.
    *
    * @param name name
    * @param values string array

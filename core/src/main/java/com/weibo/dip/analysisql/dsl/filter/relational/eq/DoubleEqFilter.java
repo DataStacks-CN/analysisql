@@ -7,7 +7,7 @@ public class DoubleEqFilter extends EqFilter<Double> {
   public DoubleEqFilter() {}
 
   /**
-   * Initializes a instance with name and double value.
+   * Initialize a instance with name and double value.
    *
    * @param name name
    * @param value double value

@@ -7,7 +7,7 @@ public class LongNeFilter extends NeFilter<Long> {
   public LongNeFilter() {}
 
   /**
-   * Initializes a instance with name and long value.
+   * Initialize a instance with name and long value.
    *
    * @param name name
    * @param value long value

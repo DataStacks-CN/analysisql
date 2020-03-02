@@ -14,7 +14,7 @@ public class OrFilter extends Filter {
   }
 
   /**
-   * Initializes a instance with filter list.
+   * Initialize a instance with filter list.
    *
    * @param filters filters
    */

@@ -31,6 +31,34 @@ public class Granularity implements Serializable {
     this.unit = unit;
   }
 
+  /**
+   * Get milliseconds.
+   *
+   * @return milliseconds
+   */
+  public long getMilliseconds() {
+    switch (unit) {
+      case s:
+        return data * 1000;
+      case m:
+        return data * 60 * 1000;
+      case h:
+        return data * 3600 * 1000;
+      case d:
+        return data * 24 * 3600 * 1000;
+      case w:
+        return data * 7 * 24 * 3600 * 1000;
+      case M:
+        return data * 30 * 24 * 3600 * 1000;
+      case q:
+        return data * 120 * 24 * 3600 * 1000;
+      case y:
+        return data * 360 * 24 * 3600 * 1000;
+      default:
+        throw new UnsupportedOperationException();
+    }
+  }
+
   public enum Unit {
     s,
     m,

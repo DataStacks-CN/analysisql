@@ -11,7 +11,7 @@ public class NotFilter extends Filter {
   }
 
   /**
-   * Initializes a instance with filter.
+   * Initialize a instance with filter.
    *
    * @param filter filter
    */

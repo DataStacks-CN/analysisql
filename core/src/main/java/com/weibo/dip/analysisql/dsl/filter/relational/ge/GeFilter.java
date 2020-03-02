@@ -8,7 +8,7 @@ public abstract class GeFilter<T> extends RelationalFilter<T> {
   public GeFilter() {}
 
   /**
-   * Initializes a instance with name, type and value.
+   * Initialize a instance with name, type and value.
    *
    * @param name name
    * @param type type

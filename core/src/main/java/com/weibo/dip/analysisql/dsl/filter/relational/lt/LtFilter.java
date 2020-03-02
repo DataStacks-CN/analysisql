@@ -8,7 +8,7 @@ public abstract class LtFilter<T> extends RelationalFilter<T> {
   public LtFilter() {}
 
   /**
-   * Initializes a instance with name, type and value.
+   * Initialize a instance with name, type and value.
    *
    * @param name name
    * @param type type

@@ -1,8 +1,8 @@
 package com.weibo.dip.analysisql.connector;
 
 import com.weibo.dip.analysisql.dsl.Parser;
-import com.weibo.dip.analysisql.dsl.request.GetDimentionValuesRequest;
-import com.weibo.dip.analysisql.dsl.request.GetDimentionsRequest;
+import com.weibo.dip.analysisql.dsl.request.GetDimensionValuesRequest;
+import com.weibo.dip.analysisql.dsl.request.GetDimensionsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetMetricsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
@@ -44,7 +44,7 @@ public abstract class DefaultConnector implements Connector {
   }
 
   @Override
-  public Response getDimentions(GetDimentionsRequest request) {
+  public Response getDimensions(GetDimensionsRequest request) {
     Response response = new Response();
 
     response.setSessionId(request.getSessionId());
@@ -53,13 +53,13 @@ public abstract class DefaultConnector implements Connector {
 
     String topic = request.getTopic();
     if (metadatas.containsKey(topic)) {
-      List<Pair<String, String>> dimentions = metadatas.get(topic).getDimentions();
-      if (CollectionUtils.isNotEmpty(dimentions)) {
-        for (Pair<String, String> dimention : dimentions) {
+      List<Pair<String, String>> dimensions = metadatas.get(topic).getDimensions();
+      if (CollectionUtils.isNotEmpty(dimensions)) {
+        for (Pair<String, String> dimension : dimensions) {
           Row row = new Row();
 
-          row.add(new StringColumn(Parser.NAME, dimention.getKey()));
-          row.add(new StringColumn(Parser.ALIAS, dimention.getValue()));
+          row.add(new StringColumn(Parser.NAME, dimension.getKey()));
+          row.add(new StringColumn(Parser.ALIAS, dimension.getValue()));
 
           response.add(row);
         }
@@ -70,7 +70,7 @@ public abstract class DefaultConnector implements Connector {
   }
 
   @Override
-  public Response getDimentionValues(GetDimentionValuesRequest request) {
+  public Response getDimensionValues(GetDimensionValuesRequest request) {
     Response response = new Response();
 
     response.setSessionId(request.getSessionId());
@@ -78,10 +78,10 @@ public abstract class DefaultConnector implements Connector {
     response.setMsg(null);
 
     String topic = request.getTopic();
-    String dimention = request.getDimention();
+    String dimension = request.getDimension();
 
     if (metadatas.containsKey(topic)) {
-      List<String> values = metadatas.get(topic).getDimentionValues(dimention);
+      List<String> values = metadatas.get(topic).getDimensionValues(dimension);
       if (CollectionUtils.isNotEmpty(values)) {
         for (String value : values) {
           Row row = new Row();

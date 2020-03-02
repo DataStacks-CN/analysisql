@@ -5,7 +5,7 @@ public class ArrayStringColumn extends Column<String[]> {
   public ArrayStringColumn() {}
 
   /**
-   * Initializes a instance with name and string array.
+   * Initialize a instance with name and string array.
    *
    * @param name name
    * @param values string array

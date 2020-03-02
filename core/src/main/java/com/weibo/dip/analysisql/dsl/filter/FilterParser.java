@@ -43,7 +43,7 @@ public class FilterParser {
   private Connector connector;
 
   /**
-   * Initializes a instance with context and connector.
+   * Initialize a instance with context and connector.
    *
    * @param context 'where' or 'having'
    * @param connector Connector instance

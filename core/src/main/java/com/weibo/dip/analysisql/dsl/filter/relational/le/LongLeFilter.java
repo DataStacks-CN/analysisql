@@ -7,7 +7,7 @@ public class LongLeFilter extends LeFilter<Long> {
   public LongLeFilter() {}
 
   /**
-   * Initializes a instance with name and long value.
+   * Initialize a instance with name and long value.
    *
    * @param name name
    * @param value long value

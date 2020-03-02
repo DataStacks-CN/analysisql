@@ -5,7 +5,7 @@ public class ArrayDoubleColumn extends Column<double[]> {
   public ArrayDoubleColumn() {}
 
   /**
-   * Initializes a instance with name and double array.
+   * Initialize a instance with name and double array.
    *
    * @param name name
    * @param values long array

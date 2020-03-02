@@ -7,7 +7,7 @@ public class StringGeFilter extends GeFilter<String> {
   public StringGeFilter() {}
 
   /**
-   * Initializes a instance with name and string value.
+   * Initialize a instance with name and string value.
    *
    * @param name name
    * @param value string value

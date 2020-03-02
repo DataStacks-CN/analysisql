@@ -2,8 +2,8 @@ package com.weibo.dip.analysisql;
 
 import com.weibo.dip.analysisql.connector.Connector;
 import com.weibo.dip.analysisql.dsl.Parser;
-import com.weibo.dip.analysisql.dsl.request.GetDimentionValuesRequest;
-import com.weibo.dip.analysisql.dsl.request.GetDimentionsRequest;
+import com.weibo.dip.analysisql.dsl.request.GetDimensionValuesRequest;
+import com.weibo.dip.analysisql.dsl.request.GetDimensionsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetMetricsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
@@ -53,11 +53,11 @@ public class AnalysisQl {
       case Request.GET_TOPICS:
         return connector.getTopics((GetTopicsRequest) request);
 
-      case Request.GET_DIMENTIONS:
-        return connector.getDimentions((GetDimentionsRequest) request);
+      case Request.GET_DIMENSIONS:
+        return connector.getDimensions((GetDimensionsRequest) request);
 
-      case Request.GET_DIMENTION_VALUES:
-        return connector.getDimentionValues((GetDimentionValuesRequest) request);
+      case Request.GET_DIMENSION_VALUES:
+        return connector.getDimensionValues((GetDimensionValuesRequest) request);
 
       case Request.GET_METRICS:
         return connector.getMetrics((GetMetricsRequest) request);

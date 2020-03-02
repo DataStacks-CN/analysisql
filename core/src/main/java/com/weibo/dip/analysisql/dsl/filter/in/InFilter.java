@@ -16,7 +16,7 @@ public abstract class InFilter<T> extends Filter {
   public InFilter() {}
 
   /**
-   * Initializes a instance with name and array.
+   * Initialize a instance with name and array.
    *
    * @param name name
    * @param values array

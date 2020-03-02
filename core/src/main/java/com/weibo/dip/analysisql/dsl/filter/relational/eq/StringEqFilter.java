@@ -7,7 +7,7 @@ public class StringEqFilter extends EqFilter<String> {
   public StringEqFilter() {}
 
   /**
-   * Initializes a instance with name and string value.
+   * Initialize a instance with name and string value.
    *
    * @param name name
    * @param value string value

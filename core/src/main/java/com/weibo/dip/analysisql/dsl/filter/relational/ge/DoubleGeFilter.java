@@ -7,7 +7,7 @@ public class DoubleGeFilter extends GeFilter<Double> {
   public DoubleGeFilter() {}
 
   /**
-   * Initializes a instance with name and double value.
+   * Initialize a instance with name and double value.
    *
    * @param name name
    * @param value double value

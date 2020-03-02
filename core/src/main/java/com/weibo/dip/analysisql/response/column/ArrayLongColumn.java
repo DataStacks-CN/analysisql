@@ -5,7 +5,7 @@ public class ArrayLongColumn extends Column<long[]> {
   public ArrayLongColumn() {}
 
   /**
-   * Initializes a instance with name and long array.
+   * Initialize a instance with name and long array.
    *
    * @param name name
    * @param values long array

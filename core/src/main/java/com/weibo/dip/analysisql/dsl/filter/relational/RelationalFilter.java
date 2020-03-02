@@ -15,7 +15,7 @@ public abstract class RelationalFilter<T> extends Filter {
   public RelationalFilter() {}
 
   /**
-   * Initializes a instance with operator, name and type.
+   * Initialize a instance with operator, name and type.
    *
    * @param operator operator
    * @param name name

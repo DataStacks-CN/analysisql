@@ -8,19 +8,19 @@ import javafx.util.Pair;
 /** Metadata. */
 public abstract class Metadata {
   protected String topic;
-  protected List<Pair<String, String>> dimentions;
+  protected List<Pair<String, String>> dimensions;
   protected List<Pair<String, String>> metrics;
   protected List<Pair<String, MetricCalculator>> calculators;
 
   /**
-   * Initializes a instance with topic.
+   * Initialize a instance with topic.
    *
    * @param topic topic
    */
   public Metadata(String topic) {
     this.topic = topic;
 
-    dimentions = new ArrayList<>();
+    dimensions = new ArrayList<>();
     metrics = new ArrayList<>();
     calculators = new ArrayList<>();
   }
@@ -29,15 +29,15 @@ public abstract class Metadata {
     return topic;
   }
 
-  public void addDimention(String dimention, String alias) {
-    dimentions.add(new Pair<>(dimention, alias));
+  public void addDimension(String dimension, String alias) {
+    dimensions.add(new Pair<>(dimension, alias));
   }
 
-  public List<Pair<String, String>> getDimentions() {
-    return dimentions;
+  public List<Pair<String, String>> getDimensions() {
+    return dimensions;
   }
 
-  public abstract List<String> getDimentionValues(String dimention);
+  public abstract List<String> getDimensionValues(String dimension);
 
   public void addMetric(String metric, String alias) {
     metrics.add(new Pair<>(metric, alias));

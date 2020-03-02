@@ -7,7 +7,7 @@ public class DoubleLtFilter extends LtFilter<Double> {
   public DoubleLtFilter() {}
 
   /**
-   * Initializes a instance with name and double value.
+   * Initialize a instance with name and double value.
    *
    * @param name name
    * @param value double value

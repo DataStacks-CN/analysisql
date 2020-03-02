@@ -9,7 +9,7 @@ public class GetMetricsRequest extends Request {
   }
 
   /**
-   * Initializes a instance with topic.
+   * Initialize a instance with topic.
    *
    * @param topic topic
    */

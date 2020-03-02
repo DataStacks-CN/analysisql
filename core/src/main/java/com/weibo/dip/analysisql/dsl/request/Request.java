@@ -6,8 +6,8 @@ import java.io.Serializable;
 /** Request. */
 public abstract class Request implements Serializable {
   public static final String GET_TOPICS = "getTopics";
-  public static final String GET_DIMENTIONS = "getDimentions";
-  public static final String GET_DIMENTION_VALUES = "getDimentionValues";
+  public static final String GET_DIMENSIONS = "getDimensions";
+  public static final String GET_DIMENSION_VALUES = "getDimensionValues";
   public static final String GET_METRICS = "getMetrics";
   public static final String QUERY = "query";
 

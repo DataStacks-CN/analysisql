@@ -8,7 +8,7 @@ public class RegexFilter extends Filter {
   public RegexFilter() {}
 
   /**
-   * Initializes a instance with name and pattern.
+   * Initialize a instance with name and pattern.
    *
    * @param name name
    * @param pattern pattern
