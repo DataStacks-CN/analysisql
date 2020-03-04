@@ -10,6 +10,7 @@ import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.dsl.request.Request;
 import com.weibo.dip.analysisql.response.Response;
 import java.util.Objects;
+import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 
 /** AnalysisQl. */
@@ -47,6 +48,10 @@ public class AnalysisQl {
   public Response request(Request request) {
     if (Objects.isNull(request)) {
       return null;
+    }
+
+    if (Objects.isNull(request.getSessionId())) {
+      request.setSessionId(UUID.randomUUID().toString());
     }
 
     switch (request.getType()) {

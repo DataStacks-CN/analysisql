@@ -14,11 +14,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import javafx.util.Pair;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.time.StopWatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** DefaultConnector. */
-public abstract class DefaultConnector implements Connector {
+public class DefaultConnector implements Connector {
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConnector.class);
+
   protected Map<String, Metadata> metadatas = new HashMap<>();
 
   public void register(Metadata metadata) {
@@ -27,11 +33,16 @@ public abstract class DefaultConnector implements Connector {
 
   @Override
   public Response getTopics(GetTopicsRequest request) {
+    String sessionId = request.getSessionId();
+
     Response response = new Response();
 
-    response.setSessionId(request.getSessionId());
+    response.setSessionId(sessionId);
     response.setCode(200);
     response.setMsg(null);
+
+    StopWatch watch = new StopWatch();
+    watch.start();
 
     for (String topic : metadatas.keySet()) {
       Row row = new Row();
@@ -40,16 +51,28 @@ public abstract class DefaultConnector implements Connector {
       response.add(row);
     }
 
+    watch.stop();
+    LOGGER.info(
+        "sessionId: {}, query: {}, time: {} ms",
+        sessionId,
+        request,
+        watch.getTime(TimeUnit.MILLISECONDS));
+
     return response;
   }
 
   @Override
   public Response getDimensions(GetDimensionsRequest request) {
+    String sessionId = request.getSessionId();
+
     Response response = new Response();
 
-    response.setSessionId(request.getSessionId());
+    response.setSessionId(sessionId);
     response.setCode(200);
     response.setMsg(null);
+
+    StopWatch watch = new StopWatch();
+    watch.start();
 
     String topic = request.getTopic();
     if (metadatas.containsKey(topic)) {
@@ -66,16 +89,28 @@ public abstract class DefaultConnector implements Connector {
       }
     }
 
+    watch.stop();
+    LOGGER.info(
+        "sessionId: {}, query: {}, time: {} ms",
+        sessionId,
+        request,
+        watch.getTime(TimeUnit.MILLISECONDS));
+
     return response;
   }
 
   @Override
   public Response getDimensionValues(GetDimensionValuesRequest request) {
+    String sessionId = request.getSessionId();
+
     Response response = new Response();
 
-    response.setSessionId(request.getSessionId());
+    response.setSessionId(sessionId);
     response.setCode(200);
     response.setMsg(null);
+
+    StopWatch watch = new StopWatch();
+    watch.start();
 
     String topic = request.getTopic();
     String dimension = request.getDimension();
@@ -92,16 +127,28 @@ public abstract class DefaultConnector implements Connector {
       }
     }
 
+    watch.stop();
+    LOGGER.info(
+        "sessionId: {}, query: {}, time: {} ms",
+        sessionId,
+        request,
+        watch.getTime(TimeUnit.MILLISECONDS));
+
     return response;
   }
 
   @Override
   public Response getMetrics(GetMetricsRequest request) {
+    String sessionId = request.getSessionId();
+
     Response response = new Response();
 
-    response.setSessionId(request.getSessionId());
+    response.setSessionId(sessionId);
     response.setCode(200);
     response.setMsg(null);
+
+    StopWatch watch = new StopWatch();
+    watch.start();
 
     String topic = request.getTopic();
     if (metadatas.containsKey(topic)) {
@@ -118,6 +165,13 @@ public abstract class DefaultConnector implements Connector {
       }
     }
 
+    watch.stop();
+    LOGGER.info(
+        "sessionId: {}, query: {}, time: {} ms",
+        sessionId,
+        request,
+        watch.getTime(TimeUnit.MILLISECONDS));
+
     return response;
   }
 
@@ -131,10 +185,13 @@ public abstract class DefaultConnector implements Connector {
     response.setCode(200);
     response.setMsg(null);
 
-    String topic = request.getTopic();
-    String metric = request.getMetric();
-
     try {
+      StopWatch watch = new StopWatch();
+      watch.start();
+
+      String topic = request.getTopic();
+      String metric = request.getMetric();
+
       Metadata metadata = metadatas.get(topic);
       assert Objects.nonNull(metadata);
 
@@ -147,6 +204,13 @@ public abstract class DefaultConnector implements Connector {
           response.add(row);
         }
       }
+
+      watch.stop();
+      LOGGER.info(
+          "sessionId: {}, query: {}, time: {} ms",
+          sessionId,
+          request,
+          watch.getTime(TimeUnit.MILLISECONDS));
     } catch (Exception e) {
       response.setCode(500);
       response.setMsg(e.getMessage());
