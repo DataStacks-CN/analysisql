@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import javafx.util.Pair;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -212,6 +213,8 @@ public class DefaultConnector implements Connector {
           request,
           watch.getTime(TimeUnit.MILLISECONDS));
     } catch (Exception e) {
+      LOGGER.info("query error: {}", ExceptionUtils.getStackTrace(e));
+
       response.setCode(500);
       response.setMsg(e.getMessage());
     }

@@ -11,6 +11,8 @@
   <modules>
     <module>core</module>
     <module>view</module>
+    <module>presto</module>
+    <module>mysql</module>
   </modules>
 
   <distributionManagement>
@@ -27,9 +29,11 @@
     <gson.version>2.6.2</gson.version>
     <commons-lang3.version>3.7</commons-lang3.version>
     <commons-collections.version>3.2.1</commons-collections.version>
+    <commons-io.version>2.6</commons-io.version>
     <log4j.version>1.2.17</log4j.version>
     <slf4j-log4j12.version>1.7.5</slf4j-log4j12.version>
     <mysql-connector-java.version>5.1.38</mysql-connector-java.version>
+    <presto.version>0.218</presto.version>
     <java.version>1.8</java.version>
     <compiler.version>3.1</compiler.version>
     <source.version>2.1.2</source.version>
@@ -58,6 +62,12 @@
         <version>${commons-collections.version}</version>
       </dependency>
 
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${commons-io.version}</version>
+      </dependency>
+
       <!-- log4j -->
       <dependency>
         <groupId>log4j</groupId>
@@ -75,6 +85,13 @@
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
         <version>${mysql-connector-java.version}</version>
+      </dependency>
+
+      <!-- presto -->
+      <dependency>
+        <groupId>com.facebook.presto</groupId>
+        <artifactId>presto-jdbc</artifactId>
+        <version>${presto.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
