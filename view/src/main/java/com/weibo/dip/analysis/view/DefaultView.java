@@ -118,7 +118,7 @@ public class DefaultView extends View {
               String.format(
                   "SELECT DISTINCT(dvalue) FROM %s WHERE "
                       + "topic = '%s' AND dimension = '%s' AND dtime = '%s'",
-                  table, topic, dimension, Parser.DATE_FORMAT.format(timestamp.getTime())));
+                  table, topic, dimension, Parser.DATETIME_FORMAT.format(timestamp.getTime())));
       if (!rs.next()) {
         return null;
       }

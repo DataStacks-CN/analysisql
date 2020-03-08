@@ -32,7 +32,9 @@ public class Parser {
   public static final String INTERVAL = "interval";
   public static final String START = "start";
   public static final String END = "end";
-  public static final FastDateFormat DATE_FORMAT =
+
+  public static final FastDateFormat DATE_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd");
+  public static final FastDateFormat DATETIME_FORMAT =
       FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 
   public static final String GRANULARITY = "granularity";
@@ -224,8 +226,8 @@ public class Parser {
     Date end;
 
     try {
-      start = DATE_FORMAT.parse(intervalOjb.getAsJsonPrimitive(START).getAsString());
-      end = DATE_FORMAT.parse(intervalOjb.getAsJsonPrimitive(END).getAsString());
+      start = DATETIME_FORMAT.parse(intervalOjb.getAsJsonPrimitive(START).getAsString());
+      end = DATETIME_FORMAT.parse(intervalOjb.getAsJsonPrimitive(END).getAsString());
     } catch (ParseException e) {
       throw new SyntaxException(
           "Type query/interval, property "

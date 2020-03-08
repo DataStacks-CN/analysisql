@@ -15,13 +15,13 @@ import org.apache.commons.lang3.StringUtils;
 public class SqlSnippetVisitor extends QueryRequestVisitor {
   private SqlFilterVisitor filterVisitor;
 
-  private String columns;
-  private String metric;
-  private String groups;
-  private String where;
-  private String having;
-  private String orders;
-  private String limit;
+  protected String columns;
+  protected String metric;
+  protected String groups;
+  protected String where;
+  protected String having;
+  protected String orders;
+  protected String limit;
 
   public SqlSnippetVisitor(SqlFilterVisitor filterVisitor) {
     this.filterVisitor = filterVisitor;
@@ -66,8 +66,8 @@ public class SqlSnippetVisitor extends QueryRequestVisitor {
     where =
         String.format(
             "fdate BETWEEN '%s' AND '%s'",
-            Parser.DATE_FORMAT.format(interval.getStart()),
-            Parser.DATE_FORMAT.format(interval.getEnd()));
+            Parser.DATETIME_FORMAT.format(interval.getStart()),
+            Parser.DATETIME_FORMAT.format(interval.getEnd()));
   }
 
   @Override
@@ -77,10 +77,10 @@ public class SqlSnippetVisitor extends QueryRequestVisitor {
 
     /*
      select: TIMESTAMPADD(
-        SECOND,
-        FLOOR(TIMESTAMPDIFF(SECOND, '1970-01-01 00:00:00', fdate) / $(gap)) * $(gap),
-        '1970-01-01 00:00:00'
-      ) AS timeBucket
+                SECOND,
+                FLOOR(TIMESTAMPDIFF(SECOND, '1970-01-01 00:00:00', fdate) / $(gap)) * $(gap),
+                '1970-01-01 00:00:00'
+              ) AS timeBucket
     */
     columns =
         String.format(
@@ -91,11 +91,6 @@ public class SqlSnippetVisitor extends QueryRequestVisitor {
                 + "'%s'"
                 + ") AS %s",
             "1970-01-01 00:00:00", gap, gap, "1970-01-01 00:00:00", SqlTemplate.TIME_BUCKET);
-
-    /*
-     group by: timeBucket
-    */
-    groups = SqlTemplate.TIME_BUCKET;
   }
 
   @Override
@@ -117,6 +112,11 @@ public class SqlSnippetVisitor extends QueryRequestVisitor {
 
   @Override
   protected void visitGroups(String[] groups) {
+    /*
+     group by: timeBucket
+    */
+    this.groups = SqlTemplate.TIME_BUCKET;
+
     if (ArrayUtils.isEmpty(groups)) {
       return;
     }

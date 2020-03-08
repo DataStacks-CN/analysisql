@@ -13,9 +13,14 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.weibo.dip</groupId>
+      <artifactId>analysisql-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.facebook.presto</groupId>
       <artifactId>presto-jdbc</artifactId>
-      <version>${presto.version}</version>
     </dependency>
   </dependencies>
 </project>
