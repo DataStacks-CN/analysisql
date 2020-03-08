@@ -66,14 +66,17 @@ public class PrestoSqlSnippetVisitor extends SqlSnippetVisitor {
   @Override
   protected void visitInterval(Interval interval) {
     /*
-     where: fday BETWEEN '...' AND '...' AND fdate BETWEEN '...' AND '...'
+     where:
+
+     CONCAT(fday, ' ', fhour, ':00:00') BETWEEN '...' AND '...' AND fdate BETWEEN '...' AND '...'
     */
+    String start = Parser.DATETIME_FORMAT.format(interval.getStart());
+    String end = Parser.DATETIME_FORMAT.format(interval.getEnd());
+
     where =
         String.format(
-            "fday BETWEEN '%s' AND '%s' AND fdate BETWEEN '%s' AND '%s'",
-            Parser.DATE_FORMAT.format(interval.getStart()),
-            Parser.DATE_FORMAT.format(interval.getEnd()),
-            Parser.DATETIME_FORMAT.format(interval.getStart()),
-            Parser.DATETIME_FORMAT.format(interval.getEnd()));
+            "CONCAT(fday, ' ', fhour, ':00:00') BETWEEN '%s' AND '%s' "
+                + "AND fdate BETWEEN '%s' AND '%s'",
+            start, end, start, end);
   }
 }
