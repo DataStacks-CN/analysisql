@@ -76,15 +76,14 @@ public class MySqlCalculator extends SqlFileBasedCalculator {
           String columnTypeName = columnTypeNames.get(column - 1);
 
           switch (columnTypeName) {
-            case "TIMESTAMP":
-              assert columnName.equals(SqlTemplate.TIME_BUCKET);
-
-              cols.add(new LongColumn(columnName, rs.getTimestamp(column).getTime()));
-              break;
-
             case "VARCHAR":
             case "CHAR":
-              cols.add(new StringColumn(columnName, rs.getString(column)));
+              if (columnName.equals(SqlTemplate.TIME_BUCKET)) {
+                cols.add(new LongColumn(columnName, rs.getTimestamp(column).getTime()));
+              } else {
+                cols.add(new StringColumn(columnName, rs.getString(column)));
+              }
+
               break;
 
             case "TINYINT":
