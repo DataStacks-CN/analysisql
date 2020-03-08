@@ -96,11 +96,6 @@ public class SqlSnippetVisitor extends QueryRequestVisitor {
      group by: timeBucket
     */
     groups = SqlTemplate.TIME_BUCKET;
-
-    /*
-     order by: timeBucket ASC
-    */
-    orders = "timeBucket ASC";
   }
 
   @Override
@@ -172,6 +167,11 @@ public class SqlSnippetVisitor extends QueryRequestVisitor {
 
   @Override
   protected void visitOrders(Order[] orders) {
+    /*
+     order by: timeBucket ASC
+    */
+    this.orders = "timeBucket ASC";
+
     if (ArrayUtils.isEmpty(orders)) {
       return;
     }
@@ -181,11 +181,11 @@ public class SqlSnippetVisitor extends QueryRequestVisitor {
     */
     StringJoiner snippet = new StringJoiner(", ");
 
-    snippet.add(this.orders);
-
     for (Order order : orders) {
       snippet.add(order.getName() + StringUtils.SPACE + order.getSort().name().toUpperCase());
     }
+
+    this.orders = snippet.toString();
   }
 
   @Override
