@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>analysisql</artifactId>
+    <groupId>com.weibo.dip</groupId>
+    <version>1.0.8</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>analysisql-clickhouse</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.weibo.dip</groupId>
+      <artifactId>analysisql-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ru.yandex.clickhouse</groupId>
+      <artifactId>clickhouse-jdbc</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${assembly.version}</version>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/resources/assembly.xml</descriptor>
+          </descriptors>
+        </configuration>
+
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

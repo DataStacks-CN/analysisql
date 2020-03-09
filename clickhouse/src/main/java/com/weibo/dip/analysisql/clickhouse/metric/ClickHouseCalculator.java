@@ -1,4 +1,4 @@
-package com.weibo.dip.analysisql.mysql.metric;
+package com.weibo.dip.analysisql.clickhouse.metric;
 
 import com.weibo.dip.analysisql.metric.JdbcCalculator;
 import com.weibo.dip.analysisql.metric.SqlTemplate;
@@ -8,10 +8,11 @@ import com.weibo.dip.analysisql.response.column.LongColumn;
 import com.weibo.dip.analysisql.response.column.StringColumn;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import ru.yandex.clickhouse.domain.ClickHouseDataType;
 
-/** MySqlCalculator. */
-public class MySqlCalculator extends JdbcCalculator {
-  public MySqlCalculator(
+/** ClickHouseCalculator. */
+public class ClickHouseCalculator extends JdbcCalculator {
+  public ClickHouseCalculator(
       SqlTemplate sqlTemplate, String sqlFile, String url, String user, String passwd) {
     super(sqlTemplate, sqlFile, url, user, passwd);
   }
@@ -19,27 +20,29 @@ public class MySqlCalculator extends JdbcCalculator {
   @Override
   public Column<?> cast(ResultSet rs, int column, String columnName, String columnTypeName)
       throws SQLException {
-    switch (columnTypeName) {
-      case "VARCHAR":
-      case "CHAR":
-        if (columnName.equals(SqlTemplate.TIME_BUCKET)) {
-          return new LongColumn(columnName, rs.getTimestamp(column).getTime());
-        } else {
-          return new StringColumn(columnName, rs.getString(column));
-        }
+    switch (ClickHouseDataType.fromTypeString(columnTypeName)) {
+      case String:
+      case FixedString:
+        return new StringColumn(columnName, rs.getString(column));
 
-      case "TINYINT":
-      case "SMALLINT":
-      case "MEDIUMINT":
-      case "INT":
-      case "BIGINT":
+      case UInt8:
+      case UInt16:
+      case UInt32:
+      case UInt64:
+      case Int8:
+      case Int16:
+      case Int32:
+      case Int64:
         return new LongColumn(columnName, rs.getLong(column));
 
-      case "FLOAT":
-      case "DOUBLE":
+      case Float32:
+      case Float64:
         return new DoubleColumn(columnName, rs.getDouble(column));
-
       default:
+        if (columnTypeName.contains(ClickHouseDataType.DateTime.name())) {
+          return new LongColumn(columnName, rs.getTimestamp(column).getTime());
+        }
+
         throw new UnsupportedOperationException();
     }
   }
