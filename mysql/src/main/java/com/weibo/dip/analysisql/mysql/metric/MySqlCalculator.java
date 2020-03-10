@@ -19,7 +19,7 @@ public class MySqlCalculator extends JdbcCalculator {
   @Override
   public Column<?> cast(ResultSet rs, int column, String columnName, String columnTypeName)
       throws SQLException {
-    switch (columnTypeName) {
+    switch (columnTypeName.toUpperCase()) {
       case "VARCHAR":
       case "CHAR":
         if (columnName.equals(SqlTemplate.TIME_BUCKET)) {
@@ -40,7 +40,7 @@ public class MySqlCalculator extends JdbcCalculator {
         return new DoubleColumn(columnName, rs.getDouble(column));
 
       default:
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(columnTypeName);
     }
   }
 }

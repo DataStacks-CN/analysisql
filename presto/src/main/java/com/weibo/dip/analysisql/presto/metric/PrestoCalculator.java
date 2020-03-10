@@ -22,7 +22,7 @@ public class PrestoCalculator extends JdbcCalculator {
   @Override
   public Column<?> cast(ResultSet rs, int column, String columnName, String columnTypeName)
       throws SQLException {
-    switch (columnTypeName) {
+    switch (columnTypeName.toUpperCase()) {
       case "VARCHAR":
       case "CHAR":
         return new StringColumn(columnName, rs.getString(column));
@@ -76,7 +76,7 @@ public class PrestoCalculator extends JdbcCalculator {
         return new ArrayDoubleColumn(columnName, doubleValues);
 
       default:
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(columnTypeName);
     }
   }
 }

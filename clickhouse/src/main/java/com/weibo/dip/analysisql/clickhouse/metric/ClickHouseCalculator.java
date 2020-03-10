@@ -43,7 +43,7 @@ public class ClickHouseCalculator extends JdbcCalculator {
           return new LongColumn(columnName, rs.getTimestamp(column).getTime());
         }
 
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(columnTypeName);
     }
   }
 }
