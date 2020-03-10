@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /** SqlSnippetVisitor. */
 public class SqlSnippetVisitor extends QueryRequestVisitor {
-  private SqlFilterVisitor filterVisitor;
+  protected SqlFilterVisitor filterVisitor;
 
   protected String columns;
   protected String metric;
