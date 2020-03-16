@@ -23,7 +23,7 @@ public class Table extends Metadata implements Comparable<Table> {
   private int delay;
 
   public Table(View view) {
-    super(view.getTopic());
+    super(view.getTopic(), view.getAlias(), view.getDesc());
   }
 
   /**

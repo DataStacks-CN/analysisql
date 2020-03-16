@@ -48,7 +48,29 @@ public class DefaultView extends View {
    * @param table mysql table
    */
   public DefaultView(String topic, String url, String username, String password, String table) {
-    super(topic);
+    this(topic, topic, topic, url, username, password, table);
+  }
+
+  /**
+   * Initialize a instance with topic, alias, desc, url, username, password, table.
+   *
+   * @param topic topic
+   * @param alias alias
+   * @param desc description
+   * @param url mysql url
+   * @param username mysql username
+   * @param password mysql password
+   * @param table mysql table
+   */
+  public DefaultView(
+      String topic,
+      String alias,
+      String desc,
+      String url,
+      String username,
+      String password,
+      String table) {
+    super(topic, alias, desc);
 
     this.url = url;
     this.username = username;

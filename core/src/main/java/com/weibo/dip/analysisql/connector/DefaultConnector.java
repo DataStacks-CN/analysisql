@@ -45,9 +45,12 @@ public class DefaultConnector implements Connector {
     StopWatch watch = new StopWatch();
     watch.start();
 
-    for (String topic : metadatas.keySet()) {
+    for (Metadata metadata : metadatas.values()) {
       Row row = new Row();
-      row.add(new StringColumn(Parser.TOPIC, topic));
+
+      row.add(new StringColumn(Parser.TOPIC, metadata.getTopic()));
+      row.add(new StringColumn(Parser.ALIAS, metadata.getAlias()));
+      row.add(new StringColumn(Parser.DESC, metadata.getDesc()));
 
       response.add(row);
     }

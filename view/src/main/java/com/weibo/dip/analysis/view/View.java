@@ -18,7 +18,18 @@ public abstract class View extends Metadata {
    * @param topic topic
    */
   public View(String topic) {
-    super(topic);
+    this(topic, topic, topic);
+  }
+
+  /**
+   * Initialize a instance with topic, alias, desc.
+   *
+   * @param topic topic
+   * @param alias alias
+   * @param desc description
+   */
+  public View(String topic, String alias, String desc) {
+    super(topic, alias, desc);
 
     tables = new ArrayList<>();
 
