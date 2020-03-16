@@ -2,7 +2,9 @@ package com.weibo.dip.analysisql.connector;
 
 import com.weibo.dip.analysisql.metric.MetricCalculator;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javafx.util.Pair;
 
 /** Metadata. */
@@ -13,8 +15,8 @@ public abstract class Metadata {
 
   protected List<Dimension> dimensions;
 
-  protected List<Pair<String, String>> metrics;
-  protected List<Pair<String, MetricCalculator>> calculators;
+  protected List<Metric> metrics;
+  protected Map<String, MetricCalculator> calculators;
 
   /**
    * Initialize a instance with topic.
@@ -38,8 +40,9 @@ public abstract class Metadata {
     this.desc = desc;
 
     dimensions = new ArrayList<>();
+
     metrics = new ArrayList<>();
-    calculators = new ArrayList<>();
+    calculators = new HashMap<>();
   }
 
   public String getTopic() {
@@ -69,18 +72,22 @@ public abstract class Metadata {
   public abstract List<String> getDimensionValues(String dimension);
 
   public void addMetric(String metric, String alias) {
-    metrics.add(new Pair<>(metric, alias));
+    metrics.add(new Metric(metric, alias, null));
   }
 
-  public List<Pair<String, String>> getMetrics() {
+  public void addMetric(String metric, String alias, String desc) {
+    metrics.add(new Metric(metric, alias, desc));
+  }
+
+  public List<Metric> getMetrics() {
     return metrics;
   }
 
   public void addCalculator(String metric, MetricCalculator calculator) {
-    calculators.add(new Pair<>(metric, calculator));
+    calculators.put(metric, calculator);
   }
 
-  public List<Pair<String, MetricCalculator>> getCalculators() {
+  public Map<String, MetricCalculator> getCalculators() {
     return calculators;
   }
 
@@ -91,15 +98,6 @@ public abstract class Metadata {
    * @return MetricCalculator instance
    */
   public MetricCalculator getCalculator(String metric) {
-    MetricCalculator calculator = null;
-
-    for (Pair<String, MetricCalculator> pair : calculators) {
-      if (pair.getKey().equals(metric)) {
-        calculator = pair.getValue();
-        break;
-      }
-    }
-
-    return calculator;
+    return calculators.get(metric);
   }
 }

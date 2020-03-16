@@ -4,7 +4,7 @@ import com.weibo.dip.analysisql.connector.Metadata;
 import com.weibo.dip.analysisql.metric.MetricCalculator;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.util.Pair;
+import java.util.Map;
 
 /** View. */
 public abstract class View extends Metadata {
@@ -50,7 +50,7 @@ public abstract class View extends Metadata {
   }
 
   @Override
-  public List<Pair<String, MetricCalculator>> getCalculators() {
+  public Map<String, MetricCalculator> getCalculators() {
     throw new UnsupportedOperationException();
   }
 

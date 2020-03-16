@@ -11,11 +11,10 @@ public class MySqlTemplate extends SqlTemplate {
   }
 
   @Override
-  public String render(String resource, QueryRequest request) throws Exception {
+  public String render(String sql, QueryRequest request) throws Exception {
     snippetVisitor.visit(request);
 
-    return load(resource)
-        .replace("$COLUMNS", snippetVisitor.getColumns())
+    return sql.replace("$COLUMNS", snippetVisitor.getColumns())
         .replace("$METRIC", snippetVisitor.getMetric())
         .replace("$GROUPS", snippetVisitor.getGroups())
         .replace("$WHERE", snippetVisitor.getWhere())

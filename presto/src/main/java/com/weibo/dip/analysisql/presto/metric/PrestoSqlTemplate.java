@@ -27,9 +27,7 @@ public class PrestoSqlTemplate extends MySqlTemplate {
   }
 
   @Override
-  public String render(String resource, QueryRequest request) throws Exception {
-    String sql = super.render(resource, request);
-
-    return sql.replace("$PERCENTILE", PERCENTILE_ARRAY);
+  public String render(String sql, QueryRequest request) throws Exception {
+    return super.render(sql, request).replace("$PERCENTILE", PERCENTILE_ARRAY);
   }
 }

@@ -2,6 +2,7 @@ package com.weibo.dip.analysis.view;
 
 import com.weibo.dip.analysisql.connector.Dimension;
 import com.weibo.dip.analysisql.connector.Metadata;
+import com.weibo.dip.analysisql.connector.Metric;
 import com.weibo.dip.analysisql.dsl.filter.Filter;
 import com.weibo.dip.analysisql.dsl.request.Granularity;
 import com.weibo.dip.analysisql.dsl.request.Interval;
@@ -102,14 +103,19 @@ public class Table extends Metadata implements Comparable<Table> {
   }
 
   @Override
+  public void addMetric(String metric, String alias, String desc) {
+    super.addMetric(metric, alias, desc);
+  }
+
+  @Override
   public void addCalculator(String metric, MetricCalculator calculator) {
     super.addCalculator(metric, calculator);
 
-    metrics.add(new Pair<>(metric, metric));
+    metrics.add(new Metric(metric, null, null));
   }
 
   private boolean satisfyMetric(String metric) {
-    return metrics.stream().anyMatch(pair -> pair.getKey().equals(metric));
+    return metrics.stream().anyMatch(m -> m.getName().equals(metric));
   }
 
   private boolean satisfyDimensions(Filter where, String[] groups) {

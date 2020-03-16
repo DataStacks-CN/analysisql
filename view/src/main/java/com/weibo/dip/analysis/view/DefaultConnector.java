@@ -1,5 +1,9 @@
-package com.weibo.dip.analysisql.connector;
+package com.weibo.dip.analysis.view;
 
+import com.weibo.dip.analysisql.connector.Connector;
+import com.weibo.dip.analysisql.connector.Dimension;
+import com.weibo.dip.analysisql.connector.Metadata;
+import com.weibo.dip.analysisql.connector.Metric;
 import com.weibo.dip.analysisql.dsl.Parser;
 import com.weibo.dip.analysisql.dsl.request.GetDimensionValuesRequest;
 import com.weibo.dip.analysisql.dsl.request.GetDimensionsRequest;
@@ -7,6 +11,7 @@ import com.weibo.dip.analysisql.dsl.request.GetMetricsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.metric.MetricCalculator;
+import com.weibo.dip.analysisql.metric.SqlFileBasedCalculator;
 import com.weibo.dip.analysisql.response.Response;
 import com.weibo.dip.analysisql.response.Row;
 import com.weibo.dip.analysisql.response.column.StringColumn;
@@ -15,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import javafx.util.Pair;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.StopWatch;
@@ -157,13 +161,31 @@ public class DefaultConnector implements Connector {
 
     String topic = request.getTopic();
     if (metadatas.containsKey(topic)) {
-      List<Pair<String, String>> metrics = metadatas.get(topic).getMetrics();
+      Metadata metadata = metadatas.get(topic);
+
+      List<Metric> metrics = metadata.getMetrics();
       if (CollectionUtils.isNotEmpty(metrics)) {
-        for (Pair<String, String> metric : metrics) {
+        for (Metric metric : metrics) {
+          String name = metric.getName();
+
           Row row = new Row();
 
-          row.add(new StringColumn(Parser.NAME, metric.getKey()));
-          row.add(new StringColumn(Parser.ALIAS, metric.getValue()));
+          row.add(new StringColumn(Parser.NAME, name));
+          row.add(new StringColumn(Parser.ALIAS, metric.getAlias()));
+          row.add(new StringColumn(Parser.DESC, metric.getDesc()));
+
+          String rule = Parser.CUSTOM;
+
+          if (metadata instanceof View) {
+            Table table = ((View) metadata).getTables().get(0);
+
+            MetricCalculator calculator = table.getCalculator(name);
+            if (calculator instanceof SqlFileBasedCalculator) {
+              rule = ((SqlFileBasedCalculator) calculator).getSql();
+            }
+          }
+
+          row.add(new StringColumn(Parser.RULE, rule));
 
           response.add(row);
         }
