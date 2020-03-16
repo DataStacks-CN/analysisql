@@ -1,5 +1,6 @@
 package com.weibo.dip.analysis.view;
 
+import com.weibo.dip.analysisql.connector.Dimension;
 import com.weibo.dip.analysisql.connector.Metadata;
 import com.weibo.dip.analysisql.dsl.filter.Filter;
 import com.weibo.dip.analysisql.dsl.request.Granularity;
@@ -81,8 +82,13 @@ public class Table extends Metadata implements Comparable<Table> {
     throw new UnsupportedOperationException();
   }
 
+  @Override
+  public void addDimension(String dimension, String alias, String desc) {
+    throw new UnsupportedOperationException();
+  }
+
   public void addDimension(String dimension) {
-    dimensions.add(new Pair<>(dimension, dimension));
+    dimensions.add(new Dimension(dimension, null, null));
   }
 
   @Override
@@ -117,8 +123,7 @@ public class Table extends Metadata implements Comparable<Table> {
       dimensions.addAll(Arrays.asList(groups));
     }
 
-    return dimensions.stream()
-        .allMatch(dimension -> this.dimensions.contains(new Pair<>(dimension, dimension)));
+    return this.dimensions.containsAll(dimensions);
   }
 
   private boolean satisfyGranularity(Granularity granularity) {

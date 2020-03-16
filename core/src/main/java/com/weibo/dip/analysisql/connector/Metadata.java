@@ -11,7 +11,8 @@ public abstract class Metadata {
   protected String alias;
   protected String desc;
 
-  protected List<Pair<String, String>> dimensions;
+  protected List<Dimension> dimensions;
+
   protected List<Pair<String, String>> metrics;
   protected List<Pair<String, MetricCalculator>> calculators;
 
@@ -21,7 +22,7 @@ public abstract class Metadata {
    * @param topic topic
    */
   public Metadata(String topic) {
-    this(topic, topic, topic);
+    this(topic, null, null);
   }
 
   /**
@@ -54,10 +55,14 @@ public abstract class Metadata {
   }
 
   public void addDimension(String dimension, String alias) {
-    dimensions.add(new Pair<>(dimension, alias));
+    dimensions.add(new Dimension(dimension, alias, null));
   }
 
-  public List<Pair<String, String>> getDimensions() {
+  public void addDimension(String dimension, String alias, String desc) {
+    dimensions.add(new Dimension(dimension, alias, desc));
+  }
+
+  public List<Dimension> getDimensions() {
     return dimensions;
   }
 

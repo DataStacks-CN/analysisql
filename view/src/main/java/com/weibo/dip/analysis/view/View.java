@@ -18,7 +18,7 @@ public abstract class View extends Metadata {
    * @param topic topic
    */
   public View(String topic) {
-    this(topic, topic, topic);
+    this(topic, null, null);
   }
 
   /**

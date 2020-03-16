@@ -80,13 +80,14 @@ public class DefaultConnector implements Connector {
 
     String topic = request.getTopic();
     if (metadatas.containsKey(topic)) {
-      List<Pair<String, String>> dimensions = metadatas.get(topic).getDimensions();
+      List<Dimension> dimensions = metadatas.get(topic).getDimensions();
       if (CollectionUtils.isNotEmpty(dimensions)) {
-        for (Pair<String, String> dimension : dimensions) {
+        for (Dimension dimension : dimensions) {
           Row row = new Row();
 
-          row.add(new StringColumn(Parser.NAME, dimension.getKey()));
-          row.add(new StringColumn(Parser.ALIAS, dimension.getValue()));
+          row.add(new StringColumn(Parser.NAME, dimension.getName()));
+          row.add(new StringColumn(Parser.ALIAS, dimension.getAlias()));
+          row.add(new StringColumn(Parser.DESC, dimension.getDesc()));
 
           response.add(row);
         }
