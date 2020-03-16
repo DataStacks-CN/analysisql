@@ -181,7 +181,10 @@ public class DefaultConnector implements Connector {
 
             MetricCalculator calculator = table.getCalculator(name);
             if (calculator instanceof SqlFileBasedCalculator) {
-              rule = ((SqlFileBasedCalculator) calculator).getSql();
+              String sql = ((SqlFileBasedCalculator) calculator).getSql();
+              if (Objects.nonNull(sql)) {
+                rule = sql;
+              }
             }
           }
 
