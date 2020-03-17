@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import javafx.util.Pair;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.ArrayUtils;
 
 /** Table. */
@@ -129,7 +129,10 @@ public class Table extends Metadata implements Comparable<Table> {
       dimensions.addAll(Arrays.asList(groups));
     }
 
-    return this.dimensions.containsAll(dimensions);
+    return this.dimensions.stream()
+        .map(Dimension::getName)
+        .collect(Collectors.toSet())
+        .containsAll(dimensions);
   }
 
   private boolean satisfyGranularity(Granularity granularity) {
