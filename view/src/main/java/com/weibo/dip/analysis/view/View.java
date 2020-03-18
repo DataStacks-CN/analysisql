@@ -5,6 +5,7 @@ import com.weibo.dip.analysisql.metric.MetricCalculator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /** View. */
 public abstract class View extends Metadata {
@@ -61,5 +62,27 @@ public abstract class View extends Metadata {
   @Override
   public MetricCalculator getCalculator(String metric) {
     return router;
+  }
+
+  /**
+   * Get tables using dimension name.
+   *
+   * @param name dimension name
+   * @return tables
+   */
+  public List<Table> getTableUsingDimension(String name) {
+    return tables.stream()
+        .filter(table -> table.containDimension(name))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Get tables using metric name.
+   *
+   * @param name metric name
+   * @return tables
+   */
+  public List<Table> getTableUsingMetric(String name) {
+    return tables.stream().filter(table -> table.containMetric(name)).collect(Collectors.toList());
   }
 }

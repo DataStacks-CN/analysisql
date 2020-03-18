@@ -64,7 +64,7 @@ public abstract class Metadata {
     dimensions.add(new Dimension(dimension, alias, desc));
   }
 
-  public boolean containDimention(String name) {
+  public boolean containDimension(String name) {
     return dimensions.stream().anyMatch(dimension -> dimension.getName().equals(name));
   }
 
