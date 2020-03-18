@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.util.Pair;
 
 /** Metadata. */
 public abstract class Metadata {
@@ -65,6 +64,10 @@ public abstract class Metadata {
     dimensions.add(new Dimension(dimension, alias, desc));
   }
 
+  public boolean containDimention(String name) {
+    return dimensions.stream().anyMatch(dimension -> dimension.getName().equals(name));
+  }
+
   public List<Dimension> getDimensions() {
     return dimensions;
   }
@@ -77,6 +80,11 @@ public abstract class Metadata {
 
   public void addMetric(String metric, String alias, String desc) {
     metrics.add(new Metric(metric, alias, desc));
+  }
+
+  public boolean containMetric(String name) {
+    return metrics.stream().anyMatch(metric -> metric.getName().equals(name))
+        && calculators.containsKey(name);
   }
 
   public List<Metric> getMetrics() {
