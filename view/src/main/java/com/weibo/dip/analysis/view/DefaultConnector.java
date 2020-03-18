@@ -177,7 +177,7 @@ public class DefaultConnector implements Connector {
           String rule = Parser.CUSTOM;
 
           if (metadata instanceof View) {
-            Table table = ((View) metadata).getTables().get(0);
+            Table table = ((View) metadata).getTableUsingMetric(name).get(0);
 
             MetricCalculator calculator = table.getCalculator(name);
             if (calculator instanceof SqlFileBasedCalculator) {
