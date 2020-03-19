@@ -1,7 +1,5 @@
 package com.weibo.dip.analysisql.metric;
 
-import com.weibo.dip.analysisql.metric.SqlFileBasedCalculator;
-import com.weibo.dip.analysisql.metric.SqlTemplate;
 import com.weibo.dip.analysisql.response.Row;
 import com.weibo.dip.analysisql.response.column.Column;
 import java.sql.Connection;
