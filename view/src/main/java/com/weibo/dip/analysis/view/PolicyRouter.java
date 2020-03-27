@@ -33,7 +33,8 @@ public class PolicyRouter implements MetricCalculator {
             .sorted()
             .collect(Collectors.toList());
     if (CollectionUtils.isEmpty(tables)) {
-      LOGGER.warn("View {} does not have any satisfied table!", view.getTopic());
+      LOGGER.warn(
+          "View {} does not have any satisfied table for request {}", view.getTopic(), request);
       return null;
     }
 

@@ -96,6 +96,8 @@ public class DefaultConnector implements Connector {
           response.add(row);
         }
       }
+    } else {
+      LOGGER.warn("sessionId: {}, unknown topic: {}", sessionId, topic);
     }
 
     watch.stop();
@@ -134,6 +136,8 @@ public class DefaultConnector implements Connector {
           response.add(row);
         }
       }
+    } else {
+      LOGGER.warn("sessionId: {}, unknown topic: {}", sessionId, topic);
     }
 
     watch.stop();
@@ -193,6 +197,8 @@ public class DefaultConnector implements Connector {
           response.add(row);
         }
       }
+    } else {
+      LOGGER.warn("sessionId: {}, unknown topic: {}", sessionId, topic);
     }
 
     watch.stop();
@@ -223,10 +229,15 @@ public class DefaultConnector implements Connector {
       String metric = request.getMetric();
 
       Metadata metadata = metadatas.get(topic);
-      assert Objects.nonNull(metadata);
+      if (Objects.isNull(metadata)) {
+        throw new RuntimeException("unknown topic: " + topic);
+      }
 
       MetricCalculator calculator = metadata.getCalculator(metric);
-      assert Objects.nonNull(calculator);
+      if (Objects.isNull(calculator)) {
+        throw new RuntimeException(
+            "can't get the calculator in topic: " + topic + " for metric: " + metric);
+      }
 
       List<Row> rows = calculator.calculate(request);
       if (CollectionUtils.isNotEmpty(rows)) {
@@ -242,7 +253,7 @@ public class DefaultConnector implements Connector {
           request,
           watch.getTime(TimeUnit.MILLISECONDS));
     } catch (Exception e) {
-      LOGGER.info("query error: {}", ExceptionUtils.getStackTrace(e));
+      LOGGER.info("sessionId: {}, query error: {}", sessionId, ExceptionUtils.getStackTrace(e));
 
       response.setCode(500);
       response.setMsg(e.getMessage());
