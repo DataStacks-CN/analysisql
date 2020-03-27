@@ -2,6 +2,7 @@ package com.weibo.dip.analysisql.mysql.metric;
 
 import com.weibo.dip.analysisql.metric.JdbcCalculator;
 import com.weibo.dip.analysisql.metric.SqlTemplate;
+import com.weibo.dip.analysisql.metric.SqlTemplateFactory;
 import com.weibo.dip.analysisql.response.column.Column;
 import com.weibo.dip.analysisql.response.column.DoubleColumn;
 import com.weibo.dip.analysisql.response.column.LongColumn;
@@ -12,8 +13,12 @@ import java.sql.SQLException;
 /** MySqlCalculator. */
 public class MySqlCalculator extends JdbcCalculator {
   public MySqlCalculator(
-      SqlTemplate sqlTemplate, String sqlFile, String url, String user, String passwd) {
-    super(sqlTemplate, sqlFile, url, user, passwd);
+      SqlTemplateFactory sqlTemplateFactory,
+      String sqlFile,
+      String url,
+      String user,
+      String passwd) {
+    super(sqlTemplateFactory, sqlFile, url, user, passwd);
   }
 
   @Override

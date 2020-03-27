@@ -19,17 +19,21 @@ public abstract class JdbcCalculator extends SqlFileBasedCalculator {
   protected String passwd;
 
   /**
-   * Initialize a instance with sql template, sql file, url, user, password.
+   * Initialize a instance with sql template factory, sql file, url, user, password.
    *
-   * @param sqlTemplate SqlTemplate
+   * @param sqlTemplateFactory SqlTemplateFactory
    * @param sqlFile sql file
    * @param url jdbc url
    * @param user jdbc user
    * @param passwd jdbc password
    */
   public JdbcCalculator(
-      SqlTemplate sqlTemplate, String sqlFile, String url, String user, String passwd) {
-    super(sqlTemplate, sqlFile);
+      SqlTemplateFactory sqlTemplateFactory,
+      String sqlFile,
+      String url,
+      String user,
+      String passwd) {
+    super(sqlTemplateFactory, sqlFile);
 
     this.url = url;
     this.user = user;

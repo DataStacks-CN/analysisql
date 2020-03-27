@@ -18,18 +18,18 @@ import org.slf4j.LoggerFactory;
 public abstract class SqlFileBasedCalculator implements MetricCalculator {
   private static final Logger LOGGER = LoggerFactory.getLogger(SqlFileBasedCalculator.class);
 
-  protected SqlTemplate sqlTemplate;
+  protected SqlTemplateFactory sqlTemplateFactory;
 
   protected String sql;
 
   /**
-   * Initialize a instance with sql template, sql file.
+   * Initialize a instance with sql template factory, sql file.
    *
-   * @param sqlTemplate SqlTemplate
+   * @param sqlTemplateFactory SqlTemplateFactory
    * @param sqlFile Sql file path
    */
-  public SqlFileBasedCalculator(SqlTemplate sqlTemplate, String sqlFile) {
-    this.sqlTemplate = sqlTemplate;
+  public SqlFileBasedCalculator(SqlTemplateFactory sqlTemplateFactory, String sqlFile) {
+    this.sqlTemplateFactory = sqlTemplateFactory;
 
     if (Objects.nonNull(sqlFile)) {
       this.sql = load(sqlFile);
@@ -38,23 +38,19 @@ public abstract class SqlFileBasedCalculator implements MetricCalculator {
     }
   }
 
-  public SqlTemplate getSqlTemplate() {
-    return sqlTemplate;
+  public SqlTemplateFactory getSqlTemplateFactory() {
+    return sqlTemplateFactory;
   }
 
   public String getSql() {
     return sql;
   }
 
-  public void setSqlTemplate(SqlTemplate sqlTemplate) {
-    this.sqlTemplate = sqlTemplate;
-  }
-
   protected String load(String resource) {
     InputStream in = null;
 
     try {
-      in = SqlTemplate.class.getClassLoader().getResourceAsStream(resource);
+      in = SqlFileBasedCalculator.class.getClassLoader().getResourceAsStream(resource);
       assert Objects.nonNull(in);
 
       List<String> lines =
@@ -82,7 +78,7 @@ public abstract class SqlFileBasedCalculator implements MetricCalculator {
 
   @Override
   public List<Row> calculate(QueryRequest request) throws Exception {
-    String sql = sqlTemplate.render(this.sql, request);
+    String sql = sqlTemplateFactory.create().render(this.sql, request);
     LOGGER.info("sessionId: {}, sql: {}", request.getSessionId(), sql);
 
     return query(sql);

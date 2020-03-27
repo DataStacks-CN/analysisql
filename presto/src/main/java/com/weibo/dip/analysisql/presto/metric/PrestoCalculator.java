@@ -2,6 +2,7 @@ package com.weibo.dip.analysisql.presto.metric;
 
 import com.weibo.dip.analysisql.metric.JdbcCalculator;
 import com.weibo.dip.analysisql.metric.SqlTemplate;
+import com.weibo.dip.analysisql.metric.SqlTemplateFactory;
 import com.weibo.dip.analysisql.response.column.ArrayDoubleColumn;
 import com.weibo.dip.analysisql.response.column.ArrayLongColumn;
 import com.weibo.dip.analysisql.response.column.ArrayStringColumn;
@@ -15,8 +16,12 @@ import java.sql.SQLException;
 /** PrestoCalculator. */
 public class PrestoCalculator extends JdbcCalculator {
   public PrestoCalculator(
-      SqlTemplate sqlTemplate, String sqlFile, String url, String user, String passwd) {
-    super(sqlTemplate, sqlFile, url, user, passwd);
+      SqlTemplateFactory sqlTemplateFactory,
+      String sqlFile,
+      String url,
+      String user,
+      String passwd) {
+    super(sqlTemplateFactory, sqlFile, url, user, passwd);
   }
 
   @Override

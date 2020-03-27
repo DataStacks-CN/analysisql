@@ -2,6 +2,7 @@ package com.weibo.dip.analysisql.clickhouse.metric;
 
 import com.weibo.dip.analysisql.metric.JdbcCalculator;
 import com.weibo.dip.analysisql.metric.SqlTemplate;
+import com.weibo.dip.analysisql.metric.SqlTemplateFactory;
 import com.weibo.dip.analysisql.response.column.Column;
 import com.weibo.dip.analysisql.response.column.DoubleColumn;
 import com.weibo.dip.analysisql.response.column.LongColumn;
@@ -13,8 +14,12 @@ import ru.yandex.clickhouse.domain.ClickHouseDataType;
 /** ClickHouseCalculator. */
 public class ClickHouseCalculator extends JdbcCalculator {
   public ClickHouseCalculator(
-      SqlTemplate sqlTemplate, String sqlFile, String url, String user, String passwd) {
-    super(sqlTemplate, sqlFile, url, user, passwd);
+      SqlTemplateFactory sqlTemplateFactory,
+      String sqlFile,
+      String url,
+      String user,
+      String passwd) {
+    super(sqlTemplateFactory, sqlFile, url, user, passwd);
   }
 
   @Override
