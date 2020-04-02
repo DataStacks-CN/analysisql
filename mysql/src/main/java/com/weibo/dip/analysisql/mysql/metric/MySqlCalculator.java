@@ -44,6 +44,9 @@ public class MySqlCalculator extends JdbcCalculator {
       case "DOUBLE":
         return new DoubleColumn(columnName, rs.getDouble(column));
 
+      case "DECIMAL":
+        return new DoubleColumn(columnName, rs.getBigDecimal(column).doubleValue());
+
       default:
         throw new UnsupportedOperationException(columnTypeName);
     }
