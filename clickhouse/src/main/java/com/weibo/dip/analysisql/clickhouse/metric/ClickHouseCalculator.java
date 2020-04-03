@@ -1,12 +1,13 @@
 package com.weibo.dip.analysisql.clickhouse.metric;
 
 import com.weibo.dip.analysisql.metric.JdbcCalculator;
-import com.weibo.dip.analysisql.metric.SqlTemplate;
 import com.weibo.dip.analysisql.metric.SqlTemplateFactory;
+import com.weibo.dip.analysisql.response.column.ArrayDoubleColumn;
 import com.weibo.dip.analysisql.response.column.Column;
 import com.weibo.dip.analysisql.response.column.DoubleColumn;
 import com.weibo.dip.analysisql.response.column.LongColumn;
 import com.weibo.dip.analysisql.response.column.StringColumn;
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import ru.yandex.clickhouse.domain.ClickHouseDataType;
@@ -43,9 +44,22 @@ public class ClickHouseCalculator extends JdbcCalculator {
       case Float32:
       case Float64:
         return new DoubleColumn(columnName, rs.getDouble(column));
+
       default:
         if (columnTypeName.contains(ClickHouseDataType.DateTime.name())) {
           return new LongColumn(columnName, rs.getTimestamp(column).getTime());
+        }
+
+        if (columnTypeName.contains(ClickHouseDataType.Array.name())) {
+          Array array = rs.getArray(column);
+
+          String baseTypeName = array.getBaseTypeName();
+
+          if (ClickHouseDataType.fromTypeString(baseTypeName) == ClickHouseDataType.Float64) {
+            return new ArrayDoubleColumn(columnName, (double[]) array.getArray());
+          }
+
+          throw new UnsupportedOperationException(baseTypeName);
         }
 
         throw new UnsupportedOperationException(columnTypeName);

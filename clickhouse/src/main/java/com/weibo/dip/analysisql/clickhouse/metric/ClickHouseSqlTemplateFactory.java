@@ -1,6 +1,5 @@
 package com.weibo.dip.analysisql.clickhouse.metric;
 
-import com.weibo.dip.analysisql.metric.MySqlTemplate;
 import com.weibo.dip.analysisql.metric.SqlTemplate;
 import com.weibo.dip.analysisql.metric.SqlTemplateFactory;
 
@@ -8,6 +7,7 @@ import com.weibo.dip.analysisql.metric.SqlTemplateFactory;
 public class ClickHouseSqlTemplateFactory implements SqlTemplateFactory {
   @Override
   public SqlTemplate create() {
-    return new MySqlTemplate(new ClickHouseSqlSnippetVisitor(new ClickHouseSqlFilterVisitor()));
+    return new ClickHouseSqlTemplate(
+        new ClickHouseSqlSnippetVisitor(new ClickHouseSqlFilterVisitor()));
   }
 }
