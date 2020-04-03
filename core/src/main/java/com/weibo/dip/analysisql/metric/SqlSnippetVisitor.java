@@ -23,6 +23,8 @@ public class SqlSnippetVisitor extends QueryRequestVisitor {
   protected String orders;
   protected String limit;
 
+  protected long gap;
+
   public SqlSnippetVisitor(SqlFilterVisitor filterVisitor) {
     this.filterVisitor = filterVisitor;
   }
@@ -55,6 +57,10 @@ public class SqlSnippetVisitor extends QueryRequestVisitor {
     return limit;
   }
 
+  public long getGap() {
+    return gap;
+  }
+
   @Override
   protected void visitTopic(String topic) {}
 
@@ -72,7 +78,7 @@ public class SqlSnippetVisitor extends QueryRequestVisitor {
 
   @Override
   protected void visitGranularity(Granularity granularity) {
-    long gap = granularity.getMilliseconds() / 1000;
+    gap = granularity.getMilliseconds() / 1000;
     assert gap > 0;
 
     /*
