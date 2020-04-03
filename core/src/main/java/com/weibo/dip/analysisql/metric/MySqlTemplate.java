@@ -20,6 +20,7 @@ public class MySqlTemplate extends SqlTemplate {
         .replace("$WHERE", snippetVisitor.getWhere())
         .replace("$HAVING", snippetVisitor.getHaving())
         .replace("$ORDERS", snippetVisitor.getOrders())
-        .replace("$LIMIT", snippetVisitor.getLimit());
+        .replace("$LIMIT", snippetVisitor.getLimit())
+        .replace("$GAP", String.valueOf(snippetVisitor.getGap()));
   }
 }
