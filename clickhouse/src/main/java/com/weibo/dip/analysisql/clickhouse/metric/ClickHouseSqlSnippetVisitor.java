@@ -14,6 +14,8 @@ public class ClickHouseSqlSnippetVisitor extends SqlSnippetVisitor {
 
   @Override
   protected void visitGranularity(Granularity granularity) {
+    gap = granularity.getMilliseconds() / 1000;
+
     /*
      select:
 
