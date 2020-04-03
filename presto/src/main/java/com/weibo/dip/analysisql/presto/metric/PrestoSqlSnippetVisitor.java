@@ -16,7 +16,7 @@ public class PrestoSqlSnippetVisitor extends SqlSnippetVisitor {
 
   @Override
   protected void visitGranularity(Granularity granularity) {
-    long gap = granularity.getMilliseconds() / 1000;
+    gap = granularity.getMilliseconds() / 1000;
     assert gap > 0;
 
     /*
