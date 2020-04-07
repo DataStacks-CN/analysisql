@@ -1,7 +1,6 @@
 package com.weibo.dip.analysisql.presto.metric;
 
 import com.weibo.dip.analysisql.metric.JdbcCalculator;
-import com.weibo.dip.analysisql.metric.SqlTemplate;
 import com.weibo.dip.analysisql.metric.SqlTemplateFactory;
 import com.weibo.dip.analysisql.response.column.ArrayDoubleColumn;
 import com.weibo.dip.analysisql.response.column.ArrayLongColumn;
