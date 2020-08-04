@@ -6,6 +6,10 @@ import com.weibo.dip.analysisql.clickhouse.metric.ClickHouseCalculator;
 import com.weibo.dip.analysisql.clickhouse.metric.ClickHouseSqlTemplateFactory;
 import com.weibo.dip.analysisql.dsl.request.Granularity;
 import com.weibo.dip.analysisql.metric.MetricCalculator;
+import com.weibo.dip.analysisql.metric.MySqlTemplateFactory;
+import com.weibo.dip.analysisql.mysql.metric.MySqlCalculator;
+import com.weibo.dip.analysisql.presto.metric.PrestoCalculator;
+import com.weibo.dip.analysisql.presto.metric.PrestoSqlTemplateFactory;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -143,14 +147,20 @@ public class ViewBuilder {
 
     switch (type) {
       case TYPE_CLICKHOUSE:
+        calculator =
+            new ClickHouseCalculator(sql, new ClickHouseSqlTemplateFactory(), url, user, passwd);
         break;
       case TYPE_MYSQL:
+        calculator = new MySqlCalculator(sql, new MySqlTemplateFactory(), url, user, passwd);
         break;
       case TYPE_PRESTO:
+        calculator = new PrestoCalculator(sql, new PrestoSqlTemplateFactory(), url, user, passwd);
         break;
       default:
-        throw new UnsupportedOperationException();
+        throw new RuntimeException("Unsupported db type: " + type);
     }
+
+    view.getTable(table).addCalculator(name, calculator);
 
     return this;
   }
