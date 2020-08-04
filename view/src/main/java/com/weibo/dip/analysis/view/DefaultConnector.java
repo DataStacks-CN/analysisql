@@ -11,7 +11,7 @@ import com.weibo.dip.analysisql.dsl.request.GetMetricsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.metric.MetricCalculator;
-import com.weibo.dip.analysisql.metric.SqlFileBasedCalculator;
+import com.weibo.dip.analysisql.metric.SqlBasedCalculator;
 import com.weibo.dip.analysisql.response.Response;
 import com.weibo.dip.analysisql.response.Row;
 import com.weibo.dip.analysisql.response.column.StringColumn;
@@ -240,8 +240,8 @@ public class DefaultConnector implements Connector {
           Table table = ((View) metadata).getTableUsingMetric(name).get(0);
 
           MetricCalculator calculator = table.getCalculator(name);
-          if (calculator instanceof SqlFileBasedCalculator) {
-            String sql = ((SqlFileBasedCalculator) calculator).getSql();
+          if (calculator instanceof SqlBasedCalculator) {
+            String sql = ((SqlBasedCalculator) calculator).getSql();
             if (Objects.nonNull(sql)) {
               rule = sql;
             }

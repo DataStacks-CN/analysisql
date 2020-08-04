@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** JdbcCalculator. */
-public abstract class JdbcCalculator extends SqlFileBasedCalculator {
+public abstract class JdbcCalculator extends SqlBasedCalculator {
   protected String url;
   protected String user;
   protected String passwd;
@@ -34,6 +34,24 @@ public abstract class JdbcCalculator extends SqlFileBasedCalculator {
       String user,
       String passwd) {
     super(sqlTemplateFactory, sqlFile);
+
+    this.url = url;
+    this.user = user;
+    this.passwd = passwd;
+  }
+
+  /**
+   * Initialize a instance with sql, sql template factory, url, user, password.
+   *
+   * @param sql sql
+   * @param sqlTemplateFactory SqlTemplateFactory
+   * @param url jdbc url
+   * @param user jdbc user
+   * @param passwd jdbc password
+   */
+  public JdbcCalculator(
+      String sql, SqlTemplateFactory sqlTemplateFactory, String url, String user, String passwd) {
+    super(sql, sqlTemplateFactory);
 
     this.url = url;
     this.user = user;

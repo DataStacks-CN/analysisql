@@ -263,7 +263,27 @@ public class ViewLoader {
     }
   }
 
-  private void buildViewTableCalculators(ViewBuilder builder, String table) throws Exception {}
+  private void buildViewTableCalculators(ViewBuilder builder, String table) throws Exception {
+    Connection conn = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+
+    try {
+      conn = DriverManager.getConnection(url, user, passwd);
+      stmt = conn.createStatement();
+      rs =
+          stmt.executeQuery(
+              String.format(
+                  "SELECT avtd_name FROM %s WHERE avtd_topic = %s AND avtd_table = %s",
+                  viewTableDimension, builder.getTopic(), table));
+
+      while (rs.next()) {
+        builder.tableDimension(table, rs.getString("avtd_name"));
+      }
+    } finally {
+      closeQuietly(conn, stmt, rs);
+    }
+  }
 
   private void closeQuietly(Connection conn, Statement stmt, ResultSet rs) {
     if (Objects.nonNull(rs)) {

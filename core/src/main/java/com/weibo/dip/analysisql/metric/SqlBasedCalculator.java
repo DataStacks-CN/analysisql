@@ -14,9 +14,9 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** SqlFileBasedCalculator. */
-public abstract class SqlFileBasedCalculator implements MetricCalculator {
-  private static final Logger LOGGER = LoggerFactory.getLogger(SqlFileBasedCalculator.class);
+/** SqlBasedCalculator. */
+public abstract class SqlBasedCalculator implements MetricCalculator {
+  private static final Logger LOGGER = LoggerFactory.getLogger(SqlBasedCalculator.class);
 
   protected SqlTemplateFactory sqlTemplateFactory;
 
@@ -28,7 +28,7 @@ public abstract class SqlFileBasedCalculator implements MetricCalculator {
    * @param sqlTemplateFactory SqlTemplateFactory
    * @param sqlFile Sql file path
    */
-  public SqlFileBasedCalculator(SqlTemplateFactory sqlTemplateFactory, String sqlFile) {
+  public SqlBasedCalculator(SqlTemplateFactory sqlTemplateFactory, String sqlFile) {
     this.sqlTemplateFactory = sqlTemplateFactory;
 
     if (Objects.nonNull(sqlFile)) {
@@ -36,6 +36,17 @@ public abstract class SqlFileBasedCalculator implements MetricCalculator {
     } else {
       this.sql = null;
     }
+  }
+
+  /**
+   * Initialize a instance with sql and sql template factory.
+   *
+   * @param sql sql
+   * @param sqlTemplateFactory SqlTemplateFactory
+   */
+  public SqlBasedCalculator(String sql, SqlTemplateFactory sqlTemplateFactory) {
+    this.sqlTemplateFactory = sqlTemplateFactory;
+    this.sql = sql;
   }
 
   public SqlTemplateFactory getSqlTemplateFactory() {
@@ -50,7 +61,7 @@ public abstract class SqlFileBasedCalculator implements MetricCalculator {
     InputStream in = null;
 
     try {
-      in = SqlFileBasedCalculator.class.getClassLoader().getResourceAsStream(resource);
+      in = SqlBasedCalculator.class.getClassLoader().getResourceAsStream(resource);
       assert Objects.nonNull(in);
 
       List<String> lines =

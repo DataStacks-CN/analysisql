@@ -23,6 +23,11 @@ public class PrestoCalculator extends JdbcCalculator {
     super(sqlTemplateFactory, sqlFile, url, user, passwd);
   }
 
+  public PrestoCalculator(
+      String sql, SqlTemplateFactory sqlTemplateFactory, String url, String user, String passwd) {
+    super(sql, sqlTemplateFactory, url, user, passwd);
+  }
+
   @Override
   public Column<?> cast(ResultSet rs, int column, String columnName, String columnTypeName)
       throws SQLException {
