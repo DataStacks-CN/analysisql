@@ -150,9 +150,10 @@ public class ViewLoader {
       while (rs.next()) {
         ViewBuilder builder = new ViewBuilder();
 
-        builder.topic(rs.getString("avi_topic"));
-        builder.alias(rs.getString("avi_alias"));
-        builder.desc(rs.getString("avi_desc"));
+        builder
+            .topic(rs.getString("avi_topic"))
+            .alias(rs.getString("avi_alias"))
+            .desc(rs.getString("avi_desc"));
 
         builders.add(builder);
       }
@@ -277,7 +278,56 @@ public class ViewLoader {
     }
   }
 
-  private void buildViewTables(ViewBuilder builder) throws Exception {}
+  private void buildViewTables(ViewBuilder builder) throws Exception {
+    Connection conn = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+
+    try {
+      conn = DriverManager.getConnection(url, user, passwd);
+      stmt = conn.createStatement();
+      rs =
+          stmt.executeQuery(
+              String.format(
+                  "SELECT "
+                      + "avti_name, avti_data, avti_unit, avti_period, avti_delay "
+                      + "FROM %s WHERE avti_topic = %s AND avti_state = 1",
+                  viewTableInfo, builder.getTopic()));
+
+      while (rs.next()) {
+        builder.table(
+            rs.getString("avti_name"),
+            rs.getInt("avti_data"),
+            rs.getString("avti_unit"),
+            rs.getInt("avti_period"),
+            rs.getInt("avti_delay"));
+      }
+    } finally {
+      if (Objects.nonNull(rs)) {
+        try {
+          rs.close();
+        } catch (SQLException e) {
+          // do nothing
+        }
+      }
+
+      if (Objects.nonNull(stmt)) {
+        try {
+          stmt.close();
+        } catch (SQLException e) {
+          // do nothing
+        }
+      }
+
+      if (Objects.nonNull(conn)) {
+        try {
+          conn.close();
+        } catch (SQLException e) {
+          // do nothing
+        }
+      }
+    }
+  }
 
   /**
    * Load view.
