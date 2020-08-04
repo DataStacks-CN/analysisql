@@ -329,6 +329,10 @@ public class ViewLoader {
     }
   }
 
+  private void buildViewTableDimensions(ViewBuilder builder, String table) throws Exception {}
+
+  private void buildViewTableCalculators(ViewBuilder builder, String table) throws Exception {}
+
   /**
    * Load view.
    *
@@ -342,6 +346,12 @@ public class ViewLoader {
     for (ViewBuilder builder : builders) {
       buildViewDimensions(builder);
       buildViewMetrics(builder);
+      buildViewTables(builder);
+
+      for (String table : builder.getTables()) {
+        buildViewTableDimensions(builder, table);
+        buildViewTableCalculators(builder, table);
+      }
 
       views.add(builder.build());
     }
