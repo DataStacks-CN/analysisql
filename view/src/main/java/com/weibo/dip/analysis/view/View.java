@@ -41,6 +41,10 @@ public abstract class View extends Metadata {
     return tables;
   }
 
+  public Table getTable(String name) {
+    return tables.stream().filter(table -> table.getName().equals(name)).findAny().orElse(null);
+  }
+
   public PolicyRouter getRouter() {
     return router;
   }
