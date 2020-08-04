@@ -50,12 +50,24 @@ public abstract class Metadata implements Closeable {
     return topic;
   }
 
+  public void setTopic(String topic) {
+    this.topic = topic;
+  }
+
   public String getAlias() {
     return alias;
   }
 
+  public void setAlias(String alias) {
+    this.alias = alias;
+  }
+
   public String getDesc() {
     return desc;
+  }
+
+  public void setDesc(String desc) {
+    this.desc = desc;
   }
 
   public void addDimension(String dimension, String alias) {
