@@ -277,6 +277,8 @@ public class ViewLoader {
     }
   }
 
+  private void buildViewTables(ViewBuilder builder) throws Exception {}
+
   /**
    * Load view.
    *

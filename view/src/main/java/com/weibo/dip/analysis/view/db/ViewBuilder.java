@@ -55,12 +55,28 @@ public class ViewBuilder {
     return this;
   }
 
+  /**
+   * Add view dimension.
+   *
+   * @param name dimension name
+   * @param alias dimension alias
+   * @param desc dimension desc
+   * @return builder
+   */
   public ViewBuilder dimension(String name, String alias, String desc) {
     view.addDimension(name, alias, desc);
 
     return this;
   }
 
+  /**
+   * Add view metric.
+   *
+   * @param name metric name
+   * @param alias metric alias
+   * @param desc metric desc
+   * @return builder
+   */
   public ViewBuilder metric(String name, String alias, String desc) {
     view.addMetric(name, alias, desc);
 
