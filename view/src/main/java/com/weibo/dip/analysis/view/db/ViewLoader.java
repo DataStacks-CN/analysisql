@@ -274,11 +274,20 @@ public class ViewLoader {
       rs =
           stmt.executeQuery(
               String.format(
-                  "SELECT avtd_name FROM %s WHERE avtd_topic = %s AND avtd_table = %s",
-                  viewTableDimension, builder.getTopic(), table));
+                  "SELECT "
+                      + "avtc_metric, avtc_type, avtc_url, avtc_user, avtc_passwd, avtc_sql "
+                      + "FROM %s WHERE avtc_topic = %s AND avtc_table = %s",
+                  viewTableCalculator, builder.getTopic(), table));
 
       while (rs.next()) {
-        builder.tableDimension(table, rs.getString("avtd_name"));
+        builder.tableCalculator(
+            table,
+            rs.getString("avtc_metric"),
+            rs.getString("avtc_type"),
+            rs.getString("avtc_url"),
+            rs.getString("avtc_user"),
+            rs.getString("avtc_passwd"),
+            rs.getString("avtc_sql"));
       }
     } finally {
       closeQuietly(conn, stmt, rs);
