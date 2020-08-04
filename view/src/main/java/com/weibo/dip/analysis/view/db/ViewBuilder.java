@@ -1,18 +1,18 @@
 package com.weibo.dip.analysis.view.db;
 
 import com.weibo.dip.analysis.view.DefaultView;
+import com.weibo.dip.analysis.view.Table;
+import com.weibo.dip.analysisql.dsl.request.Granularity;
 import java.util.Objects;
 
 /** ViewBuilder. */
 public class ViewBuilder {
-  private String topic;
-
   private DefaultView view = null;
 
   public ViewBuilder() {}
 
   public String getTopic() {
-    return topic;
+    return view.getTopic();
   }
 
   /**
@@ -22,8 +22,6 @@ public class ViewBuilder {
    * @return builder
    */
   public ViewBuilder topic(String topic) {
-    this.topic = topic;
-
     if (Objects.isNull(view)) {
       view = new DefaultView(topic);
     }
@@ -79,6 +77,24 @@ public class ViewBuilder {
    */
   public ViewBuilder metric(String name, String alias, String desc) {
     view.addMetric(name, alias, desc);
+
+    return this;
+  }
+
+  /**
+   * Add view table.
+   *
+   * @param name table name
+   * @param data table granularity/data
+   * @param unit table granularity/unit
+   * @param period table period
+   * @param delay table delay
+   * @return builder
+   */
+  public ViewBuilder table(String name, int data, String unit, int period, int delay) {
+    view.addTable(
+        new Table(
+            view, name, new Granularity(data, Granularity.Unit.valueOf(unit)), period, delay));
 
     return this;
   }
