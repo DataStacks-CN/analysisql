@@ -163,6 +163,7 @@ public class ViewLoader {
         try {
           rs.close();
         } catch (SQLException e) {
+          // do nothing
         }
       }
 
@@ -170,6 +171,7 @@ public class ViewLoader {
         try {
           stmt.close();
         } catch (SQLException e) {
+          // do nothing
         }
       }
 
@@ -177,10 +179,58 @@ public class ViewLoader {
         try {
           conn.close();
         } catch (SQLException e) {
+          // do nothing
         }
       }
     }
   }
+
+  private void buildViewDimensions(ViewBuilder builder) throws Exception {
+    Connection conn = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+
+    try {
+      conn = DriverManager.getConnection(url, user, passwd);
+      stmt = conn.createStatement();
+      rs =
+          stmt.executeQuery(
+              String.format(
+                  "SELECT avd_name, avd_alias, avd_desc FROM %s WHERE avd_topic = {}",
+                  viewDimension, builder.getTopic()));
+
+      while (rs.next()) {
+        builder.dimension(
+            rs.getString("avd_name"), rs.getString("avd_alias"), rs.getString("avd_desc"));
+      }
+
+    } finally {
+      if (Objects.nonNull(rs)) {
+        try {
+          rs.close();
+        } catch (SQLException e) {
+          // do nothing
+        }
+      }
+
+      if (Objects.nonNull(stmt)) {
+        try {
+          stmt.close();
+        } catch (SQLException e) {
+          // do nothing
+        }
+      }
+
+      if (Objects.nonNull(conn)) {
+        try {
+          conn.close();
+        } catch (SQLException e) {
+          // do nothing
+        }
+      }
+    }
+  }
+
   /**
    * Load view.
    *
@@ -192,6 +242,7 @@ public class ViewLoader {
 
     List<ViewBuilder> builders = fetchViewBuilders();
     for (ViewBuilder builder : builders) {
+      buildViewDimensions(builder);
 
       views.add(builder.build());
     }
