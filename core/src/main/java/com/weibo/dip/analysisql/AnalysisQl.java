@@ -9,12 +9,14 @@ import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.dsl.request.Request;
 import com.weibo.dip.analysisql.response.Response;
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 
 /** AnalysisQl. */
-public class AnalysisQl {
+public class AnalysisQl implements Closeable {
   private Connector connector;
 
   public AnalysisQl(Connector connector) {
@@ -72,5 +74,10 @@ public class AnalysisQl {
       default:
         throw new UnsupportedOperationException();
     }
+  }
+
+  @Override
+  public void close() throws IOException {
+    connector.close();
   }
 }

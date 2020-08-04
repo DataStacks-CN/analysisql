@@ -1,13 +1,15 @@
 package com.weibo.dip.analysisql.connector;
 
 import com.weibo.dip.analysisql.metric.MetricCalculator;
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /** Metadata. */
-public abstract class Metadata {
+public abstract class Metadata implements Closeable {
   protected String topic;
   protected String alias;
   protected String desc;
@@ -108,4 +110,7 @@ public abstract class Metadata {
   public MetricCalculator getCalculator(String metric) {
     return calculators.get(metric);
   }
+
+  @Override
+  public void close() throws IOException {}
 }

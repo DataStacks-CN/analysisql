@@ -15,11 +15,15 @@ import com.weibo.dip.analysisql.metric.SqlFileBasedCalculator;
 import com.weibo.dip.analysisql.response.Response;
 import com.weibo.dip.analysisql.response.Row;
 import com.weibo.dip.analysisql.response.column.StringColumn;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.StopWatch;
@@ -30,10 +34,21 @@ import org.slf4j.LoggerFactory;
 public class DefaultConnector implements Connector {
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConnector.class);
 
+  protected ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
+  protected Lock readLock = readWriteLock.readLock();
+  protected Lock writeLock = readWriteLock.writeLock();
+
   protected Map<String, Metadata> metadatas = new HashMap<>();
 
   public void register(Metadata metadata) {
-    metadatas.put(metadata.getTopic(), metadata);
+    writeLock.lock();
+
+    try {
+      metadatas.put(metadata.getTopic(), metadata);
+    } finally {
+      writeLock.unlock();
+    }
   }
 
   @Override
@@ -49,14 +64,20 @@ public class DefaultConnector implements Connector {
     StopWatch watch = new StopWatch();
     watch.start();
 
-    for (Metadata metadata : metadatas.values()) {
-      Row row = new Row();
+    readLock.lock();
 
-      row.add(new StringColumn(Parser.TOPIC, metadata.getTopic()));
-      row.add(new StringColumn(Parser.ALIAS, metadata.getAlias()));
-      row.add(new StringColumn(Parser.DESC, metadata.getDesc()));
+    try {
+      for (Metadata metadata : metadatas.values()) {
+        Row row = new Row();
 
-      response.add(row);
+        row.add(new StringColumn(Parser.TOPIC, metadata.getTopic()));
+        row.add(new StringColumn(Parser.ALIAS, metadata.getAlias()));
+        row.add(new StringColumn(Parser.DESC, metadata.getDesc()));
+
+        response.add(row);
+      }
+    } finally {
+      readLock.unlock();
     }
 
     watch.stop();
@@ -82,22 +103,31 @@ public class DefaultConnector implements Connector {
     StopWatch watch = new StopWatch();
     watch.start();
 
-    String topic = request.getTopic();
-    if (metadatas.containsKey(topic)) {
-      List<Dimension> dimensions = metadatas.get(topic).getDimensions();
-      if (CollectionUtils.isNotEmpty(dimensions)) {
-        for (Dimension dimension : dimensions) {
-          Row row = new Row();
+    List<Dimension> dimensions = null;
 
-          row.add(new StringColumn(Parser.NAME, dimension.getName()));
-          row.add(new StringColumn(Parser.ALIAS, dimension.getAlias()));
-          row.add(new StringColumn(Parser.DESC, dimension.getDesc()));
+    readLock.lock();
 
-          response.add(row);
-        }
+    try {
+      String topic = request.getTopic();
+      if (metadatas.containsKey(topic)) {
+        dimensions = metadatas.get(topic).getDimensions();
+      } else {
+        LOGGER.warn("sessionId: {}, unknown topic: {}", sessionId, topic);
       }
-    } else {
-      LOGGER.warn("sessionId: {}, unknown topic: {}", sessionId, topic);
+    } finally {
+      readLock.unlock();
+    }
+
+    if (CollectionUtils.isNotEmpty(dimensions)) {
+      for (Dimension dimension : dimensions) {
+        Row row = new Row();
+
+        row.add(new StringColumn(Parser.NAME, dimension.getName()));
+        row.add(new StringColumn(Parser.ALIAS, dimension.getAlias()));
+        row.add(new StringColumn(Parser.DESC, dimension.getDesc()));
+
+        response.add(row);
+      }
     }
 
     watch.stop();
@@ -123,21 +153,30 @@ public class DefaultConnector implements Connector {
     StopWatch watch = new StopWatch();
     watch.start();
 
-    String topic = request.getTopic();
-    String dimension = request.getDimension();
+    List<String> values = null;
 
-    if (metadatas.containsKey(topic)) {
-      List<String> values = metadatas.get(topic).getDimensionValues(dimension);
-      if (CollectionUtils.isNotEmpty(values)) {
-        for (String value : values) {
-          Row row = new Row();
-          row.add(new StringColumn(Parser.VALUE, value));
+    readLock.lock();
 
-          response.add(row);
-        }
+    try {
+      String topic = request.getTopic();
+      String dimension = request.getDimension();
+
+      if (metadatas.containsKey(topic)) {
+        values = metadatas.get(topic).getDimensionValues(dimension);
+      } else {
+        LOGGER.warn("sessionId: {}, unknown topic: {}", sessionId, topic);
       }
-    } else {
-      LOGGER.warn("sessionId: {}, unknown topic: {}", sessionId, topic);
+    } finally {
+      readLock.unlock();
+    }
+
+    if (CollectionUtils.isNotEmpty(values)) {
+      for (String value : values) {
+        Row row = new Row();
+        row.add(new StringColumn(Parser.VALUE, value));
+
+        response.add(row);
+      }
     }
 
     watch.stop();
@@ -163,42 +202,51 @@ public class DefaultConnector implements Connector {
     StopWatch watch = new StopWatch();
     watch.start();
 
-    String topic = request.getTopic();
-    if (metadatas.containsKey(topic)) {
-      Metadata metadata = metadatas.get(topic);
+    Metadata metadata = null;
+    List<Metric> metrics = null;
 
-      List<Metric> metrics = metadata.getMetrics();
-      if (CollectionUtils.isNotEmpty(metrics)) {
-        for (Metric metric : metrics) {
-          String name = metric.getName();
+    readLock.lock();
 
-          Row row = new Row();
+    try {
+      String topic = request.getTopic();
+      if (metadatas.containsKey(topic)) {
+        metadata = metadatas.get(topic);
+        metrics = metadata.getMetrics();
+      } else {
+        LOGGER.warn("sessionId: {}, unknown topic: {}", sessionId, topic);
+      }
+    } finally {
+      readLock.unlock();
+    }
 
-          row.add(new StringColumn(Parser.NAME, name));
-          row.add(new StringColumn(Parser.ALIAS, metric.getAlias()));
-          row.add(new StringColumn(Parser.DESC, metric.getDesc()));
+    if (CollectionUtils.isNotEmpty(metrics)) {
+      for (Metric metric : metrics) {
+        String name = metric.getName();
 
-          String rule = Parser.CUSTOM;
+        Row row = new Row();
 
-          if (metadata instanceof View) {
-            Table table = ((View) metadata).getTableUsingMetric(name).get(0);
+        row.add(new StringColumn(Parser.NAME, name));
+        row.add(new StringColumn(Parser.ALIAS, metric.getAlias()));
+        row.add(new StringColumn(Parser.DESC, metric.getDesc()));
 
-            MetricCalculator calculator = table.getCalculator(name);
-            if (calculator instanceof SqlFileBasedCalculator) {
-              String sql = ((SqlFileBasedCalculator) calculator).getSql();
-              if (Objects.nonNull(sql)) {
-                rule = sql;
-              }
+        String rule = Parser.CUSTOM;
+
+        if (metadata instanceof View) {
+          Table table = ((View) metadata).getTableUsingMetric(name).get(0);
+
+          MetricCalculator calculator = table.getCalculator(name);
+          if (calculator instanceof SqlFileBasedCalculator) {
+            String sql = ((SqlFileBasedCalculator) calculator).getSql();
+            if (Objects.nonNull(sql)) {
+              rule = sql;
             }
           }
-
-          row.add(new StringColumn(Parser.RULE, rule));
-
-          response.add(row);
         }
+
+        row.add(new StringColumn(Parser.RULE, rule));
+
+        response.add(row);
       }
-    } else {
-      LOGGER.warn("sessionId: {}, unknown topic: {}", sessionId, topic);
     }
 
     watch.stop();
@@ -228,22 +276,30 @@ public class DefaultConnector implements Connector {
       String topic = request.getTopic();
       String metric = request.getMetric();
 
-      Metadata metadata = metadatas.get(topic);
-      if (Objects.isNull(metadata)) {
-        throw new RuntimeException("unknown topic: " + topic);
+      Metadata metadata;
+
+      readLock.lock();
+
+      try {
+        metadata = metadatas.get(topic);
+      } finally {
+        readLock.unlock();
       }
 
-      MetricCalculator calculator = metadata.getCalculator(metric);
-      if (Objects.isNull(calculator)) {
-        throw new RuntimeException(
-            "can't get the calculator in topic: " + topic + " for metric: " + metric);
-      }
-
-      List<Row> rows = calculator.calculate(request);
-      if (CollectionUtils.isNotEmpty(rows)) {
-        for (Row row : rows) {
-          response.add(row);
+      if (Objects.nonNull(metadata)) {
+        MetricCalculator calculator = metadata.getCalculator(metric);
+        if (Objects.nonNull(calculator)) {
+          List<Row> rows = calculator.calculate(request);
+          if (CollectionUtils.isNotEmpty(rows)) {
+            for (Row row : rows) {
+              response.add(row);
+            }
+          }
+        } else {
+          LOGGER.warn("sessionId: {}, can't get the calculator in topic: {}", sessionId, topic);
         }
+      } else {
+        LOGGER.warn("sessionId: {}, unknown topic: {}", sessionId, topic);
       }
 
       watch.stop();
@@ -260,5 +316,25 @@ public class DefaultConnector implements Connector {
     }
 
     return response;
+  }
+
+  @Override
+  public void close() throws IOException {
+    writeLock.lock();
+
+    try {
+      for (Metadata metadata : metadatas.values()) {
+        try {
+          metadata.close();
+        } catch (IOException e) {
+          LOGGER.error(
+              "Metadata {} close error: {}", metadata.getTopic(), ExceptionUtils.getStackTrace(e));
+        }
+      }
+
+      metadatas.clear();
+    } finally {
+      writeLock.unlock();
+    }
   }
 }
