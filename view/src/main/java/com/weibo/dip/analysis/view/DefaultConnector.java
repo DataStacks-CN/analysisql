@@ -41,6 +41,11 @@ public class DefaultConnector implements Connector {
 
   protected Map<String, Metadata> metadatas = new HashMap<>();
 
+  /**
+   * Register a metadata.
+   *
+   * @param metadata Metadata
+   */
   public void register(Metadata metadata) {
     writeLock.lock();
 
