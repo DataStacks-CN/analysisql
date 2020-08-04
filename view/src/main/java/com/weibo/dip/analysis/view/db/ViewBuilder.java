@@ -61,6 +61,12 @@ public class ViewBuilder {
     return this;
   }
 
+  public ViewBuilder metric(String name, String alias, String desc) {
+    view.addMetric(name, alias, desc);
+
+    return this;
+  }
+
   public DefaultView build() {
     return view;
   }
