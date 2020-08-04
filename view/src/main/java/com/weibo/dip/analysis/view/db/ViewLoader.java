@@ -196,7 +196,7 @@ public class ViewLoader {
       rs =
           stmt.executeQuery(
               String.format(
-                  "SELECT avd_name, avd_alias, avd_desc FROM %s WHERE avd_topic = {}",
+                  "SELECT avd_name, avd_alias, avd_desc FROM %s WHERE avd_topic = %s",
                   viewDimension, builder.getTopic()));
 
       while (rs.next()) {
