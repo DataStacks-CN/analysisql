@@ -1,7 +1,21 @@
 package com.weibo.dip.analysis.view.db;
 
+import com.weibo.dip.analysis.view.DefaultView;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /** ViewLoader. */
 public class ViewLoader {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewLoader.class);
+
   public static final String TABLE_VIEW_INFO = "aql_view_info";
   public static final String TABLE_VIEW_DIMENSION = "aql_view_dimension";
   public static final String TABLE_VIEW_DIMENSION_VALUE = "aql_view_dimension_value";
@@ -115,5 +129,73 @@ public class ViewLoader {
 
   public void setViewTableCalculator(String viewTableCalculator) {
     this.viewTableCalculator = viewTableCalculator;
+  }
+
+  private List<ViewBuilder> fetchViewBuilders() throws Exception {
+    Connection conn = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+
+    try {
+      conn = DriverManager.getConnection(url, user, passwd);
+      stmt = conn.createStatement();
+      rs =
+          stmt.executeQuery(
+              String.format(
+                  "SELECT avi_topic, avi_alias, avi_desc, avi_state FROM %s WHERE state = 1",
+                  viewInfo));
+
+      List<ViewBuilder> builders = new ArrayList<>();
+
+      while (rs.next()) {
+        ViewBuilder builder = new ViewBuilder();
+
+        builder.topic(rs.getString("avi_topic"));
+        builder.alias(rs.getString("avi_alias"));
+        builder.desc(rs.getString("avi_desc"));
+
+        builders.add(builder);
+      }
+
+      return builders;
+    } finally {
+      if (Objects.nonNull(rs)) {
+        try {
+          rs.close();
+        } catch (SQLException e) {
+        }
+      }
+
+      if (Objects.nonNull(stmt)) {
+        try {
+          stmt.close();
+        } catch (SQLException e) {
+        }
+      }
+
+      if (Objects.nonNull(conn)) {
+        try {
+          conn.close();
+        } catch (SQLException e) {
+        }
+      }
+    }
+  }
+  /**
+   * Load view.
+   *
+   * @return views
+   * @throws Exception If jdbc or sql error.
+   */
+  public List<DefaultView> load() throws Exception {
+    List<DefaultView> views = new ArrayList<>();
+
+    List<ViewBuilder> builders = fetchViewBuilders();
+    for (ViewBuilder builder : builders) {
+
+      views.add(builder.build());
+    }
+
+    return views;
   }
 }
