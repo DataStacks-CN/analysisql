@@ -1,4 +1,4 @@
-package com.weibo.dip.analysis.view.db;
+package com.weibo.dip.analysis.view.dynamic;
 
 import com.weibo.dip.analysis.view.DefaultView;
 import java.sql.Connection;
@@ -179,8 +179,17 @@ public class ViewLoader {
                   viewDimension, builder.getTopic()));
 
       while (rs.next()) {
-        builder.dimension(
-            rs.getString("avd_name"), rs.getString("avd_alias"), rs.getString("avd_desc"));
+        String name = rs.getString("avd_name");
+        String alias = rs.getString("avd_alias");
+        String desc = rs.getString("avd_desc");
+
+        builder.dimension(name, alias, desc);
+        LOGGER.info(
+            "View[{}] build dimension: name[{}], alias[{}], desc[{}]",
+            builder.getTopic(),
+            name,
+            alias,
+            desc);
       }
 
     } finally {
@@ -203,8 +212,17 @@ public class ViewLoader {
                   viewMetric, builder.getTopic()));
 
       while (rs.next()) {
-        builder.metric(
-            rs.getString("avm_name"), rs.getString("avm_alias"), rs.getString("avd_desc"));
+        String name = rs.getString("avm_name");
+        String alias = rs.getString("avm_alias");
+        String desc = rs.getString("avd_desc");
+
+        builder.metric(name, alias, desc);
+        LOGGER.info(
+            "View[{}] build metric: name[{}], alias[{}], desc[{}]",
+            builder.getTopic(),
+            name,
+            alias,
+            desc);
       }
 
     } finally {
@@ -229,12 +247,21 @@ public class ViewLoader {
                   viewTableInfo, builder.getTopic()));
 
       while (rs.next()) {
-        builder.table(
-            rs.getString("avti_name"),
-            rs.getInt("avti_data"),
-            rs.getString("avti_unit"),
-            rs.getInt("avti_period"),
-            rs.getInt("avti_delay"));
+        String name = rs.getString("avti_name");
+        int data = rs.getInt("avti_data");
+        String unit = rs.getString("avti_unit");
+        int period = rs.getInt("avti_period");
+        int delay = rs.getInt("avti_delay");
+
+        builder.table(name, data, unit, period, delay);
+        LOGGER.info(
+            "View[{}] build table: name[{}], data[{}], unit[{}], period[{}], delay[{}]",
+            builder.getTopic(),
+            name,
+            data,
+            unit,
+            period,
+            delay);
       }
     } finally {
       closeQuietly(conn, stmt, rs);
@@ -256,7 +283,11 @@ public class ViewLoader {
                   viewTableDimension, builder.getTopic(), table));
 
       while (rs.next()) {
-        builder.tableDimension(table, rs.getString("avtd_name"));
+        String name = rs.getString("avtd_name");
+
+        builder.tableDimension(table, name);
+        LOGGER.info(
+            "View[{}]/Table[{}] build dimension: name[{}]", builder.getTopic(), table, name);
       }
     } finally {
       closeQuietly(conn, stmt, rs);
@@ -280,14 +311,25 @@ public class ViewLoader {
                   viewTableCalculator, builder.getTopic(), table));
 
       while (rs.next()) {
-        builder.tableCalculator(
+        String name = rs.getString("avtc_metric");
+        String type = rs.getString("avtc_type");
+        String url = rs.getString("avtc_url");
+        String user = rs.getString("avtc_user");
+        String passwd = rs.getString("avtc_passwd");
+        String sql = rs.getString("avtc_sql");
+
+        builder.tableCalculator(table, name, type, url, user, passwd, sql);
+        LOGGER.info(
+            "View[{}]/Table[{}] build calculator: "
+                + "name[{}], type[{}], url[{}], user[{}], passwd[{}], sql[{}]",
+            builder.getTopic(),
             table,
-            rs.getString("avtc_metric"),
-            rs.getString("avtc_type"),
-            rs.getString("avtc_url"),
-            rs.getString("avtc_user"),
-            rs.getString("avtc_passwd"),
-            rs.getString("avtc_sql"));
+            name,
+            type,
+            url,
+            user,
+            passwd,
+            sql);
       }
     } finally {
       closeQuietly(conn, stmt, rs);
@@ -331,6 +373,8 @@ public class ViewLoader {
 
     List<ViewBuilder> builders = fetchViewBuilders();
     for (ViewBuilder builder : builders) {
+      LOGGER.info("View[{}] build start...", builder.getTopic());
+
       buildViewDimensions(builder);
       buildViewMetrics(builder);
       buildViewTables(builder);
@@ -341,6 +385,8 @@ public class ViewLoader {
       }
 
       views.add(builder.build());
+
+      LOGGER.info("View[{}] build end", builder.getTopic());
     }
 
     return views;

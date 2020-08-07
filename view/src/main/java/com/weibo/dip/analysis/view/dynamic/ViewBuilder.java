@@ -1,4 +1,4 @@
-package com.weibo.dip.analysis.view.db;
+package com.weibo.dip.analysis.view.dynamic;
 
 import com.weibo.dip.analysis.view.DefaultView;
 import com.weibo.dip.analysis.view.Table;
