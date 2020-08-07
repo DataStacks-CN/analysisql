@@ -20,9 +20,13 @@ public class ViewBuilder {
   public static final String TYPE_MYSQL = "mysql";
   public static final String TYPE_PRESTO = "presto";
 
-  private DefaultView view = null;
+  private final ViewLoader loader;
 
-  public ViewBuilder() {}
+  private DefaultView view;
+
+  public ViewBuilder(ViewLoader loader) {
+    this.loader = loader;
+  }
 
   public String getTopic() {
     return view.getTopic();
@@ -40,7 +44,13 @@ public class ViewBuilder {
    */
   public ViewBuilder topic(String topic) {
     if (Objects.isNull(view)) {
-      view = new DefaultView(topic);
+      view =
+          new DefaultView(
+              topic,
+              loader.getUrl(),
+              loader.getUser(),
+              loader.getPasswd(),
+              loader.getViewDimensionValue());
     }
 
     return this;
