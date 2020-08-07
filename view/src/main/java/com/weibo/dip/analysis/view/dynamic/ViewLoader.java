@@ -142,7 +142,7 @@ public class ViewLoader {
       rs =
           stmt.executeQuery(
               String.format(
-                  "SELECT avi_topic, avi_alias, avi_desc, avi_state FROM %s WHERE state = 1",
+                  "SELECT avi_topic, avi_alias, avi_desc, avi_state FROM %s WHERE avi_state = 1",
                   viewInfo));
 
       List<ViewBuilder> builders = new ArrayList<>();
