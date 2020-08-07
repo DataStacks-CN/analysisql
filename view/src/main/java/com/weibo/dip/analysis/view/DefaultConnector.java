@@ -234,16 +234,19 @@ public class DefaultConnector implements Connector {
         row.add(new StringColumn(Parser.ALIAS, metric.getAlias()));
         row.add(new StringColumn(Parser.DESC, metric.getDesc()));
 
-        String rule = Parser.CUSTOM;
+        String rule = Parser.UNKNOWN;
 
         if (metadata instanceof View) {
-          Table table = ((View) metadata).getTableUsingMetric(name).get(0);
-
-          MetricCalculator calculator = table.getCalculator(name);
-          if (calculator instanceof SqlBasedCalculator) {
-            String sql = ((SqlBasedCalculator) calculator).getSql();
-            if (Objects.nonNull(sql)) {
-              rule = sql;
+          List<Table> tables = ((View) metadata).getTableUsingMetric(name);
+          if (CollectionUtils.isNotEmpty(tables)) {
+            MetricCalculator calculator = tables.get(0).getCalculator(name);
+            if (calculator instanceof SqlBasedCalculator) {
+              String sql = ((SqlBasedCalculator) calculator).getSql();
+              if (Objects.nonNull(sql)) {
+                rule = sql;
+              }
+            } else {
+              rule = Parser.CUSTOM;
             }
           }
         }

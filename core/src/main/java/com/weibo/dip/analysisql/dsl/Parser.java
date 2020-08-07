@@ -66,6 +66,7 @@ public class Parser {
 
   public static final String RULE = "rule";
   public static final String CUSTOM = "custom";
+  public static final String UNKNOWN = "unknown";
 
   private Connector connector;
 
