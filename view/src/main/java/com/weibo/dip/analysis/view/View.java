@@ -13,6 +13,8 @@ public abstract class View extends Metadata {
 
   protected PolicyRouter router;
 
+  protected boolean dynamic;
+
   /**
    * Initialize a instance with topic.
    *
@@ -47,6 +49,14 @@ public abstract class View extends Metadata {
 
   public PolicyRouter getRouter() {
     return router;
+  }
+
+  public boolean isDynamic() {
+    return dynamic;
+  }
+
+  public void setDynamic(boolean dynamic) {
+    this.dynamic = dynamic;
   }
 
   @Override

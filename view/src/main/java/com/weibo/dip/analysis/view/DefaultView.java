@@ -34,8 +34,6 @@ public class DefaultView extends View {
 
   private String table;
 
-  private boolean dynamic = false;
-
   public DefaultView(String topic) {
     super(topic);
   }
@@ -110,14 +108,6 @@ public class DefaultView extends View {
 
   public void setTable(String table) {
     this.table = table;
-  }
-
-  public boolean isDynamic() {
-    return dynamic;
-  }
-
-  public void setDynamic(boolean dynamic) {
-    this.dynamic = dynamic;
   }
 
   @Override

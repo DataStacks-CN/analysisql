@@ -18,6 +18,7 @@ import com.weibo.dip.analysisql.response.Row;
 import com.weibo.dip.analysisql.response.column.StringColumn;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import javax.xml.bind.annotation.XmlType.DEFAULT;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.StopWatch;
@@ -57,17 +59,30 @@ public class DefaultConnector implements Connector {
 
     try {
       metadatas.put(metadata.getTopic(), metadata);
+      LOGGER.info("View[{}] register", metadata.getTopic());
     } finally {
       writeLock.unlock();
     }
   }
 
+  /**
+   * Enable dynamic load.
+   *
+   * @param loader View loader
+   * @param rate Load rate
+   */
   public void enableDynamic(ViewLoader loader, int rate) {
     loadExecutor = Executors.newSingleThreadScheduledExecutor();
     loadExecutor.scheduleAtFixedRate(
         () -> {
           try {
             List<DefaultView> views = loader.load();
+
+            clearDynamic();
+
+            for (DefaultView view : views) {
+              register(view);
+            }
           } catch (Exception e) {
             LOGGER.error("Dynamic load views error: {}", ExceptionUtils.getStackTrace(e));
           }
@@ -75,6 +90,30 @@ public class DefaultConnector implements Connector {
         0,
         rate,
         TimeUnit.SECONDS);
+  }
+
+  /** Clear dynamic views. */
+  public void clearDynamic() {
+    writeLock.lock();
+
+    try {
+      Iterator<Map.Entry<String, Metadata>> iter = metadatas.entrySet().iterator();
+
+      while (iter.hasNext()) {
+        Metadata metadata = iter.next().getValue();
+        if (!(metadata instanceof DefaultView)) {
+          continue;
+        }
+
+        DefaultView view = (DefaultView) metadata;
+        if (view.isDynamic()) {
+          iter.remove();
+          LOGGER.info("View[{}] dynamic clear", view.getTopic());
+        }
+      }
+    } finally {
+      writeLock.unlock();
+    }
   }
 
   @Override
