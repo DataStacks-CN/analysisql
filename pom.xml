@@ -7,7 +7,7 @@
   <groupId>com.weibo.dip</groupId>
   <artifactId>analysisql</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.9</version>
+  <version>1.1</version>
   <modules>
     <module>core</module>
     <module>view</module>
