@@ -1,5 +1,6 @@
 package com.weibo.dip.analysis.view;
 
+import com.weibo.dip.analysis.view.dynamic.ViewLoader;
 import com.weibo.dip.analysisql.connector.Connector;
 import com.weibo.dip.analysisql.connector.Dimension;
 import com.weibo.dip.analysisql.connector.Metadata;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -41,6 +44,9 @@ public class DefaultConnector implements Connector {
 
   protected Map<String, Metadata> metadatas = new HashMap<>();
 
+  protected ViewLoader loader;
+  protected ScheduledExecutorService loadExecutor;
+
   /**
    * Register a metadata.
    *
@@ -54,6 +60,21 @@ public class DefaultConnector implements Connector {
     } finally {
       writeLock.unlock();
     }
+  }
+
+  public void enableDynamic(ViewLoader loader, int rate) {
+    loadExecutor = Executors.newSingleThreadScheduledExecutor();
+    loadExecutor.scheduleAtFixedRate(
+        () -> {
+          try {
+            List<DefaultView> views = loader.load();
+          } catch (Exception e) {
+            LOGGER.error("Dynamic load views error: {}", ExceptionUtils.getStackTrace(e));
+          }
+        },
+        0,
+        rate,
+        TimeUnit.SECONDS);
   }
 
   @Override

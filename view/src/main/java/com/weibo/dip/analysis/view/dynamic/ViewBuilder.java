@@ -51,6 +51,7 @@ public class ViewBuilder {
               loader.getUser(),
               loader.getPasswd(),
               loader.getViewDimensionValue());
+      view.setDynamic(true);
     }
 
     return this;
