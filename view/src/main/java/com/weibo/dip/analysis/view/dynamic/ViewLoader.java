@@ -214,7 +214,7 @@ public class ViewLoader {
       while (rs.next()) {
         String name = rs.getString("avm_name");
         String alias = rs.getString("avm_alias");
-        String desc = rs.getString("avd_desc");
+        String desc = rs.getString("avm_desc");
 
         builder.metric(name, alias, desc);
         LOGGER.info(
