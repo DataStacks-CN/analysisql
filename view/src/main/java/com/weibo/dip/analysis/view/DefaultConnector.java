@@ -240,13 +240,15 @@ public class DefaultConnector implements Connector {
           List<Table> tables = ((View) metadata).getTableUsingMetric(name);
           if (CollectionUtils.isNotEmpty(tables)) {
             MetricCalculator calculator = tables.get(0).getCalculator(name);
-            if (calculator instanceof SqlBasedCalculator) {
-              String sql = ((SqlBasedCalculator) calculator).getSql();
-              if (Objects.nonNull(sql)) {
-                rule = sql;
+            if (Objects.nonNull(calculator)) {
+              if (calculator instanceof SqlBasedCalculator) {
+                String sql = ((SqlBasedCalculator) calculator).getSql();
+                if (Objects.nonNull(sql)) {
+                  rule = sql;
+                }
+              } else {
+                rule = Parser.CUSTOM;
               }
-            } else {
-              rule = Parser.CUSTOM;
             }
           }
         }
