@@ -148,7 +148,7 @@ public class ViewLoader {
       List<ViewBuilder> builders = new ArrayList<>();
 
       while (rs.next()) {
-        ViewBuilder builder = new ViewBuilder();
+        ViewBuilder builder = new ViewBuilder(this);
 
         builder
             .topic(rs.getString("avi_topic"))
