@@ -175,7 +175,7 @@ public class ViewLoader {
       rs =
           stmt.executeQuery(
               String.format(
-                  "SELECT avd_name, avd_alias, avd_desc FROM %s WHERE avd_topic = %s",
+                  "SELECT avd_name, avd_alias, avd_desc FROM %s WHERE avd_topic = '%s'",
                   viewDimension, builder.getTopic()));
 
       while (rs.next()) {
@@ -208,7 +208,7 @@ public class ViewLoader {
       rs =
           stmt.executeQuery(
               String.format(
-                  "SELECT avm_name, avm_alias, avm_desc FROM %s WHERE avm_topic = %s",
+                  "SELECT avm_name, avm_alias, avm_desc FROM %s WHERE avm_topic = '%s'",
                   viewMetric, builder.getTopic()));
 
       while (rs.next()) {
@@ -243,7 +243,7 @@ public class ViewLoader {
               String.format(
                   "SELECT "
                       + "avti_name, avti_data, avti_unit, avti_period, avti_delay "
-                      + "FROM %s WHERE avti_topic = %s AND avti_state = 1",
+                      + "FROM %s WHERE avti_topic = '%s' AND avti_state = 1",
                   viewTableInfo, builder.getTopic()));
 
       while (rs.next()) {
@@ -279,7 +279,7 @@ public class ViewLoader {
       rs =
           stmt.executeQuery(
               String.format(
-                  "SELECT avtd_name FROM %s WHERE avtd_topic = %s AND avtd_table = %s",
+                  "SELECT avtd_name FROM %s WHERE avtd_topic = '%s' AND avtd_table = '%s'",
                   viewTableDimension, builder.getTopic(), table));
 
       while (rs.next()) {
@@ -307,7 +307,7 @@ public class ViewLoader {
               String.format(
                   "SELECT "
                       + "avtc_metric, avtc_type, avtc_url, avtc_user, avtc_passwd, avtc_sql "
-                      + "FROM %s WHERE avtc_topic = %s AND avtc_table = %s",
+                      + "FROM %s WHERE avtc_topic = '%s' AND avtc_table = '%s'",
                   viewTableCalculator, builder.getTopic(), table));
 
       while (rs.next()) {
