@@ -5,3 +5,5 @@ AnalysisQl是我们团队（微博流媒体数据平台）自主研发的即席�
 [微博大数据即席查询（OLAP）引擎实践](https://github.com/leaderman/blog/blob/master/AnalysisQl/%E5%BE%AE%E5%8D%9A%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%8D%B3%E5%B8%AD%E6%9F%A5%E8%AF%A2%EF%BC%88OLAP%EF%BC%89%E5%BC%95%E6%93%8E%E5%AE%9E%E8%B7%B5.md)
 
 [微博大数据即席查询语言（AnalysisQl DSL）](https://github.com/leaderman/blog/blob/master/AnalysisQl/%E5%BE%AE%E5%8D%9A%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%8D%B3%E5%B8%AD%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80%EF%BC%88AnalysisQl%20DSL%EF%BC%89.md)
+
+[微博AnalysisQl动态数据视图元数据设计](https://github.com/leaderman/blog/blob/master/AnalysisQl/%E5%BE%AE%E5%8D%9AAnalysisQl%E5%8A%A8%E6%80%81%E6%95%B0%E6%8D%AE%E8%A7%86%E5%9B%BE%E5%85%83%E6%95%B0%E6%8D%AE%E8%AE%BE%E8%AE%A1.md)
