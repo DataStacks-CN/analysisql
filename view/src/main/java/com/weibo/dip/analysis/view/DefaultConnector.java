@@ -16,6 +16,7 @@ import com.weibo.dip.analysisql.metric.SqlBasedCalculator;
 import com.weibo.dip.analysisql.response.Response;
 import com.weibo.dip.analysisql.response.Row;
 import com.weibo.dip.analysisql.response.column.StringColumn;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,14 +29,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import javax.xml.bind.annotation.XmlType.DEFAULT;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** DefaultConnector. */
+/**
+ * DefaultConnector.
+ */
 public class DefaultConnector implements Connector {
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConnector.class);
 
@@ -69,30 +72,32 @@ public class DefaultConnector implements Connector {
    * Enable dynamic load.
    *
    * @param loader View loader
-   * @param rate Load rate
+   * @param rate   Load rate
    */
   public void enableDynamic(ViewLoader loader, int rate) {
     loadExecutor = Executors.newSingleThreadScheduledExecutor();
     loadExecutor.scheduleAtFixedRate(
-        () -> {
-          try {
-            List<DefaultView> views = loader.load();
+            () -> {
+              try {
+                List<DefaultView> views = loader.load();
 
-            clearDynamic();
+                clearDynamic();
 
-            for (DefaultView view : views) {
-              register(view);
-            }
-          } catch (Exception e) {
-            LOGGER.error("Dynamic load views error: {}", ExceptionUtils.getStackTrace(e));
-          }
-        },
-        0,
-        rate,
-        TimeUnit.SECONDS);
+                for (DefaultView view : views) {
+                  register(view);
+                }
+              } catch (Exception e) {
+                LOGGER.error("Dynamic load views error: {}", ExceptionUtils.getStackTrace(e));
+              }
+            },
+            0,
+            rate,
+            TimeUnit.SECONDS);
   }
 
-  /** Clear dynamic views. */
+  /**
+   * Clear dynamic views.
+   */
   public void clearDynamic() {
     writeLock.lock();
 
@@ -147,10 +152,10 @@ public class DefaultConnector implements Connector {
 
     watch.stop();
     LOGGER.info(
-        "sessionId: {}, query: {}, time: {} ms",
-        sessionId,
-        request,
-        watch.getTime(TimeUnit.MILLISECONDS));
+            "sessionId: {}, query: {}, time: {} ms",
+            sessionId,
+            request,
+            watch.getTime(TimeUnit.MILLISECONDS));
 
     return response;
   }
@@ -197,10 +202,10 @@ public class DefaultConnector implements Connector {
 
     watch.stop();
     LOGGER.info(
-        "sessionId: {}, query: {}, time: {} ms",
-        sessionId,
-        request,
-        watch.getTime(TimeUnit.MILLISECONDS));
+            "sessionId: {}, query: {}, time: {} ms",
+            sessionId,
+            request,
+            watch.getTime(TimeUnit.MILLISECONDS));
 
     return response;
   }
@@ -246,10 +251,10 @@ public class DefaultConnector implements Connector {
 
     watch.stop();
     LOGGER.info(
-        "sessionId: {}, query: {}, time: {} ms",
-        sessionId,
-        request,
-        watch.getTime(TimeUnit.MILLISECONDS));
+            "sessionId: {}, query: {}, time: {} ms",
+            sessionId,
+            request,
+            watch.getTime(TimeUnit.MILLISECONDS));
 
     return response;
   }
@@ -297,7 +302,7 @@ public class DefaultConnector implements Connector {
         String rule = Parser.UNKNOWN;
 
         if (metadata instanceof View) {
-          List<Table> tables = ((View) metadata).getTableUsingMetric(name);
+          List<Table> tables = ((View) metadata).getTablesUsingMetric(name);
           if (CollectionUtils.isNotEmpty(tables)) {
             MetricCalculator calculator = tables.get(0).getCalculator(name);
             if (Objects.nonNull(calculator)) {
@@ -321,10 +326,10 @@ public class DefaultConnector implements Connector {
 
     watch.stop();
     LOGGER.info(
-        "sessionId: {}, query: {}, time: {} ms",
-        sessionId,
-        request,
-        watch.getTime(TimeUnit.MILLISECONDS));
+            "sessionId: {}, query: {}, time: {} ms",
+            sessionId,
+            request,
+            watch.getTime(TimeUnit.MILLISECONDS));
 
     return response;
   }
@@ -374,10 +379,10 @@ public class DefaultConnector implements Connector {
 
       watch.stop();
       LOGGER.info(
-          "sessionId: {}, query: {}, time: {} ms",
-          sessionId,
-          request,
-          watch.getTime(TimeUnit.MILLISECONDS));
+              "sessionId: {}, query: {}, time: {} ms",
+              sessionId,
+              request,
+              watch.getTime(TimeUnit.MILLISECONDS));
     } catch (Exception e) {
       LOGGER.info("sessionId: {}, query error: {}", sessionId, ExceptionUtils.getStackTrace(e));
 
@@ -389,7 +394,7 @@ public class DefaultConnector implements Connector {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close() {
     writeLock.lock();
 
     try {
@@ -398,7 +403,7 @@ public class DefaultConnector implements Connector {
           metadata.close();
         } catch (IOException e) {
           LOGGER.error(
-              "Metadata {} close error: {}", metadata.getTopic(), ExceptionUtils.getStackTrace(e));
+                  "Metadata {} close error: {}", metadata.getTopic(), ExceptionUtils.getStackTrace(e));
         }
       }
 

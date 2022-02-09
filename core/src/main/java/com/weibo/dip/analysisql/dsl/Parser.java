@@ -18,11 +18,15 @@ import com.weibo.dip.analysisql.dsl.request.Order;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.dsl.request.Request;
 import com.weibo.dip.analysisql.exception.SyntaxException;
+
 import java.text.ParseException;
 import java.util.Date;
+
 import org.apache.commons.lang3.time.FastDateFormat;
 
-/** Parser. */
+/**
+ * Parser.
+ */
 public class Parser {
   public static final String SESSION_ID = "sessionId";
   public static final String TYPE = "type";
@@ -35,7 +39,7 @@ public class Parser {
 
   public static final FastDateFormat DATE_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd");
   public static final FastDateFormat DATETIME_FORMAT =
-      FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
+          FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 
   public static final String GRANULARITY = "granularity";
   public static final String DATA = "data";
@@ -68,7 +72,7 @@ public class Parser {
   public static final String CUSTOM = "custom";
   public static final String UNKNOWN = "unknown";
 
-  private Connector connector;
+  private final Connector connector;
 
   public Parser(Connector connector) {
     this.connector = connector;
@@ -100,8 +104,8 @@ public class Parser {
     JsonObject json = element.getAsJsonObject();
 
     if (!json.has(TYPE)
-        || !json.get(TYPE).isJsonPrimitive()
-        || !json.getAsJsonPrimitive(TYPE).isString()) {
+            || !json.get(TYPE).isJsonPrimitive()
+            || !json.getAsJsonPrimitive(TYPE).isString()) {
       throw new SyntaxException("Property 'type'(string) must be set");
     }
 
@@ -130,8 +134,8 @@ public class Parser {
     }
 
     if (json.has(SESSION_ID)
-        && json.get(SESSION_ID).isJsonPrimitive()
-        && json.getAsJsonPrimitive(SESSION_ID).isString()) {
+            && json.get(SESSION_ID).isJsonPrimitive()
+            && json.getAsJsonPrimitive(SESSION_ID).isString()) {
       request.setSessionId(json.getAsJsonPrimitive(SESSION_ID).getAsString());
     }
 
@@ -144,8 +148,8 @@ public class Parser {
 
   private Request parseGetDimensions(JsonObject json) {
     if (!json.has(TOPIC)
-        || !json.get(TOPIC).isJsonPrimitive()
-        || !json.getAsJsonPrimitive(TOPIC).isString()) {
+            || !json.get(TOPIC).isJsonPrimitive()
+            || !json.getAsJsonPrimitive(TOPIC).isString()) {
       throw new SyntaxException("Type getDimensions, property 'topic'(string) must be set");
     }
 
@@ -156,13 +160,13 @@ public class Parser {
 
   private Request parseGetDimensionValues(JsonObject json) {
     if (!json.has(TOPIC)
-        || !json.get(TOPIC).isJsonPrimitive()
-        || !json.getAsJsonPrimitive(TOPIC).isString()
-        || !json.has(DIMENSION)
-        || !json.get(DIMENSION).isJsonPrimitive()
-        || !json.getAsJsonPrimitive(DIMENSION).isString()) {
+            || !json.get(TOPIC).isJsonPrimitive()
+            || !json.getAsJsonPrimitive(TOPIC).isString()
+            || !json.has(DIMENSION)
+            || !json.get(DIMENSION).isJsonPrimitive()
+            || !json.getAsJsonPrimitive(DIMENSION).isString()) {
       throw new SyntaxException(
-          "Type getDimensionValues, property 'topic'(string), 'dimension'(string) must be set");
+              "Type getDimensionValues, property 'topic'(string), 'dimension'(string) must be set");
     }
 
     String topic = json.getAsJsonPrimitive(TOPIC).getAsString();
@@ -178,8 +182,8 @@ public class Parser {
 
   private Request parseGetMetrics(JsonObject json) {
     if (!json.has(TOPIC)
-        || !json.get(TOPIC).isJsonPrimitive()
-        || !json.getAsJsonPrimitive(TOPIC).isString()) {
+            || !json.get(TOPIC).isJsonPrimitive()
+            || !json.getAsJsonPrimitive(TOPIC).isString()) {
       throw new SyntaxException("Type getMetrics, property 'topic'(string) must be set");
     }
 
@@ -190,18 +194,18 @@ public class Parser {
 
   private Request parseQuery(JsonObject json) {
     if (!json.has(TOPIC)
-        || !json.get(TOPIC).isJsonPrimitive()
-        || !json.get(TOPIC).getAsJsonPrimitive().isString()
-        || !json.has(INTERVAL)
-        || !json.get(INTERVAL).isJsonObject()
-        || !(json.getAsJsonObject(INTERVAL).entrySet().size() > 0)
-        || !json.has(METRIC)
-        || !json.get(METRIC).isJsonPrimitive()
-        || !json.getAsJsonPrimitive(METRIC).isString()) {
+            || !json.get(TOPIC).isJsonPrimitive()
+            || !json.get(TOPIC).getAsJsonPrimitive().isString()
+            || !json.has(INTERVAL)
+            || !json.get(INTERVAL).isJsonObject()
+            || !(json.getAsJsonObject(INTERVAL).entrySet().size() > 0)
+            || !json.has(METRIC)
+            || !json.get(METRIC).isJsonPrimitive()
+            || !json.getAsJsonPrimitive(METRIC).isString()) {
       throw new SyntaxException(
-          "Type query, property "
-              + "'topic'(string), 'interval'(json), "
-              + "'metric'(string) must be set");
+              "Type query, property "
+                      + "'topic'(string), 'interval'(json), "
+                      + "'metric'(string) must be set");
     }
 
     QueryRequest queryRequest = new QueryRequest();
@@ -217,13 +221,13 @@ public class Parser {
     */
     JsonObject intervalOjb = json.getAsJsonObject(INTERVAL);
     if (!intervalOjb.has(START)
-        || !intervalOjb.get(START).isJsonPrimitive()
-        || !intervalOjb.getAsJsonPrimitive(START).isString()
-        || !intervalOjb.has(END)
-        || !intervalOjb.get(END).isJsonPrimitive()
-        || !intervalOjb.getAsJsonPrimitive(END).isString()) {
+            || !intervalOjb.get(START).isJsonPrimitive()
+            || !intervalOjb.getAsJsonPrimitive(START).isString()
+            || !intervalOjb.has(END)
+            || !intervalOjb.get(END).isJsonPrimitive()
+            || !intervalOjb.getAsJsonPrimitive(END).isString()) {
       throw new SyntaxException(
-          "Type query/interval, property 'start'(string), 'end'(string) must be set");
+              "Type query/interval, property 'start'(string), 'end'(string) must be set");
     }
 
     Date start;
@@ -234,8 +238,8 @@ public class Parser {
       end = DATETIME_FORMAT.parse(intervalOjb.getAsJsonPrimitive(END).getAsString());
     } catch (ParseException e) {
       throw new SyntaxException(
-          "Type query/interval, property "
-              + "'start'(string), 'end'(string) must be in 'yyyy-MM-dd HH:mm:ss' format");
+              "Type query/interval, property "
+                      + "'start'(string), 'end'(string) must be in 'yyyy-MM-dd HH:mm:ss' format");
     }
 
     Interval interval = new Interval(start, end);
@@ -254,13 +258,13 @@ public class Parser {
 
       JsonObject granularityObj = json.getAsJsonObject(GRANULARITY);
       if (!granularityObj.has(DATA)
-          || !granularityObj.get(DATA).isJsonPrimitive()
-          || !granularityObj.getAsJsonPrimitive(DATA).isNumber()
-          || !granularityObj.has(UNIT)
-          || !granularityObj.get(UNIT).isJsonPrimitive()
-          || !granularityObj.getAsJsonPrimitive(UNIT).isString()) {
+              || !granularityObj.get(DATA).isJsonPrimitive()
+              || !granularityObj.getAsJsonPrimitive(DATA).isNumber()
+              || !granularityObj.has(UNIT)
+              || !granularityObj.get(UNIT).isJsonPrimitive()
+              || !granularityObj.getAsJsonPrimitive(UNIT).isString()) {
         throw new SyntaxException(
-            "Type query/granularity, property " + "'data'(int), 'unit'(string) must be set");
+                "Type query/granularity, property " + "'data'(int), 'unit'(string) must be set");
       }
 
       data = granularityObj.getAsJsonPrimitive(DATA).getAsInt();
@@ -269,7 +273,7 @@ public class Parser {
         unit = Granularity.Unit.valueOf(granularityObj.getAsJsonPrimitive(UNIT).getAsString());
       } catch (IllegalArgumentException e) {
         throw new SyntaxException(
-            "Type query, property 'granularity' must be in '1s/2m/3h/4d/5w/6M/1q/1y' format");
+                "Type query, property 'granularity' must be in '1s/2m/3h/4d/5w/6M/1q/1y' format");
       }
     }
 
@@ -342,15 +346,15 @@ public class Parser {
       for (int index = 0; index < orderArray.size(); index++) {
         JsonElement item = orderArray.get(index);
         if (!item.isJsonObject()
-            || !item.getAsJsonObject().has(NAME)
-            || !item.getAsJsonObject().get(NAME).isJsonPrimitive()
-            || !item.getAsJsonObject().getAsJsonPrimitive(NAME).isString()
-            || !item.getAsJsonObject().has(SORT)
-            || !item.getAsJsonObject().get(SORT).isJsonPrimitive()
-            || !item.getAsJsonObject().getAsJsonPrimitive(SORT).isString()) {
+                || !item.getAsJsonObject().has(NAME)
+                || !item.getAsJsonObject().get(NAME).isJsonPrimitive()
+                || !item.getAsJsonObject().getAsJsonPrimitive(NAME).isString()
+                || !item.getAsJsonObject().has(SORT)
+                || !item.getAsJsonObject().get(SORT).isJsonPrimitive()
+                || !item.getAsJsonObject().getAsJsonPrimitive(SORT).isString()) {
           throw new SyntaxException(
-              "Type query, property 'orders'(object)'s order "
-                  + "must has property(string) 'name' and 'sort'");
+                  "Type query, property 'orders'(object)'s order "
+                          + "must has property(string) 'name' and 'sort'");
         }
 
         JsonObject order = item.getAsJsonObject();
@@ -359,7 +363,7 @@ public class Parser {
         String sort = order.getAsJsonPrimitive(SORT).getAsString();
         if (!(sort.equals(ASC) || sort.equals(DESC))) {
           throw new SyntaxException(
-              "Type query, property 'orders'(object)'s order" + " 'sort' must be 'asc/desc'");
+                  "Type query, property 'orders'(object)'s order" + " 'sort' must be 'asc/desc'");
         }
 
         orders[index] = new Order(name, Order.Sort.valueOf(sort));
@@ -374,8 +378,8 @@ public class Parser {
     int limit = Integer.MAX_VALUE;
     if (json.has(LIMIT) && !json.get(LIMIT).isJsonNull()) {
       if (!json.get(LIMIT).isJsonPrimitive()
-          || !json.getAsJsonPrimitive(LIMIT).isNumber()
-          || ((json.getAsJsonPrimitive(LIMIT).getAsNumber() instanceof Float)
+              || !json.getAsJsonPrimitive(LIMIT).isNumber()
+              || ((json.getAsJsonPrimitive(LIMIT).getAsNumber() instanceof Float)
               || (json.getAsJsonPrimitive(LIMIT).getAsNumber() instanceof Double))) {
         throw new SyntaxException("Type query, property 'limit'(int) must be set");
       }

@@ -9,15 +9,19 @@ import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.dsl.request.Request;
 import com.weibo.dip.analysisql.response.Response;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
+
 import org.apache.commons.lang3.StringUtils;
 
-/** AnalysisQl. */
+/**
+ * AnalysisQl.
+ */
 public class AnalysisQl implements Closeable {
-  private Connector connector;
+  private final Connector connector;
 
   public AnalysisQl(Connector connector) {
     this.connector = connector;
@@ -42,7 +46,7 @@ public class AnalysisQl implements Closeable {
   }
 
   /**
-   * Request with a instance.
+   * Request with an instance.
    *
    * @param request request
    * @return response

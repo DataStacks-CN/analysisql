@@ -2,7 +2,9 @@ package com.weibo.dip.analysisql.dsl.request;
 
 import com.weibo.dip.analysisql.dsl.filter.Filter;
 
-/** QueryRequestVisitor. */
+/**
+ * QueryRequestVisitor.
+ */
 public abstract class QueryRequestVisitor {
   protected abstract void visitTopic(String topic);
 

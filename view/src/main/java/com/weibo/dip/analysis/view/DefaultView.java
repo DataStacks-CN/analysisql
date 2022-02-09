@@ -1,6 +1,7 @@
 package com.weibo.dip.analysis.view;
 
 import com.weibo.dip.analysisql.dsl.Parser;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,11 +11,14 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** DefaultView. */
+/**
+ * DefaultView.
+ */
 public class DefaultView extends View {
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultView.class);
 
@@ -39,37 +43,37 @@ public class DefaultView extends View {
   }
 
   /**
-   * Initialize a instance with topic, url, username, password, db, table.
+   * Initialize an instance with topic, url, username, password, db, table.
    *
-   * @param topic topic
-   * @param url mysql url
+   * @param topic    topic
+   * @param url      mysql url
    * @param username mysql username
    * @param password mysql password
-   * @param table mysql table
+   * @param table    mysql table
    */
   public DefaultView(String topic, String url, String username, String password, String table) {
     this(topic, topic, topic, url, username, password, table);
   }
 
   /**
-   * Initialize a instance with topic, alias, desc, url, username, password, table.
+   * Initialize an instance with topic, alias, desc, url, username, password, table.
    *
-   * @param topic topic
-   * @param alias alias
-   * @param desc description
-   * @param url mysql url
+   * @param topic    topic
+   * @param alias    alias
+   * @param desc     description
+   * @param url      mysql url
    * @param username mysql username
    * @param password mysql password
-   * @param table mysql table
+   * @param table    mysql table
    */
   public DefaultView(
-      String topic,
-      String alias,
-      String desc,
-      String url,
-      String username,
-      String password,
-      String table) {
+          String topic,
+          String alias,
+          String desc,
+          String url,
+          String username,
+          String password,
+          String table) {
     super(topic, alias, desc);
 
     this.url = url;
@@ -121,11 +125,10 @@ public class DefaultView extends View {
 
       stmt = conn.createStatement();
 
-      rs =
-          stmt.executeQuery(
+      rs = stmt.executeQuery(
               String.format(
-                  "SELECT MAX(dtime) FROM %s WHERE topic = '%s' AND dimension = '%s'",
-                  table, topic, dimension));
+                      "SELECT MAX(dtime) FROM %s WHERE topic = '%s' AND dimension = '%s'",
+                      table, topic, dimension));
       if (!rs.next()) {
         return null;
       }
@@ -135,12 +138,11 @@ public class DefaultView extends View {
         return null;
       }
 
-      rs =
-          stmt.executeQuery(
+      rs = stmt.executeQuery(
               String.format(
-                  "SELECT DISTINCT(dvalue) FROM %s WHERE "
-                      + "topic = '%s' AND dimension = '%s' AND dtime = '%s'",
-                  table, topic, dimension, Parser.DATETIME_FORMAT.format(timestamp.getTime())));
+                      "SELECT DISTINCT(dvalue) FROM %s WHERE "
+                              + "topic = '%s' AND dimension = '%s' AND dtime = '%s'",
+                      table, topic, dimension, Parser.DATETIME_FORMAT.format(timestamp.getTime())));
       if (!rs.next()) {
         return null;
       }

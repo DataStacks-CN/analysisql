@@ -6,9 +6,12 @@ import com.weibo.dip.analysisql.dsl.request.GetMetricsRequest;
 import com.weibo.dip.analysisql.dsl.request.GetTopicsRequest;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.response.Response;
+
 import java.io.Closeable;
 
-/** Connector. */
+/**
+ * Connector.
+ */
 public interface Connector extends Closeable {
   Response getTopics(GetTopicsRequest request);
 

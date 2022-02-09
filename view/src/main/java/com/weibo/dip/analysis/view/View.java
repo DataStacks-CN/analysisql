@@ -2,12 +2,15 @@ package com.weibo.dip.analysis.view;
 
 import com.weibo.dip.analysisql.connector.Metadata;
 import com.weibo.dip.analysisql.metric.MetricCalculator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/** View. */
+/**
+ * View.
+ */
 public abstract class View extends Metadata {
   protected List<Table> tables;
 
@@ -16,7 +19,7 @@ public abstract class View extends Metadata {
   protected boolean dynamic;
 
   /**
-   * Initialize a instance with topic.
+   * Initialize an instance with topic.
    *
    * @param topic topic
    */
@@ -25,11 +28,11 @@ public abstract class View extends Metadata {
   }
 
   /**
-   * Initialize a instance with topic, alias, desc.
+   * Initialize an instance with topic, alias, desc.
    *
    * @param topic topic
    * @param alias alias
-   * @param desc description
+   * @param desc  description
    */
   public View(String topic, String alias, String desc) {
     super(topic, alias, desc);
@@ -84,10 +87,10 @@ public abstract class View extends Metadata {
    * @param name dimension name
    * @return tables
    */
-  public List<Table> getTableUsingDimension(String name) {
+  public List<Table> getTablesUsingDimension(String name) {
     return tables.stream()
-        .filter(table -> table.containDimension(name))
-        .collect(Collectors.toList());
+            .filter(table -> table.containDimension(name))
+            .collect(Collectors.toList());
   }
 
   /**
@@ -96,7 +99,7 @@ public abstract class View extends Metadata {
    * @param name metric name
    * @return tables
    */
-  public List<Table> getTableUsingMetric(String name) {
+  public List<Table> getTablesUsingMetric(String name) {
     return tables.stream().filter(table -> table.containMetric(name)).collect(Collectors.toList());
   }
 }

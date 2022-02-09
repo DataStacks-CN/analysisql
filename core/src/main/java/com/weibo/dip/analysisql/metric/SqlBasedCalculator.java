@@ -2,19 +2,23 @@ package com.weibo.dip.analysisql.metric;
 
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.response.Row;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** SqlBasedCalculator. */
+/**
+ * SqlBasedCalculator.
+ */
 public abstract class SqlBasedCalculator implements MetricCalculator {
   private static final Logger LOGGER = LoggerFactory.getLogger(SqlBasedCalculator.class);
 
@@ -26,7 +30,7 @@ public abstract class SqlBasedCalculator implements MetricCalculator {
    * Initialize a instance with sql template factory, sql file.
    *
    * @param sqlTemplateFactory SqlTemplateFactory
-   * @param sqlFile Sql file path
+   * @param sqlFile            Sql file path
    */
   public SqlBasedCalculator(SqlTemplateFactory sqlTemplateFactory, String sqlFile) {
     this.sqlTemplateFactory = sqlTemplateFactory;
@@ -41,7 +45,7 @@ public abstract class SqlBasedCalculator implements MetricCalculator {
   /**
    * Initialize a instance with sql and sql template factory.
    *
-   * @param sql sql
+   * @param sql                sql
    * @param sqlTemplateFactory SqlTemplateFactory
    */
   public SqlBasedCalculator(String sql, SqlTemplateFactory sqlTemplateFactory) {
@@ -65,9 +69,9 @@ public abstract class SqlBasedCalculator implements MetricCalculator {
       assert Objects.nonNull(in);
 
       List<String> lines =
-          IOUtils.readLines(in, StandardCharsets.UTF_8).stream()
-              .map(String::trim)
-              .collect(Collectors.toList());
+              IOUtils.readLines(in, StandardCharsets.UTF_8).stream()
+                      .map(String::trim)
+                      .collect(Collectors.toList());
 
       return StringUtils.join(lines, StringUtils.SPACE);
     } catch (IOException e) {

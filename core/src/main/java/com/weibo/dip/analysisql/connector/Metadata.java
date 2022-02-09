@@ -1,6 +1,7 @@
 package com.weibo.dip.analysisql.connector;
 
 import com.weibo.dip.analysisql.metric.MetricCalculator;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,7 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Metadata. */
+/**
+ * Metadata.
+ */
 public abstract class Metadata implements Closeable {
   protected String topic;
   protected String alias;
@@ -20,7 +23,7 @@ public abstract class Metadata implements Closeable {
   protected Map<String, MetricCalculator> calculators;
 
   /**
-   * Initialize a instance with topic.
+   * Initialize an instance with topic.
    *
    * @param topic topic
    */
@@ -29,11 +32,11 @@ public abstract class Metadata implements Closeable {
   }
 
   /**
-   * Initialize a instance with topic, alias, desc.
+   * Initialize an instance with topic, alias, desc.
    *
    * @param topic topic
    * @param alias alias
-   * @param desc description
+   * @param desc  description
    */
   public Metadata(String topic, String alias, String desc) {
     this.topic = topic;
@@ -86,6 +89,12 @@ public abstract class Metadata implements Closeable {
     return dimensions;
   }
 
+  /**
+   * Get dimension values.
+   *
+   * @param dimension dimension
+   * @return dimension values
+   */
   public abstract List<String> getDimensionValues(String dimension);
 
   public void addMetric(String metric, String alias) {
@@ -98,7 +107,7 @@ public abstract class Metadata implements Closeable {
 
   public boolean containMetric(String name) {
     return metrics.stream().anyMatch(metric -> metric.getName().equals(name))
-        && calculators.containsKey(name);
+            && calculators.containsKey(name);
   }
 
   public List<Metric> getMetrics() {
@@ -124,5 +133,6 @@ public abstract class Metadata implements Closeable {
   }
 
   @Override
-  public void close() throws IOException {}
+  public void close() throws IOException {
+  }
 }

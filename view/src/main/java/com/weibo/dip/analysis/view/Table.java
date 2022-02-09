@@ -9,15 +9,19 @@ import com.weibo.dip.analysisql.dsl.request.Interval;
 import com.weibo.dip.analysisql.dsl.request.QueryRequest;
 import com.weibo.dip.analysisql.metric.MetricCalculator;
 import com.weibo.dip.analysisql.util.GsonCreator;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.ArrayUtils;
 
-/** Table. */
+/**
+ * Table.
+ */
 public class Table extends Metadata implements Comparable<Table> {
   private String name;
   private Granularity granularity;
@@ -29,13 +33,13 @@ public class Table extends Metadata implements Comparable<Table> {
   }
 
   /**
-   * Initialize a instance with view, granularity, period and delay.
+   * Initialize an instance with view, granularity, period and delay.
    *
-   * @param view view
-   * @param name table name
+   * @param view        view
+   * @param name        table name
    * @param granularity table granularity
-   * @param period table period
-   * @param delay table delay
+   * @param period      table period
+   * @param delay       table delay
    */
   public Table(View view, String name, Granularity granularity, int period, int delay) {
     this(view);
@@ -130,9 +134,9 @@ public class Table extends Metadata implements Comparable<Table> {
     }
 
     return this.dimensions.stream()
-        .map(Dimension::getName)
-        .collect(Collectors.toSet())
-        .containsAll(dimensions);
+            .map(Dimension::getName)
+            .collect(Collectors.toSet())
+            .containsAll(dimensions);
   }
 
   private boolean satisfyGranularity(Granularity granularity) {
@@ -162,15 +166,15 @@ public class Table extends Metadata implements Comparable<Table> {
    */
   public boolean satisfy(QueryRequest request) {
     return satisfyMetric(request.getMetric())
-        && satisfyDimensions(request.getWhere(), request.getGroups())
-        && satisfyGranularity(request.getGranularity())
-        && satisfyInterval(request.getInterval());
+            && satisfyDimensions(request.getWhere(), request.getGroups())
+            && satisfyGranularity(request.getGranularity())
+            && satisfyInterval(request.getInterval());
   }
 
   @Override
   public int compareTo(Table table) {
     int compare =
-        Long.compare(this.granularity.getMilliseconds(), table.granularity.getMilliseconds());
+            Long.compare(this.granularity.getMilliseconds(), table.granularity.getMilliseconds());
     if (compare != 0) {
       return -compare;
     }

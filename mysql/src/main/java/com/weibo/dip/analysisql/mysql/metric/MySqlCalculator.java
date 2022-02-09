@@ -7,28 +7,31 @@ import com.weibo.dip.analysisql.response.column.Column;
 import com.weibo.dip.analysisql.response.column.DoubleColumn;
 import com.weibo.dip.analysisql.response.column.LongColumn;
 import com.weibo.dip.analysisql.response.column.StringColumn;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/** MySqlCalculator. */
+/**
+ * MySqlCalculator.
+ */
 public class MySqlCalculator extends JdbcCalculator {
   public MySqlCalculator(
-      SqlTemplateFactory sqlTemplateFactory,
-      String sqlFile,
-      String url,
-      String user,
-      String passwd) {
+          SqlTemplateFactory sqlTemplateFactory,
+          String sqlFile,
+          String url,
+          String user,
+          String passwd) {
     super(sqlTemplateFactory, sqlFile, url, user, passwd);
   }
 
   public MySqlCalculator(
-      String sql, SqlTemplateFactory sqlTemplateFactory, String url, String user, String passwd) {
+          String sql, SqlTemplateFactory sqlTemplateFactory, String url, String user, String passwd) {
     super(sql, sqlTemplateFactory, url, user, passwd);
   }
 
   @Override
   public Column<?> cast(ResultSet rs, int column, String columnName, String columnTypeName)
-      throws SQLException {
+          throws SQLException {
     switch (columnTypeName.toUpperCase()) {
       case "VARCHAR":
       case "CHAR":
